@@ -15,6 +15,9 @@ todo
 
 ```bash
 cd src_ui
+```
+
+```bash
 npm install
 ```
 
