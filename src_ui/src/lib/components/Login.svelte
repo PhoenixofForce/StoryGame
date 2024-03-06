@@ -1,10 +1,27 @@
-<script>
-  import { connect } from "../services/gameservice";
+<script lang="ts">
+  import { connect, addEventHandler } from "../services/gameservice";
 
   let username = "";
   let roomCode = "";
 
+  let errorMessage = "";
+
   $: canJoinGame = username.length > 0 && roomCode.length > 0;
+  $: canCreateGame = username.length > 0;
+
+  addEventHandler("join", {
+    onError: handleJoinError,
+  });
+
+  function handleJoinError(error: any) {
+    console.log("an error while joining occured", error);
+    errorMessage = error.message;
+  }
+
+  function connectToSocket(type: "join" | "create") {
+    errorMessage = "";
+    connect(username, roomCode, type);
+  }
 </script>
 
 <div>
@@ -15,15 +32,21 @@
     ~ This site is currently under construction ~
   </p>
 
-  <form on:submit|preventDefault={() => connect(username, roomCode)}>
+  <form on:submit|preventDefault={() => {}}>
     <input bind:value={username} placeholder="Username" />
     <input bind:value={roomCode} placeholder="Room Code" />
     <div class="buttons">
-      <button disabled={!canJoinGame}>Join Game</button>
-      <button disabled={!canJoinGame}>Create Game</button>
+      <button on:click={() => connectToSocket("join")} disabled={!canJoinGame}
+        >Join Game</button
+      >
+      <button
+        on:click={() => connectToSocket("create")}
+        disabled={!canCreateGame}>Create Game</button
+      >
     </div>
   </form>
 </div>
+<span class="text-red-600 italic text-sm"> {errorMessage} </span>
 
 <style>
   form {

@@ -1,15 +1,25 @@
 package dev.phoenixofforce.story_game.connection;
 
-import dev.phoenixofforce.story_game.connection.messages.PlayerJoinMessage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.web.socket.WebSocketSession;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Data
 public class LobbyEntity {
 
-    private final String room;
-    private final Map<PlayerJoinMessage, WebSocketSession> connectedPlayer;
+    @JsonIgnore
+    private final List<PlayerEntity> connectedPlayer = Collections.synchronizedList(new ArrayList<>());
+    private final String roomCode;
+
+    public void addPlayer(PlayerEntity player) {
+        this.connectedPlayer.add(player);
+    }
+
+    public PlayerEntity getHost() {
+        return connectedPlayer.get(0);
+    }
 
 }
