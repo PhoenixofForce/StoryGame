@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PlayerPlague from "./PlayerPlague.svelte";
+  import PlayerPlague from "./PlayerPlaque.svelte";
 
   export let playerNames!: string[];
 </script>

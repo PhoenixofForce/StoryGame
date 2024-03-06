@@ -1,5 +1,6 @@
 import type { JoinMessage } from "./messageTypes";
 import { connect, sendMessage, addEventHandler } from "./websocket.Service";
+import { switchToRoom } from "./appFunctions";
 
 export { addEventHandler };
 
@@ -17,6 +18,7 @@ export function sendJoinMessage(username: string, roomCode: string, type: "join"
 
     connect(url).then(() => {
         sendMessage(data);
+        switchToRoom();
     }).catch(() => {
         console.log("something whent wrong");
     });
