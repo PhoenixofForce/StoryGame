@@ -1,5 +1,6 @@
 package dev.phoenixofforce.story_game.connection;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -7,11 +8,13 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
-public class WebsockerConfig implements WebSocketConfigurer {
+public class WebsocketConfig implements WebSocketConfigurer {
 
+    @Value( "${websocket.allowed-origins}" )
+    private String allowedOrigins;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new SocketController(), "/hello").setAllowedOrigins("*");
+        registry.addHandler(new SocketController(), "/hello").setAllowedOrigins(allowedOrigins);
     }
 }

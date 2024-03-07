@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { connect, addEventHandler } from "../services/gameservice";
+  import { sendJoinMessage, addEventHandler } from "../services/gameservice";
+  import type { BaseMessage } from "../services/messageTypes";
 
   let username = "";
   let roomCode = "";
@@ -9,26 +10,30 @@
   $: canJoinGame = username.length > 0 && roomCode.length > 0;
   $: canCreateGame = username.length > 0;
 
+  function connectToSocket(type: "join" | "create") {
+    errorMessage = "";
+    sendJoinMessage(username, roomCode, type);
+  }
+
   addEventHandler("join", {
+    onSuccess: goToLobby,
     onError: handleJoinError,
   });
 
-  function handleJoinError(error: any) {
-    console.log("an error while joining occured", error);
-    errorMessage = error.message;
+  function goToLobby(data: BaseMessage) {
+    console.log(data);
   }
 
-  function connectToSocket(type: "join" | "create") {
-    errorMessage = "";
-    connect(username, roomCode, type);
+  function handleJoinError(error: BaseMessage) {
+    errorMessage = error.message!;
   }
 </script>
 
-<div>
-  <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow">
+<div class="mt-64">
+  <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow text-center">
     The Story Game
   </div>
-  <p class="mb-60 italic text-slate-400">
+  <p class="mb-64 italic text-slate-400 text-center">
     ~ This site is currently under construction ~
   </p>
 
@@ -45,8 +50,8 @@
       >
     </div>
   </form>
+  <div class="text-red-600 italic text-sm text-center">{errorMessage}</div>
 </div>
-<span class="text-red-600 italic text-sm"> {errorMessage} </span>
 
 <style>
   form {
@@ -60,25 +65,5 @@
     display: flex;
     flex-direction: row;
     gap: 24px;
-  }
-
-  input {
-    @apply w-full rounded-xl border-2 border-solid border-slate-300 px-3 py-1;
-  }
-
-  input:focus {
-    @apply rounded-2xl;
-  }
-
-  button {
-    @apply rounded-3xl border-2 border-solid border-slate-300 bg-slate-100 px-4 py-1;
-  }
-
-  button:disabled {
-    @apply border-slate-200 bg-slate-50 text-slate-300;
-  }
-
-  button:hover:enabled {
-    @apply scale-105 bg-slate-200 shadow;
   }
 </style>

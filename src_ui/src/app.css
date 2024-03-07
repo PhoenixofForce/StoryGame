@@ -8,8 +8,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #213547;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -19,8 +19,6 @@
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -29,20 +27,15 @@ body {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
+input {
+  @apply w-96 rounded-xl border-2 border-solid border-slate-300 px-3 py-1;
+  @apply focus:rounded-2xl;
+}
 
-  a:hover {
-    color: #747bff;
-  }
-
-  button {
-    background-color: #f9f9f9;
-  }
+button {
+  @apply rounded-3xl border-2 border-solid border-slate-300 bg-slate-100 px-4 py-1 text-slate-700;
+  @apply disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-300;
+  @apply shadow hover:enabled:scale-105 hover:enabled:bg-slate-200;
 }

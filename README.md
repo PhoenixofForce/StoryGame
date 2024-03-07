@@ -20,6 +20,15 @@ and uses
 ### Setup Backend
 todo
 
+When in doubt, run maven install.
+```bash
+.\mvnw clean install
+```
+
+Set the dev-dev as an environment variable 
+- in your run configuration `spring.profiles.active=dev` or
+- as an JVM parameter `-Dspring.profiles.active=dev`
+
 ### Setup Frontend
 
 Move to the ui folder

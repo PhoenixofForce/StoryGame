@@ -1,11 +1,11 @@
-package dev.phoenixofforce.story_game.connection;
+package dev.phoenixofforce.story_game.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.web.socket.WebSocketSession;
 
 @Data
-public class PlayerEntity {
+public class Player {
 
     @JsonIgnore
     private final WebSocketSession session;

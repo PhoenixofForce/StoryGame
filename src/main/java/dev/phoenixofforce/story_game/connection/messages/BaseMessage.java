@@ -8,6 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+
+import java.io.IOException;
 
 @Data
 @Slf4j
@@ -18,7 +22,8 @@ import lombok.extern.slf4j.Slf4j;
     include = JsonTypeInfo.As.EXISTING_PROPERTY,
     property = "type", visible = true)
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = PlayerJoinMessage.class, name="join")
+    @JsonSubTypes.Type(value = PlayerJoinMessage.class, name="join"),
+    @JsonSubTypes.Type(value = LobbyStateMessage.class, name="lobby-state")
 })
 public class BaseMessage {
 
@@ -33,6 +38,15 @@ public class BaseMessage {
         } catch (JsonProcessingException e) {
             log.error("Could not parse this object to json: {}", this);
             return "";
+        }
+    }
+
+    public boolean sendTo(WebSocketSession session) {
+        try {
+            session.sendMessage(new TextMessage(toPayload()));
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 
