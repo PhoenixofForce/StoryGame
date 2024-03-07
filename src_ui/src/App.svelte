@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Login from "./lib/components/Login.svelte";
-  import Room from "./lib/components/Room.svelte";
+  import Login from "./lib/views/Login.svelte";
+  import Room from "./lib/views/Room.svelte";
   import { viewStore } from "./lib/services/appFunctions";
   import PlayerDisplay from "./lib/components/PlayerDisplay.svelte";
 </script>
