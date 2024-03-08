@@ -1,6 +1,7 @@
 <script lang="ts">
   import { sendJoinMessage, addEventHandler } from "../services/gameservice";
   import type { BaseMessage } from "../services/messageTypes";
+  import { displayLobby } from "../services/appFunctions";
 
   let username = "";
   let roomCode = "";
@@ -22,6 +23,7 @@
 
   function goToLobby(data: BaseMessage) {
     console.log(data);
+    displayLobby();
   }
 
   function handleJoinError(error: BaseMessage) {
