@@ -2,10 +2,10 @@ import { writable } from "svelte/store";
 
 export const viewStore = writable('login');
 
-export function switchToLogin() {
+export function displayLogin() {
   viewStore.set('login');
 }
 
-export function switchToRoom() {
+export function displayLobby() {
   viewStore.set('room');
 }
