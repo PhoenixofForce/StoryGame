@@ -3,6 +3,7 @@ package dev.phoenixofforce.story_game.connection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.phoenixofforce.story_game.connection.messages.BaseMessage;
 import dev.phoenixofforce.story_game.connection.messages.PlayerJoinMessage;
+import dev.phoenixofforce.story_game.connection.messages.SubmitStoryMessage;
 import dev.phoenixofforce.story_game.data.Lobby;
 import dev.phoenixofforce.story_game.data.Player;
 import org.springframework.web.socket.TextMessage;
@@ -27,7 +28,8 @@ public class SocketController extends TextWebSocketHandler {
     public SocketController() {
         commands = Map.of(
             "join", this::register,
-            "start_game", this::handleStart
+            "start_game", this::handleStart,
+            "submit-story", this::acceptStory
         );
     }
 
@@ -95,5 +97,13 @@ public class SocketController extends TextWebSocketHandler {
            Player player = socketToPlayer.get(sender);
            Lobby lobby = codeToLobby.get(player.getConnectedRoom());
            lobby.startGame(player);
+    }
+
+    private void acceptStory(WebSocketSession sender, BaseMessage message) throws IOException {
+        if(!(message instanceof SubmitStoryMessage storyMessage)) return;
+
+        Player player = socketToPlayer.get(sender);
+        Lobby lobby = codeToLobby.get(player.getConnectedRoom());
+        lobby.acceptStory(player, storyMessage.getStory());
     }
 }

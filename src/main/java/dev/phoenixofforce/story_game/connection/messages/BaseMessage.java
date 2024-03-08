@@ -24,7 +24,9 @@ import java.io.IOException;
 @JsonSubTypes({
     @JsonSubTypes.Type(value = PlayerJoinMessage.class, name="join"),
     @JsonSubTypes.Type(value = LobbyStateMessage.class, name="lobby-change"),
-    @JsonSubTypes.Type(value = StartGameTriggerMessage.class, name="start_game")
+    @JsonSubTypes.Type(value = StartGameTriggerMessage.class, name="start_game"),
+    @JsonSubTypes.Type(value = StartRoundTriggerMessage.class, name="start_round"),
+    @JsonSubTypes.Type(value = SubmitStoryMessage.class, name="submit_story"),
 })
 public class BaseMessage {
 
