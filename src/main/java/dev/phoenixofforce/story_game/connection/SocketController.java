@@ -6,14 +6,16 @@ import dev.phoenixofforce.story_game.connection.messages.PlayerJoinMessage;
 import dev.phoenixofforce.story_game.connection.messages.SubmitStoryMessage;
 import dev.phoenixofforce.story_game.data.Lobby;
 import dev.phoenixofforce.story_game.data.Player;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
+
+@Slf4j
 public class SocketController extends TextWebSocketHandler {
 
     private interface CommandHandler {
@@ -29,7 +31,7 @@ public class SocketController extends TextWebSocketHandler {
         commands = Map.of(
             "join", this::register,
             "start_game", this::handleStart,
-            "submit-story", this::acceptStory
+            "submit_story", this::acceptStory
         );
     }
 
@@ -99,7 +101,7 @@ public class SocketController extends TextWebSocketHandler {
            lobby.startGame(player);
     }
 
-    private void acceptStory(WebSocketSession sender, BaseMessage message) throws IOException {
+    private void acceptStory(WebSocketSession sender, BaseMessage message) {
         if(!(message instanceof SubmitStoryMessage storyMessage)) return;
 
         Player player = socketToPlayer.get(sender);

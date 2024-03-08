@@ -1,11 +1,22 @@
 <script lang="ts">
+  import { addEventHandler } from "../services/websocketService";
+  import { sendSubmitStoryMessage } from "../services/gameservice";
+
   let names = ["Alice", "Bob", "Charlie", "David"];
-  let storyEnd =
-    "Dictum sit amet justo donec enim diam vulputate ut pharetra. Ultrices neque ornare aenean euismod elementum nisi quis. At tempor commodo ullamcorper a. Sagittis orci a scelerisque purus.";
+  let storyEnd ="";
   let story = "";
 
+  addEventHandler("start_round", {
+    onSuccess: (e) => {
+      storyEnd = e.storySnippet;
+      story = "";
+    },
+  });
+
   function sendStory(story: String) {
-    console.log("Message sent:", story);
+    //TODO use actual player name instead of "player"
+    sendSubmitStoryMessage("player", story);
+    story = "";
   }
 </script>
 
@@ -27,11 +38,11 @@
     <p style="text-align: left">{storyEnd}</p>
     <form on:submit|preventDefault={() => sendStory(story)}>
       <input bind:value={story} placeholder="Type your message" />
+      <div class="buttons">
+        <button disabled={!story}>Send</button>
+        <button disabled=true>Idk...</button>
+      </div>
     </form>
-    <div class="buttons">
-      <button disabled={!story}>Send</button>
-      <button disabled={story.length > 0}>Edit</button>
-    </div>
   </div>
 </div>
 

@@ -50,6 +50,13 @@ public class Lobby {
         if(!starter.getSession().equals(getHost().getSession())) return;
         send(new StartGameTriggerMessage());
         game = new Game(connectedPlayer.size(), connectedPlayer.stream().map(Player::getName).toList());
+
+        sendPersonalized(player -> {
+            StartRoundTriggerMessage message = new StartRoundTriggerMessage();
+            message.setIndex(game.getCurrentRound());
+            message.setStorySnippet(game.getStorySnippet(player.getName()));
+            return message;
+        });
     }
 
     public void acceptStory(Player writer, String story) {

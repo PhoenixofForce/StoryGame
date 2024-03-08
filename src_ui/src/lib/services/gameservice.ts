@@ -21,3 +21,13 @@ export function sendJoinMessage(username: string, roomCode: string, type: "join"
         console.log("something whent wrong");
     });
 }
+
+export function sendSubmitStoryMessage(username: string, story: string) {
+    const data = {
+        type: "submit_story",
+        error: false,
+        name: username,
+        story: story,
+    }
+    sendMessage(data);
+}

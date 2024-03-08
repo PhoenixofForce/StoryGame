@@ -26,8 +26,8 @@ public class Story {
 		if (storyParts.size() == 0) {
 			return "";
 		}
-		Map.Entry<String, String> lastPart = storyParts.get(storyParts.size() - 1);
-		int snippetLength = Math.min(50, lastPart.getValue().length());
-		return "... "  + lastPart.getValue().substring(0, snippetLength);
+		String lastPart = storyParts.get(storyParts.size() - 1).getValue();
+		int snippetStart = lastPart.length() - Math.min(50, lastPart.length());
+		return "... "  + lastPart.substring(snippetStart);
 	}
 }
