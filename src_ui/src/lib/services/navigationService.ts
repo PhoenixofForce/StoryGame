@@ -7,5 +7,9 @@ export function displayLogin() {
 }
 
 export function displayLobby() {
-  viewStore.set('room');
+  viewStore.set('lobby');
+}
+
+export function displayInGame() {
+  viewStore.set('ingame');
 }

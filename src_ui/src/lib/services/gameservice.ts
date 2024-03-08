@@ -1,5 +1,5 @@
 import type { JoinMessage } from "./messageTypes";
-import { connect, sendMessage, addEventHandler } from "./websocket.Service";
+import { connect, sendMessage, addEventHandler } from "./websocketService";
 
 export { addEventHandler };
 

@@ -23,7 +23,8 @@ import java.io.IOException;
     property = "type", visible = true)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = PlayerJoinMessage.class, name="join"),
-    @JsonSubTypes.Type(value = LobbyStateMessage.class, name="lobby-state")
+    @JsonSubTypes.Type(value = LobbyStateMessage.class, name="lobby-change"),
+    @JsonSubTypes.Type(value = StartGameTriggerMessage.class, name="start_game")
 })
 public class BaseMessage {
 

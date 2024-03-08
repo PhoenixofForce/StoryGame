@@ -26,7 +26,8 @@ public class SocketController extends TextWebSocketHandler {
 
     public SocketController() {
         commands = Map.of(
-            "join", this::register
+            "join", this::register,
+            "start_game", this::handleStart
         );
     }
 
@@ -63,14 +64,12 @@ public class SocketController extends TextWebSocketHandler {
             return;
         }
 
-        Player host = new Player(sender, joinMessage.getName());
+        Player host = new Player(sender, joinMessage.getName(), joinMessage.getRoom());
         Lobby lobby = new Lobby(roomCode);
         lobby.addPlayer(host);
 
         socketToPlayer.put(sender, host);
         codeToLobby.put(roomCode, lobby);
-
-        BaseMessage.getMessage("join", "Created Lobby " + roomCode).sendTo(sender);
     }
 
     private void joinRoom(WebSocketSession sender, PlayerJoinMessage joinMessage) {
@@ -85,13 +84,16 @@ public class SocketController extends TextWebSocketHandler {
             return;
         }
 
-        Player player = new Player(sender, joinMessage.getName());
+        Player player = new Player(sender, joinMessage.getName(), joinMessage.getRoom());
         Lobby lobby = codeToLobby.get(roomCode);
 
         socketToPlayer.put(sender, player);
         lobby.addPlayer(player);
+ }
 
-        BaseMessage.getMessage("join", "Joined Lobby " + roomCode).sendTo(sender);
-        lobby.send(BaseMessage.getMessage("join", player.getName() + " joined the lobby, all: " + lobby.getConnectedPlayer().stream().map(Player::getName).collect(Collectors.joining(", "))));
+    private void handleStart(WebSocketSession sender, BaseMessage message) throws IOException {
+           Player player = socketToPlayer.get(sender);
+           Lobby lobby = codeToLobby.get(player.getConnectedRoom());
+           lobby.startGame(player);
     }
 }

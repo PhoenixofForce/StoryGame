@@ -10,5 +10,6 @@ public class Player {
     @JsonIgnore
     private final WebSocketSession session;
     private final String name;
+    private final String connectedRoom;
 
 }

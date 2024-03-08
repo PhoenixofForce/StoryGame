@@ -45,7 +45,9 @@ function addEventHandler(eventType: string, handler: SocketEventHandler) {
 }
 
 function fireEvent(type: string, isError: boolean, data: any) {
-    eventHandler.filter(e => e.eventType)
+    console.log("fire", type)
+    console.log(eventHandler)
+    eventHandler.filter(e => e.eventType === type)
         .forEach(e => {
             if (isError && e.handler.onError) e.handler.onError(data);
             if (!isError && e.handler.onSuccess) e.handler.onSuccess(data);

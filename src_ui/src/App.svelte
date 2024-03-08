@@ -1,16 +1,19 @@
 <script lang="ts">
   import Login from "./lib/views/Login.svelte";
-  import Room from "./lib/views/Room.svelte";
-  import { viewStore } from "./lib/services/appFunctions";
-  import PlayerDisplay from "./lib/components/PlayerDisplay.svelte";
+  import Lobby from "./lib/views/Lobby.svelte";
+  import InGame from "./lib/views/InGame.svelte";
+
+  import { viewStore } from "./lib/services/navigationService";
 </script>
 
 <main>
-  <PlayerDisplay playerNames={["Alice", "Bob", "Peter"]} />
-  {#if $viewStore === 'login'}
+  {$viewStore}
+  {#if $viewStore === "login"}
     <Login />
-  {:else if $viewStore === 'room'}
-    <Room />
+  {:else if $viewStore === "lobby"}
+    <Lobby />
+  {:else if $viewStore === "ingame"}
+    <InGame />
   {/if}
 </main>
 

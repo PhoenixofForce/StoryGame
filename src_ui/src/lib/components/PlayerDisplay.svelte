@@ -1,11 +1,14 @@
 <script lang="ts">
   import PlayerPlague from "./PlayerPlaque.svelte";
 
-  export let playerNames!: string[];
+  export let playerNames: { name: string; color?: string }[];
 </script>
 
-<div class="fixed left-8 top-6">
+<div>
   {#each playerNames as player}
-    <PlayerPlague name={player} />
+    <PlayerPlague
+      name={player.name}
+      color={player.color ? player.color : "slate"}
+    />
   {/each}
 </div>

@@ -1,17 +1,20 @@
 package dev.phoenixofforce.story_game.connection.messages;
 
-import dev.phoenixofforce.story_game.data.Lobby;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class LobbyStateMessage extends BaseMessage {
 
-    private Lobby lobby;
+    private String roomCode;
+    private List<String> players;
+    private String you;
+    private String host;
 
-    public LobbyStateMessage(Lobby lobby) {
-        super("lobby-data", false, "");
-        this.lobby = lobby;
+    public LobbyStateMessage() {
+        super("lobby-change", false, "");
     }
 }

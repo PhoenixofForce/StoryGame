@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { sendJoinMessage, addEventHandler } from "../services/gameservice";
+  import { sendJoinMessage, addEventHandler } from "../services/gameService";
   import type { BaseMessage } from "../services/messageTypes";
-  import { displayLobby } from "../services/appFunctions";
+  import { displayLobby } from "../services/navigationService";
 
   let username = "";
   let roomCode = "";
@@ -17,8 +17,11 @@
   }
 
   addEventHandler("join", {
-    onSuccess: goToLobby,
     onError: handleJoinError,
+  });
+
+  addEventHandler("lobby-change", {
+    onSuccess: goToLobby,
   });
 
   function goToLobby(data: BaseMessage) {
@@ -31,11 +34,11 @@
   }
 </script>
 
-<div class="mt-64">
+<div class="mt-24 xl:mt-64">
   <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow text-center">
     The Story Game
   </div>
-  <p class="mb-64 italic text-slate-400 text-center">
+  <p class="mb-24 xl:mb-64 italic text-slate-400 text-center">
     ~ This site is currently under construction ~
   </p>
 
