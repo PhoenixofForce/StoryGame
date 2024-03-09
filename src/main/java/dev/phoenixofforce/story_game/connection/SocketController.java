@@ -3,16 +3,19 @@ package dev.phoenixofforce.story_game.connection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.phoenixofforce.story_game.connection.messages.BaseMessage;
 import dev.phoenixofforce.story_game.connection.messages.PlayerJoinMessage;
+import dev.phoenixofforce.story_game.connection.messages.SubmitStoryMessage;
 import dev.phoenixofforce.story_game.data.Lobby;
 import dev.phoenixofforce.story_game.data.Player;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
+
+@Slf4j
 public class SocketController extends TextWebSocketHandler {
 
     private interface CommandHandler {
@@ -27,7 +30,8 @@ public class SocketController extends TextWebSocketHandler {
     public SocketController() {
         commands = Map.of(
             "join", this::register,
-            "start_game", this::handleStart
+            "start_game", this::handleStart,
+            "submit_story", this::acceptStory
         );
     }
 
@@ -95,5 +99,13 @@ public class SocketController extends TextWebSocketHandler {
            Player player = socketToPlayer.get(sender);
            Lobby lobby = codeToLobby.get(player.getConnectedRoom());
            lobby.startGame(player);
+    }
+
+    private void acceptStory(WebSocketSession sender, BaseMessage message) {
+        if(!(message instanceof SubmitStoryMessage storyMessage)) return;
+
+        Player player = socketToPlayer.get(sender);
+        Lobby lobby = codeToLobby.get(player.getConnectedRoom());
+        lobby.acceptStory(player, storyMessage.getStory());
     }
 }
