@@ -1,104 +1,78 @@
 <script lang="ts">
   import { addEventHandler } from "../services/websocketService";
   import { sendSubmitStoryMessage } from "../services/gameservice";
+  import { lobbyStore } from "../services/lobbyService";
+  import type {
+    GameStateUpdateMessage,
+    StartRoundTriggerMessage,
+  } from "../services/messageTypes";
+  import { displayLobby } from "../services/navigationService";
 
-  let names = ["Alice", "Bob", "Charlie", "David"];
-  let storyEnd ="";
+  let storyEnd = "";
   let story = "";
+
+  let currentRound = 0;
+  let maxRounds = 0;
+  let submittedStory = false;
+
+  let playersReady = 0;
 
   addEventHandler("start_round", {
     onSuccess: (e) => {
-      storyEnd = e.storySnippet;
+      const data = e as StartRoundTriggerMessage;
+      storyEnd = data.lastStorySnippet;
+      currentRound = data.currentRound;
+      maxRounds = data.maxRounds;
+
       story = "";
+      submittedStory = false;
+      playersReady = 0;
     },
   });
 
-  function sendStory(story: String) {
-    //TODO use actual player name instead of "player"
-    sendSubmitStoryMessage("player", story);
+  addEventHandler("game-update", {
+    onSuccess: (e) => {
+      const data = e as GameStateUpdateMessage;
+      playersReady = data.finishedPlayers;
+    },
+  });
+
+  addEventHandler("end_game", {
+    onSuccess: displayLobby,
+  });
+
+  function sendStory() {
+    sendSubmitStoryMessage(story);
     story = "";
+    submittedStory = true;
   }
 </script>
 
 <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow">
   The Story Game
 </div>
-<p class="mb-60 italic text-slate-400">Round 3 / 8</p>
+<p class="mb-60 italic text-slate-400">
+  Round {currentRound + 1} / {maxRounds + 1}<br />
+  {#if playersReady > 0}
+    <span>{playersReady} / {$lobbyStore.players.length} Players are ready</span>
+  {/if}
+</p>
 
-<div class="flex">
-  <div class="left-column">
-    <ul>
-      {#each names as name}
-        <li>{name}</li>
-      {/each}
-    </ul>
-  </div>
-
-  <div class="right-column">
+<div class="">
+  {#if !submittedStory}
     <p style="text-align: left">{storyEnd}</p>
-    <form on:submit|preventDefault={() => sendStory(story)}>
-      <input bind:value={story} placeholder="Type your message" />
-      <div class="buttons">
-        <button disabled={!story}>Send</button>
-        <button disabled=true>Idk...</button>
-      </div>
-    </form>
-  </div>
+    <textarea
+      bind:value={story}
+      placeholder="Type your message"
+      class="mb-8 w-full h-34"
+    />
+    <button class="blue float-right w-32" disabled={!story} on:click={sendStory}
+      >Send</button
+    >
+  {:else}
+    <div class="tracking-widest text-center">Waiting for other players...</div>
+  {/if}
 </div>
 
 <style>
-  .buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
-  }
-
-  .flex {
-    display: flex;
-    gap: 20px;
-  }
-
-  .left-column {
-    flex: 1;
-  }
-
-  .right-column {
-    flex: 3;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-
-  li {
-    margin-bottom: 8px;
-    padding: 4px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-
-  input,
-  button {
-    @apply w-full rounded-xl border-2 border-solid border-slate-300 px-3 py-1;
-  }
-
-  input:focus {
-    @apply rounded-2xl;
-  }
-
-  button {
-    @apply rounded-3xl border-2 border-solid border-slate-300 bg-slate-100 px-4 py-1;
-  }
-
-  button:disabled {
-    @apply border-slate-200 bg-slate-50 text-slate-300;
-  }
-
-  button:hover:enabled {
-    @apply scale-105 bg-slate-200 shadow;
-  }
 </style>

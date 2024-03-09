@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class Story {
 
-	private final List<Map.Entry<String, String>> storyParts;
+	private final List<Map.Entry<Player, String>> storyParts;
 
 	public Story() {
 		storyParts = new ArrayList<>();
@@ -18,14 +18,15 @@ public class Story {
 		return storyParts.size();
 	}
 
-	public void addStoryPart(String player, String storyPart) {
+	public void addStoryPart(Player player, String storyPart) {
 		storyParts.add(new AbstractMap.SimpleEntry<>(player, storyPart));
 	}
 
 	public String getStorySnippet() {
-		if (storyParts.size() == 0) {
+		if (storyParts.isEmpty()) {
 			return "";
 		}
+
 		String lastPart = storyParts.get(storyParts.size() - 1).getValue();
 		int snippetStart = lastPart.length() - Math.min(50, lastPart.length());
 		return "... "  + lastPart.substring(snippetStart);

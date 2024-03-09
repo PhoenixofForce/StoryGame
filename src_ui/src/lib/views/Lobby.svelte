@@ -34,14 +34,18 @@
 </script>
 
 <div class="fixed top-5 left-7">
-  <PlayerDisplay
-    playerNames={$lobbyStore.players.map((player) => {
-      return {
-        name: getPlayerDisplayName(player),
-        color: getPlayerColor(player),
-      };
-    })}
-  />
+  <span class="font-semibold"> Room Code: '{$lobbyStore.roomCode}'</span>
+
+  <div>
+    <PlayerDisplay
+      playerNames={$lobbyStore.players.map((player) => {
+        return {
+          name: getPlayerDisplayName(player),
+          color: getPlayerColor(player),
+        };
+      })}
+    />
+  </div>
 </div>
 
 <div class="flex justify-center items-center">

@@ -21,13 +21,8 @@
   });
 
   addEventHandler("lobby-change", {
-    onSuccess: goToLobby,
+    onSuccess: displayLobby,
   });
-
-  function goToLobby(data: BaseMessage) {
-    console.log(data);
-    displayLobby();
-  }
 
   function handleJoinError(error: BaseMessage) {
     errorMessage = error.message!;

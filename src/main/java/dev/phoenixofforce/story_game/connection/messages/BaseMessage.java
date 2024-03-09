@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.phoenixofforce.story_game.connection.messages.trigger.EndGameTrigger;
+import dev.phoenixofforce.story_game.connection.messages.trigger.StartGameTrigger;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +26,11 @@ import java.io.IOException;
 @JsonSubTypes({
     @JsonSubTypes.Type(value = PlayerJoinMessage.class, name="join"),
     @JsonSubTypes.Type(value = LobbyStateMessage.class, name="lobby-change"),
-    @JsonSubTypes.Type(value = StartGameTriggerMessage.class, name="start_game"),
-    @JsonSubTypes.Type(value = StartRoundTriggerMessage.class, name="start_round"),
+    @JsonSubTypes.Type(value = StartRoundMessage.class, name="start_round"),
     @JsonSubTypes.Type(value = SubmitStoryMessage.class, name="submit_story"),
+    @JsonSubTypes.Type(value = GameStateUpdateMessage.class, name="game_update"),
+    @JsonSubTypes.Type(value = EndGameTrigger.class, name="end_game"),
+    @JsonSubTypes.Type(value = StartGameTrigger.class, name="start_game"),
 })
 public class BaseMessage {
 

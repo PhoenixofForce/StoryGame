@@ -7,7 +7,7 @@
 </script>
 
 <main>
-  {$viewStore}
+  <span class="fixed top-0 left-0">State: {$viewStore}</span>
   {#if $viewStore === "login"}
     <Login />
   {:else if $viewStore === "lobby"}

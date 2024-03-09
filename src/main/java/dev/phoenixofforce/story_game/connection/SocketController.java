@@ -68,7 +68,7 @@ public class SocketController extends TextWebSocketHandler {
             return;
         }
 
-        Player host = new Player(sender, joinMessage.getName(), joinMessage.getRoom());
+        Player host = new Player(sender, joinMessage.getName(), roomCode);
         Lobby lobby = new Lobby(roomCode);
         lobby.addPlayer(host);
 
@@ -95,7 +95,7 @@ public class SocketController extends TextWebSocketHandler {
         lobby.addPlayer(player);
  }
 
-    private void handleStart(WebSocketSession sender, BaseMessage message) throws IOException {
+    private void handleStart(WebSocketSession sender, BaseMessage message) {
            Player player = socketToPlayer.get(sender);
            Lobby lobby = codeToLobby.get(player.getConnectedRoom());
            lobby.startGame(player);

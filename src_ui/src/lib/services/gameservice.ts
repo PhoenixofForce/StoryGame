@@ -22,11 +22,10 @@ export function sendJoinMessage(username: string, roomCode: string, type: "join"
     });
 }
 
-export function sendSubmitStoryMessage(username: string, story: string) {
+export function sendSubmitStoryMessage(story: string) {
     const data = {
         type: "submit_story",
         error: false,
-        name: username,
         story: story,
     }
     sendMessage(data);

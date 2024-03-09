@@ -5,11 +5,13 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StartRoundTriggerMessage extends BaseMessage {
-	int index;
-	String storySnippet;
+public class StartRoundMessage extends BaseMessage {
 
-	public StartRoundTriggerMessage() {
+	private int currentRound;
+	private int maxRounds;
+	private String lastStorySnippet;
+
+	public StartRoundMessage() {
 		super("start_round", false, "");
 	}
 }
