@@ -6,7 +6,7 @@
     GameStateUpdateMessage,
     StartRoundTriggerMessage,
   } from "../services/messageTypes";
-  import { displayLobby } from "../services/navigationService";
+  import { displayEvaluation } from "../services/navigationService";
 
   let storyEnd = "";
   let story = "";
@@ -38,7 +38,7 @@
   });
 
   addEventHandler("end_game", {
-    onSuccess: displayLobby,
+    onSuccess: displayEvaluation,
   });
 
   function sendStory() {

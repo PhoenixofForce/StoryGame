@@ -3,7 +3,7 @@ import { connect, sendMessage, addEventHandler } from "./websocketService";
 
 export { addEventHandler };
 
-const url = "ws://localhost:8080/hello";
+const url = import.meta.env.VITE_API_URL;
 
 export function sendJoinMessage(username: string, roomCode: string, type: "join" | "create") {
     const data: JoinMessage = {

@@ -13,3 +13,7 @@ export function displayLobby() {
 export function displayInGame() {
   viewStore.set('ingame');
 }
+
+export function displayEvaluation() {
+  viewStore.set('evaluation');
+}
