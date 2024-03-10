@@ -30,3 +30,12 @@ export function sendSubmitStoryMessage(story: string) {
     }
     sendMessage(data);
 }
+
+export function sendRequestRevealMessage() {
+    const data = {
+        type: "request_reveal",
+        error: false,
+        message: ""
+    }
+    sendMessage(data);
+}

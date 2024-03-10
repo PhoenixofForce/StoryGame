@@ -1,4 +1,12 @@
-export type { BaseMessage, JoinMessage, LobbyStateMessage, StartRoundTriggerMessage, GameStateUpdateMessage }
+export type {
+    BaseMessage,
+    JoinMessage,
+    LobbyStateMessage,
+    StartRoundTriggerMessage,
+    GameStateUpdateMessage,
+    RequestRevealMessage,
+    StoryRevealMessage
+}
 
 interface BaseMessage {
     type: string,
@@ -27,4 +35,11 @@ interface StartRoundTriggerMessage extends BaseMessage {
 
 interface GameStateUpdateMessage extends BaseMessage {
     finishedPlayers: number;
+}
+
+interface RequestRevealMessage extends BaseMessage {}
+
+interface StoryRevealMessage extends BaseMessage {
+    writer: string,
+    text: string
 }

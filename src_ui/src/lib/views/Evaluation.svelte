@@ -1,6 +1,11 @@
 <script lang="ts">
   import PlayerPlaque from "../components/PlayerPlaque.svelte";
   import { lobbyStore } from "../services/lobbyService";
+  import { addEventHandler } from "../services/websocketService";
+  import { sendRequestRevealMessage } from "../services/gameservice";
+  import type {
+    StoryRevealMessage
+  } from "../services/messageTypes";
 
   let revealedParts = [
     {
@@ -12,6 +17,20 @@
       writer: "Alics",
     },
   ];
+
+  addEventHandler("reveal_story", {
+    onSuccess: (e) => {
+      const data = e as StoryRevealMessage;
+      // reassign to trigger reactivity
+      revealedParts = [
+        ...revealedParts,
+        {
+          text: data.text,
+          writer: data.writer,
+        },
+      ];
+    }
+  });
 </script>
 
 <div>
@@ -28,11 +47,12 @@
     </div>
   {/each}
 
-  <div
+  <button
     class="bg-blue-100 tracking-wide font-bold px-6 py-3 rounded-full mt-6 shadow w-fit"
+    on:click={sendRequestRevealMessage}
   >
     Click to Reveal next message
-  </div>
+  </button>
 </div>
 
 <style>
