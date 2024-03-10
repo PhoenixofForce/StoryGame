@@ -21,7 +21,11 @@ public class Story {
 	public void addStoryPart(Player player, String storyPart) {
 		storyParts.add(new AbstractMap.SimpleEntry<>(player, storyPart));
 	}
-
+	
+	public Map.Entry<Player, String> getStoryPart(int index) {
+		return storyParts.get(index);
+	}
+	
 	public String getStorySnippet() {
 		if (storyParts.isEmpty()) {
 			return "";

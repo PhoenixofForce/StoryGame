@@ -52,7 +52,7 @@
   The Story Game
 </div>
 <p class="mb-60 italic text-slate-400">
-  Round {currentRound + 1} / {maxRounds + 1}<br />
+  Round {currentRound} / {maxRounds}<br />
   {#if playersReady > 0}
     <span>{playersReady} / {$lobbyStore.players.length} Players are ready</span>
   {/if}
@@ -66,9 +66,9 @@
       placeholder="Type your message"
       class="mb-8 w-full h-34"
     />
-    <button class="blue float-right w-32" disabled={!story} on:click={sendStory}
-      >Send</button
-    >
+    <button class="blue float-right w-32" disabled={!story} on:click={sendStory}>
+      Send
+    </button>
   {:else}
     <div class="tracking-widest text-center">Waiting for other players...</div>
   {/if}
