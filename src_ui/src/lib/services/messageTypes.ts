@@ -4,7 +4,6 @@ export type {
     LobbyStateMessage,
     StartRoundTriggerMessage,
     GameStateUpdateMessage,
-    RequestRevealMessage,
     StoryRevealMessage
 }
 
@@ -37,9 +36,8 @@ interface GameStateUpdateMessage extends BaseMessage {
     finishedPlayers: number;
 }
 
-interface RequestRevealMessage extends BaseMessage {}
-
 interface StoryRevealMessage extends BaseMessage {
     writer: string,
     text: string
+    storyEnd: boolean
 }

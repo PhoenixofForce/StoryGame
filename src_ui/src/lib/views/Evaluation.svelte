@@ -7,20 +7,18 @@
     StoryRevealMessage
   } from "../services/messageTypes";
 
-  let revealedParts = [
-    {
-      text: "Peter eats some Hot dog",
-      writer: "Bob",
-    },
-    {
-      text: "It was very hot",
-      writer: "Alics",
-    },
-  ];
+
+  let wasStoryEnd: boolean = false;
+  let revealedParts: Array<{ text: string; writer: string }> = [];
 
   addEventHandler("reveal_story", {
     onSuccess: (e) => {
       const data = e as StoryRevealMessage;
+
+      if (wasStoryEnd) {
+        console.log("clearing prev stories");
+        revealedParts = [];
+      }
       // reassign to trigger reactivity
       revealedParts = [
         ...revealedParts,
@@ -29,12 +27,14 @@
           writer: data.writer,
         },
       ];
+      wasStoryEnd = data.storyEnd;
+      console.log("should it end here?", data);
     }
   });
 </script>
 
 <div>
-  <h1 class="text-lg font-bold">Story from Peter</h1>
+  <h1 class="text-lg font-bold">Story</h1>
 
   {#each revealedParts as part}
     <div class="w-full">
@@ -51,7 +51,7 @@
     class="bg-blue-100 tracking-wide font-bold px-6 py-3 rounded-full mt-6 shadow w-fit"
     on:click={sendRequestRevealMessage}
   >
-    Click to Reveal next message
+    Click to Reveal next {wasStoryEnd ? "Story" : "Message"}
   </button>
 </div>
 

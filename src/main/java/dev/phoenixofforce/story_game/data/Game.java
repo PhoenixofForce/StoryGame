@@ -78,7 +78,9 @@ public class Game {
 		message.setText(storyPart.getValue());
 		
 		//TODO adapt to whatever happens to stories if players leave midgame
+		message.setStoryEnd(revealedStoryPartIndex == maxRounds - 1);
 		++revealedStoryPartIndex;
+
 		if (revealedStoryPartIndex >= maxRounds) {
 			revealedStoryPartIndex = 0;
 			++revealedStoryIndex;
