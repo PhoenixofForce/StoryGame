@@ -50,7 +50,7 @@ public class Lobby {
     public void startGame(Player starter) {
         if(!starter.getSession().equals(getHost().getSession())) return;
         send(new StartGameTrigger());
-        game = new Game(1, new ArrayList<>(connectedPlayer.stream().toList()));
+        game = new Game(3, new ArrayList<>(connectedPlayer.stream().toList()));
 
         sendPersonalized(player -> {
             StartRoundMessage message = new StartRoundMessage();
@@ -76,7 +76,7 @@ public class Lobby {
 
         sendPersonalized(player -> {
             StartRoundMessage message = new StartRoundMessage();
-            message.setCurrentRound(game.getCurrentRound());
+            message.setCurrentRound(game.getCurrentRound() + 1);
             message.setMaxRounds(game.getMaxRounds());
             message.setLastStorySnippet(game.getStorySnippet(player));
             return message;
