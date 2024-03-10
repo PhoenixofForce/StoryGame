@@ -33,7 +33,7 @@
   }
 </script>
 
-<div class="fixed top-5 left-7">
+<div class="md:fixed md:top-5 md_left-7">
   <span class="font-semibold"> Room Code: '{$lobbyStore.roomCode}'</span>
 
   <div>
@@ -66,7 +66,7 @@
 
     <button
       on:click={startGame}
-      class="blue mt-4 w-32 float-right ml-auto"
+      class="w-full blue mt-4 md:w-32 float-right ml-auto"
       disabled={$lobbyStore.you !== $lobbyStore.host}
     >
       Start Game</button
@@ -77,10 +77,10 @@
 <style>
   .card {
     max-width: 600px;
-    min-width: 200px;
+    min-width: 300px;
     max-height: 800px;
     min-height: 300px;
-    width: 30vw;
+    width: 40vw;
     height: 70vh;
   }
 </style>

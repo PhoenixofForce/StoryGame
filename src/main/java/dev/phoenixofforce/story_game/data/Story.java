@@ -32,7 +32,12 @@ public class Story {
 		}
 
 		String lastPart = storyParts.get(storyParts.size() - 1).getValue();
-		int snippetStart = lastPart.length() - Math.min(50, lastPart.length());
-		return "... "  + lastPart.substring(snippetStart);
+		String[] sentences = lastPart.split("[.?!]");
+
+		String lastSentence = sentences[sentences.length - 1];
+		lastSentence += lastPart.substring(lastPart.indexOf(lastSentence) + lastSentence.length());
+
+		int snippetStart = lastSentence.length() - Math.min(50, lastSentence.length());
+		return "... "  + lastSentence.substring(snippetStart);
 	}
 }

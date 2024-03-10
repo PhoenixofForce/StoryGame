@@ -33,7 +33,7 @@
   <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow text-center">
     The Story Game
   </div>
-  <p class="mb-24 xl:mb-64 italic text-slate-400 text-center">
+  <p class="mb-32 xl:mb-52 italic text-slate-400 text-center">
     ~ This site is currently under construction ~
   </p>
 
@@ -62,8 +62,10 @@
   }
 
   .buttons {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
+    @apply flex w-full flex-col justify-center md:flex-row md:gap-6;
+  }
+
+  .buttons button {
+    margin-top: 16px;
   }
 </style>

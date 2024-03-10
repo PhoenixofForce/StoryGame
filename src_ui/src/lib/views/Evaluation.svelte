@@ -81,6 +81,7 @@
   <h1 class="text-lg font-bold">
     Story from {currentCreator}
   </h1>
+  <hr class="h-px bg-gray-200 w-full dark:bg-gray-800 my-4" />
 
   <div class="messages flex flex-col">
     {#each revealedParts as part}
@@ -101,19 +102,27 @@
 
   <div class="mt-6">
     {#if wasStoryEnd}
-      <button on:click={downloadStory}> Download </button>
+      <button class="w-full md:w-32 mb-4" on:click={downloadStory}>
+        Download
+      </button>
       {#if wasLastStory}
-        <button on:click={displayLobby}> Back to Lobby </button>
+        <button class="w-full md:w-fit" on:click={displayLobby}>
+          Back to Lobby
+        </button>
       {/if}
     {/if}
     {#if $lobbyStore.you === $lobbyStore.host && !wasLastStory}
       {#if wasStoryEnd}
-        <button class="green" on:click={next} disabled={!$canSpeak}>
+        <button
+          class="green w-full md:w-fit"
+          on:click={next}
+          disabled={!$canSpeak}
+        >
           Click to reveal next Story
         </button>
       {:else}
         <button
-          class="blue tracking-wide font-bold px-6 py-3 rounded-full shadow w-fit"
+          class=" w-full md:w-fit blue tracking-wide font-bold px-6 py-3 rounded-full shadow"
           on:click={next}
           disabled={!$canSpeak}
         >
@@ -128,6 +137,6 @@
   .messages {
     width: 60%;
     max-width: 800px;
-    min-width: 400px;
+    min-width: 300px;
   }
 </style>
