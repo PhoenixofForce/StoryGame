@@ -4,7 +4,8 @@ export type {
     LobbyStateMessage,
     StartRoundTriggerMessage,
     GameStateUpdateMessage,
-    StoryRevealMessage
+    StoryRevealMessage,
+    NextStoryMessage
 }
 
 interface BaseMessage {
@@ -39,5 +40,10 @@ interface GameStateUpdateMessage extends BaseMessage {
 interface StoryRevealMessage extends BaseMessage {
     writer: string,
     text: string
-    storyEnd: boolean
+    storyEnd: boolean,
+    lastStory: boolean
+}
+
+interface NextStoryMessage extends BaseMessage {
+    creator: string,
 }

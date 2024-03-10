@@ -71,23 +71,30 @@ public class Game {
 	}
 	public StoryRevealMessage advanceReveal() {
 		if (allStoriesRevealed()) return null;
-		
-		Map.Entry<Player, String> storyPart =  getStory(revealedStoryIndex).getStoryPart(revealedStoryPartIndex);
+
+		Story story = getStory(revealedStoryIndex);
+		Map.Entry<Player, String> storyPart = story.getStoryPart(revealedStoryPartIndex);
 		StoryRevealMessage message = new StoryRevealMessage();
 		message.setWriter(storyPart.getKey().getName());
 		message.setText(storyPart.getValue());
-		
-		//TODO adapt to whatever happens to stories if players leave midgame
-		message.setStoryEnd(revealedStoryPartIndex == maxRounds - 1);
+
+		message.setStoryEnd(revealedStoryPartIndex == story.getLength() - 1);
 		++revealedStoryPartIndex;
 
 		if (revealedStoryPartIndex >= maxRounds) {
 			revealedStoryPartIndex = 0;
 			++revealedStoryIndex;
 		}
+
+		System.out.println(allStoriesRevealed());
+		message.setLastStory(allStoriesRevealed());
 		return message;
 	}
-	
+
+	public String getCurrentStoriesPlayer() {
+		return getStory(revealedStoryIndex).getStoryPart(0).getKey().getName();
+	}
+
 	public boolean allStoriesRevealed() {
 		return revealedStoryIndex >= stories.size();
 	}

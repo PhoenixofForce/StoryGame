@@ -70,6 +70,12 @@ public class Lobby {
         }
         if (game.getCurrentRound() >= game.getMaxRounds() - 1) {
             send(new EndGameTrigger());
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            sendNextStory();
             return;
         }
         game.advanceRound();
@@ -81,5 +87,9 @@ public class Lobby {
             message.setLastStorySnippet(game.getStorySnippet(player));
             return message;
         });
+    }
+
+    public void sendNextStory() {
+        send(new NextStoryMessage(game.getCurrentStoriesPlayer()));
     }
 }

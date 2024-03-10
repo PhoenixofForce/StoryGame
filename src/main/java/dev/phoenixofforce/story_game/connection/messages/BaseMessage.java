@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.phoenixofforce.story_game.connection.messages.trigger.EndGameTrigger;
+import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.StartGameTrigger;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,8 +32,10 @@ import java.io.IOException;
     @JsonSubTypes.Type(value = GameStateUpdateMessage.class, name="game_update"),
     @JsonSubTypes.Type(value = RequestRevealMessage.class, name="request_reveal"),
     @JsonSubTypes.Type(value = StoryRevealMessage.class, name="reveal_story"),
-    @JsonSubTypes.Type(value = EndGameTrigger.class, name="end_game"),
     @JsonSubTypes.Type(value = StartGameTrigger.class, name="start_game"),
+    @JsonSubTypes.Type(value = EndGameTrigger.class, name="end_game"),
+    @JsonSubTypes.Type(value = NextStoryTrigger.class, name="next_story_trigger"),
+    @JsonSubTypes.Type(value = NextStoryMessage.class, name="next_story"),
 })
 public class BaseMessage {
 

@@ -39,3 +39,12 @@ export function sendRequestRevealMessage() {
     }
     sendMessage(data);
 }
+
+export function sendNextStoryRequest() {
+    const data = {
+        type: "next_story_trigger",
+        error: false,
+        message: "",
+    }
+    sendMessage(data);
+}

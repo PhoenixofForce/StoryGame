@@ -46,3 +46,9 @@ button.blue {
   @apply disabled:border-blue-200 disabled:bg-blue-50 disabled:text-blue-300;
   @apply hover:enabled:bg-blue-200;
 }
+
+button.green {
+  @apply border-green-300 bg-green-100 px-4 text-green-800;
+  @apply disabled:border-green-200 disabled:bg-green-50 disabled:text-green-400;
+  @apply hover:enabled:bg-green-200;
+}

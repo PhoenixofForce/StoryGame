@@ -1,15 +1,13 @@
 package dev.phoenixofforce.story_game.connection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.phoenixofforce.story_game.connection.messages.BaseMessage;
-import dev.phoenixofforce.story_game.connection.messages.PlayerJoinMessage;
-import dev.phoenixofforce.story_game.connection.messages.RequestRevealMessage;
-import dev.phoenixofforce.story_game.connection.messages.StoryRevealMessage;
-import dev.phoenixofforce.story_game.connection.messages.SubmitStoryMessage;
+import dev.phoenixofforce.story_game.connection.messages.*;
+import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
 import dev.phoenixofforce.story_game.data.Game;
 import dev.phoenixofforce.story_game.data.Lobby;
 import dev.phoenixofforce.story_game.data.Player;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
@@ -35,8 +33,24 @@ public class SocketController extends TextWebSocketHandler {
             "join", this::register,
             "start_game", this::handleStart,
             "submit_story", this::acceptStory,
-            "request_reveal", this::revealStory
+            "request_reveal", this::revealStory,
+            "next_story_trigger", this::nextStory
         );
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        Player player = socketToPlayer.get(session);
+        Lobby lobby = codeToLobby.get(player.getConnectedRoom());
+
+        player.setConnected(false);
+        player.getSession().close();
+        socketToPlayer.remove(session);
+
+        if(lobby.getConnectedPlayer().stream().noneMatch(Player::isConnected)) {
+            codeToLobby.remove(player.getConnectedRoom());
+            log.info("Closed room '{}'", player.getConnectedRoom());
+        }
     }
 
     @Override
@@ -73,6 +87,8 @@ public class SocketController extends TextWebSocketHandler {
         }
 
         Player host = new Player(sender, joinMessage.getName(), roomCode);
+        host.setConnected(true);
+
         Lobby lobby = new Lobby(roomCode);
         lobby.addPlayer(host);
 
@@ -93,6 +109,7 @@ public class SocketController extends TextWebSocketHandler {
         }
 
         Player player = new Player(sender, joinMessage.getName(), joinMessage.getRoom());
+        player.setConnected(true);
         Lobby lobby = codeToLobby.get(roomCode);
 
         socketToPlayer.put(sender, player);
@@ -125,5 +142,12 @@ public class SocketController extends TextWebSocketHandler {
         if (game.allStoriesRevealed()) return;
         
         lobby.send(game.advanceReveal());
+    }
+
+    private void nextStory(WebSocketSession sender, BaseMessage message) {
+        if(!(message instanceof NextStoryTrigger)) return;
+        Player player = socketToPlayer.get(sender);
+        Lobby lobby = codeToLobby.get(player.getConnectedRoom());
+        lobby.sendNextStory();
     }
 }
