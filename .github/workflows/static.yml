@@ -41,11 +41,11 @@ jobs:
           node-version: 18
 
       - run: npm install
-        working-directory: .\src_ui\
+        working-directory: src_ui
         
       - name: Build static page
         run: npm run build
-        working-directory: .\src_ui\
+        working-directory: src_ui
       
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -53,7 +53,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.\src_ui\/dist'
+          path: './src_ui/dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
