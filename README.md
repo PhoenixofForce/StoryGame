@@ -50,7 +50,19 @@ npm run dev
 When changing a file, the page gets rebuild automatically and shows you the new version.
 
 ## Building & Deployment
-todo 
+todo: when tls is working
+
+### Building Frontend
+
+Depending on how you want to deploy the build page, you either have to adjust `base` inside `src_ui\vite.config.ts` or adjust the paths to the js and css files in the build html manually.
+
+```bash
+cd src_ui
+npm install
+npm run build
+```
+
+This generated `src_ui\dist` folder, which contains the static html file. 
 
 ## Contributing
 
@@ -64,48 +76,8 @@ todo
 - Only repeat smaller pieces of code a few times
 
 ### What can be done
-(todo: create project page?)
+See [on the project tab](https://github.com/users/PhoenixofForce/projects/2) whats left to do.
 
-The abbreviation **(BE)** means that something can purely be implemented in the backend with no frontend requirements. <br> 
-**(N2H)** means that something is nice to have and no necessity for the first release.
-
-- General
-    - Fun Colors/ Design
-    - Github workflow that builds the frontend and pushes it to the (currently not existing) gh-pages branch, and also builds docker images for both back- and frontend. Those are published *somewhere currently undecided*
-    - (BE) handle connections => when all players disconnected close room
-- Start screen, where
-  - the player can create a new or join an existing game
-  - (BE) Generate a (not yet existing) room-code when omitted
-  - (N2H) select the profile picture
-  - how to play section
-- Lobby screen, where 
-  - the room-creator can change settings, which are displayed for the other
-  - amount of "rounds"
-  - the people that have connected to the lobby
-  - copy a link to the room that can be shared
-  - timer length, when does the timer start
-- Game screen, which shows 
-  - the last sentence of the player before you, 
-  - the amount of players that are ready
-  - the timer and the round
-  - (Backend) A good algorithm that distributes the player order well
-- Results screen, where the host can
-  - reveal each part of the story one by one, TTS can read it out loud
-  - text messaging app style-ish
-  - (N2H) a voting mechanism 
-- Summary screen
-  - Overview of all the stories
-  - (N2H) with accumulated points
-  - possibility of downloading them all
-- Nice to have
-  - set of fixed images that the players can choose as a profile picture
-  - Background music and sounds (that can be muted)
-  - dark mode/ light mode toggle
-  - Cool, fitting logo and name
-  - Minigame for the people that have completed their part of the story
-  - A scoring system
-  - i18n
-  - Use OpenApi to generate Message classes from yaml
 
 ## License
 todo
