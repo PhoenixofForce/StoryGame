@@ -56,14 +56,21 @@ public class Game {
 	}
 
 	private void rotateStories() {
+		// a good algorithm to rotate stories is : +1, -2, +3, -4 ...
+		// this works perfectly for even numbers of players and as good as possible for odd numbers of players
+		int shift = currentRound % playerOrder.size();
+		if (shift % 2 == 0) {
+			shift = playerOrder.size() - shift;
+		}
+
 		Story firstStory = stories.get(playerOrder.get(0));
 
 		for (int i = 0; i < playerOrder.size() - 1; i++) {
 			Player player = playerOrder.get(i);
-			Story nextStory = stories.get(playerOrder.get((i + 1) % playerOrder.size()));
+			Story nextStory = stories.get(playerOrder.get((i + shift) % playerOrder.size()));
 			stories.put(player, nextStory);
 		}
-		stories.put(playerOrder.get(playerOrder.size() - 1), firstStory);
+		stories.put(playerOrder.get((playerOrder.size() - shift) % playerOrder.size()), firstStory);
 	}
 	
 	private Story getStory(int index) {
