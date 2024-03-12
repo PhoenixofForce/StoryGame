@@ -50,7 +50,19 @@ npm run dev
 When changing a file, the page gets rebuild automatically and shows you the new version.
 
 ## Building & Deployment
-todo: when tls is working
+The backend currently does not support ssl/ tls so the website needs to be deployed without https (for now).
+
+### Building Backend
+
+Select your wanted version [here](https://github.com/PhoenixofForce/StoryGame/pkgs/container/storygame) and pull the image.
+```bash
+docker pull ghcr.io/phoenixofforce/storygame:master
+```
+
+After that you can run the image with
+```bash
+docker run -d -p 8080:8080 --restart=always --name StoryGame ghcr.io/phoenixofforce/storygame:master
+```
 
 ### Building Frontend
 

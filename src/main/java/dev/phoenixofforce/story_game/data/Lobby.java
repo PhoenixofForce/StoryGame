@@ -90,6 +90,6 @@ public class Lobby {
     }
 
     public void sendNextStory() {
-        send(new NextStoryMessage(game.getCurrentStoriesPlayer()));
+        send(new NextStoryMessage(game.getCurrentStoriesAuthor()));
     }
 }

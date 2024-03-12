@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { sendJoinMessage, addEventHandler } from "../services/gameservice";
+  import { sendJoinMessage, addEventHandler } from "../services/gameService";
   import type { BaseMessage } from "../services/messageTypes";
   import { displayLobby } from "../services/navigationService";
 

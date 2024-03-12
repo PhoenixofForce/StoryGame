@@ -11,8 +11,9 @@ import java.util.Map;
 @Data
 public class Game {
 
-	private final int maxRounds;
 	private int currentRound;
+	private final int maxRounds;
+
 	private final Map<Player, Story> stories;
 	private final List<Player> playerOrder;
 
@@ -26,7 +27,6 @@ public class Game {
 		Collections.shuffle(players);
 
 		stories = new HashMap<>();
-
 		for (Player player : players) {
 			stories.put(player, new Story());
 		}
@@ -41,6 +41,10 @@ public class Game {
 	
 	public boolean isGameOver() {
 		return stories.values().stream().allMatch(s -> s.getLength() >= maxRounds);
+	}
+
+	public boolean allStoriesRevealed() {
+		return revealedStoryIndex >= stories.size();
 	}
 	
 	public void advanceRound() {
@@ -96,16 +100,12 @@ public class Game {
 			++revealedStoryIndex;
 		}
 
-		System.out.println(allStoriesRevealed());
 		message.setLastStory(allStoriesRevealed());
 		return message;
 	}
 
-	public String getCurrentStoriesPlayer() {
+	public String getCurrentStoriesAuthor() {
 		return getStory(revealedStoryIndex).getStoryPart(0).getKey().getName();
 	}
 
-	public boolean allStoriesRevealed() {
-		return revealedStoryIndex >= stories.size();
-	}
 }
