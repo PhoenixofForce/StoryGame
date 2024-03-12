@@ -4,13 +4,14 @@
   import {
     sendRequestRevealMessage,
     sendNextStoryRequest,
-  } from "../services/gameservice";
+  } from "../services/gameService";
   import { canSpeak, speak } from "../services/speakService";
   import type {
     StoryRevealMessage,
     NextStoryMessage,
   } from "../services/messageTypes";
   import { displayLobby } from "../services/navigationService";
+    import { download } from "../services/downloadService";
 
   let wasStoryEnd = false;
   let wasLastStory = false;
@@ -61,19 +62,7 @@
       text += revealedPart.writer + ":\r\n" + revealedPart.text + "\r\n\r\n";
     }
 
-    var element = document.createElement("a");
-    element.setAttribute(
-      "href",
-      "data:text/plain;charset=utf-8," + encodeURIComponent(text),
-    );
-    element.setAttribute("download", filename);
-
-    element.style.display = "none";
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
+    download(filename, text);
   }
 </script>
 

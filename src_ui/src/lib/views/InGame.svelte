@@ -1,6 +1,6 @@
 <script lang="ts">
   import { addEventHandler } from "../services/websocketService";
-  import { sendSubmitStoryMessage } from "../services/gameservice";
+  import { sendSubmitStoryMessage } from "../services/gameService";
   import { lobbyStore } from "../services/lobbyService";
   import type {
     GameStateUpdateMessage,
