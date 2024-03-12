@@ -55,6 +55,7 @@ todo: when tls is working
 ### Building Frontend
 
 Depending on how you want to deploy the build page, you either have to adjust `base` inside `src_ui\vite.config.ts` or adjust the paths to the js and css files in the build html manually.
+Also adjust `src_ui\.env.production` to your needs.
 
 ```bash
 cd src_ui
@@ -62,7 +63,11 @@ npm install
 npm run build
 ```
 
-This generated `src_ui\dist` folder, which contains the static html file. 
+This generated `src_ui\dist` folder, which contains the static html file.
+The easiest way to deploy this is to run
+```bash
+python3 -m http.server
+```
 
 ## Contributing
 
