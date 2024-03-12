@@ -18,9 +18,15 @@ public class Lobby {
     private final List<Player> connectedPlayer = Collections.synchronizedList(new ArrayList<>());
     private final String roomCode;
     private Game game;
+    private boolean gameStarted = false;
 
     public void addPlayer(Player player) {
         this.connectedPlayer.add(player);
+        sendLobbyChangeUpdate();
+    }
+
+    public void removePlayer(Player player) {
+        this.connectedPlayer.remove(player);
         sendLobbyChangeUpdate();
     }
 
@@ -51,6 +57,7 @@ public class Lobby {
         if(!starter.getSession().equals(getHost().getSession())) return;
         send(new StartGameTrigger());
         game = new Game(connectedPlayer.size(), new ArrayList<>(connectedPlayer.stream().toList()));
+        gameStarted = true;
 
         sendPersonalized(player -> {
             StartRoundMessage message = new StartRoundMessage();
