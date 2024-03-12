@@ -8,6 +8,7 @@ function connect(url: string): Promise<void> {
         socket = new WebSocket(url);
         socket.addEventListener("open", () => {
             console.log("Opened");
+            startHeartbeat();
             resolve();
         });
 
@@ -51,4 +52,14 @@ function fireEvent(type: string, isError: boolean, data: any) {
             if (isError && e.handler.onError) e.handler.onError(data);
             if (!isError && e.handler.onSuccess) e.handler.onSuccess(data);
         });
+}
+
+function startHeartbeat() {
+    setInterval(
+        () => {
+            fetch(import.meta.env.VITE_REST_URL).then((response) => {
+
+            });
+        }, 10 * 1000
+    );
 }

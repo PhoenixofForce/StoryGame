@@ -29,6 +29,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     env: 
       VITE_API_URL: ${{secrets.backend_url}}
+      VITE_REST_URL: ${{secrets.vite_ping_url}}
       
     runs-on: ubuntu-latest
     steps:
