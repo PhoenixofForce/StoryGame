@@ -33,7 +33,10 @@ public class Game {
 	}
 	
 	public boolean isRoundOver() {
-		return stories.values().stream().allMatch(s -> s.getLength() > currentRound);
+		return stories.keySet().stream()
+			.filter(Player::isConnected)
+			.map(stories::get)
+			.allMatch(s -> s.getLength() > currentRound);
 	}
 	
 	public boolean isGameOver() {

@@ -57,8 +57,11 @@ function fireEvent(type: string, isError: boolean, data: any) {
 function startHeartbeat() {
     setInterval(
         () => {
-            fetch(import.meta.env.VITE_REST_URL).then((response) => {
-
+            fetch(import.meta.env.VITE_REST_URL).then((response) => { });
+            sendMessage({
+                type: "ping",
+                error: false,
+                message: ""
             });
         }, 10 * 1000
     );

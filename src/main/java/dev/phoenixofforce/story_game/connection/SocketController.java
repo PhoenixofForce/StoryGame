@@ -3,6 +3,7 @@ package dev.phoenixofforce.story_game.connection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.phoenixofforce.story_game.connection.messages.*;
 import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
+import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
 import dev.phoenixofforce.story_game.data.Game;
 import dev.phoenixofforce.story_game.data.Lobby;
 import dev.phoenixofforce.story_game.data.Player;
@@ -34,7 +35,8 @@ public class SocketController extends TextWebSocketHandler {
             "start_game", this::handleStart,
             "submit_story", this::acceptStory,
             "request_reveal", this::revealStory,
-            "next_story_trigger", this::nextStory
+            "next_story_trigger", this::nextStory,
+            "ping", this::ping
         );
     }
 
@@ -149,5 +151,10 @@ public class SocketController extends TextWebSocketHandler {
         Player player = socketToPlayer.get(sender);
         Lobby lobby = codeToLobby.get(player.getConnectedRoom());
         lobby.sendNextStory();
+    }
+
+    private void ping(WebSocketSession sender, BaseMessage message) {
+        if(!(message instanceof Ping)) return;
+        new Ping().sendTo(sender);
     }
 }
