@@ -45,6 +45,9 @@ public class SocketController extends TextWebSocketHandler {
         Player player = socketToPlayer.get(session);
         Lobby lobby = codeToLobby.get(player.getConnectedRoom());
 
+        if (!lobby.isGameStarted()) {
+            lobby.removePlayer(player);
+        }
         player.setConnected(false);
         player.getSession().close();
         socketToPlayer.remove(session);
@@ -84,11 +87,12 @@ public class SocketController extends TextWebSocketHandler {
         }
 
         if(codeToLobby.containsKey(roomCode)) {
-            BaseMessage.getError("join", "Room code is invalid").sendTo(sender);
+            BaseMessage.getError("join", "Room code already exists").sendTo(sender);
             return;
         }
 
-        Player host = new Player(sender, joinMessage.getName(), roomCode);
+        Player host = new Player(joinMessage.getName(), roomCode);
+        host.setSession(sender);
         host.setConnected(true);
 
         Lobby lobby = new Lobby(roomCode);
@@ -106,17 +110,32 @@ public class SocketController extends TextWebSocketHandler {
         }
 
         if(!codeToLobby.containsKey(roomCode)) {
-           BaseMessage.getError("join", "Lobby does not exist").sendTo(sender);
+            BaseMessage.getError("join", "Room does not exist").sendTo(sender);
             return;
         }
 
-        Player player = new Player(sender, joinMessage.getName(), joinMessage.getRoom());
-        player.setConnected(true);
+        if(joinMessage.getName() == null ||joinMessage.getName().isBlank()) {
+            BaseMessage.getError("join", "Name is invalid").sendTo(sender);
+            return;
+        }
+
         Lobby lobby = codeToLobby.get(roomCode);
+        Optional<Player> playerInLobby = lobby.getConnectedPlayer().stream().filter((p) -> p.getName().equals(joinMessage.getName())).findAny();
+        if (playerInLobby.isPresent() && playerInLobby.get().isConnected()) {
+            BaseMessage.getError("join", "Player name already exists").sendTo(sender);
+            return;
+        }
+
+        //one might let users allow
+        Player player = playerInLobby.orElseGet(() -> new Player(joinMessage.getName(), joinMessage.getRoom()));
+        //TODO: Tell the player about the current gamestate when joining as existing player
+
+        player.setSession(sender);
+        player.setConnected(true);
 
         socketToPlayer.put(sender, player);
         lobby.addPlayer(player);
- }
+    }
 
     private void handleStart(WebSocketSession sender, BaseMessage message) {
            Player player = socketToPlayer.get(sender);
