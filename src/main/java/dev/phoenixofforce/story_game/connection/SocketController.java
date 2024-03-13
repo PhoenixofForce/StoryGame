@@ -2,10 +2,13 @@ package dev.phoenixofforce.story_game.connection;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.phoenixofforce.story_game.connection.messages.*;
+import dev.phoenixofforce.story_game.connection.messages.trigger.EndGameTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
+import dev.phoenixofforce.story_game.connection.messages.trigger.StartGameTrigger;
 import dev.phoenixofforce.story_game.data.Game;
 import dev.phoenixofforce.story_game.data.Lobby;
+import dev.phoenixofforce.story_game.data.LobbyState;
 import dev.phoenixofforce.story_game.data.Player;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
@@ -42,6 +45,8 @@ public class SocketController extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+        if(!socketToPlayer.containsKey(session)) return;
+
         Player player = socketToPlayer.get(session);
         Lobby lobby = codeToLobby.get(player.getConnectedRoom());
 
@@ -50,8 +55,11 @@ public class SocketController extends TextWebSocketHandler {
         }
         player.setConnected(false);
         player.getSession().close();
-        socketToPlayer.remove(session);
 
+        Thread.sleep(120 * 1000);
+        if(player.isConnected()) return;
+
+        socketToPlayer.remove(session);
         if(lobby.getConnectedPlayer().stream().noneMatch(Player::isConnected)) {
             codeToLobby.remove(player.getConnectedRoom());
             log.info("Closed room '{}'", player.getConnectedRoom());
@@ -85,13 +93,19 @@ public class SocketController extends TextWebSocketHandler {
         if(roomCode == null || roomCode.isBlank()) {
             roomCode = "Foo Bar"; // TODO: generate room code
         }
+        roomCode = roomCode.trim();
 
         if(codeToLobby.containsKey(roomCode)) {
             BaseMessage.getError("join", "Room code already exists").sendTo(sender);
             return;
         }
 
-        Player host = new Player(joinMessage.getName(), roomCode);
+        if(joinMessage.getName() == null ||joinMessage.getName().isBlank()) {
+            BaseMessage.getError("join", "Name is invalid").sendTo(sender);
+            return;
+        }
+
+        Player host = new Player(joinMessage.getName().trim(), roomCode);
         host.setSession(sender);
         host.setConnected(true);
 
@@ -108,6 +122,7 @@ public class SocketController extends TextWebSocketHandler {
             BaseMessage.getError("join", "Room code is invalid").sendTo(sender);
             return;
         }
+        roomCode = roomCode.trim();
 
         if(!codeToLobby.containsKey(roomCode)) {
             BaseMessage.getError("join", "Room does not exist").sendTo(sender);
@@ -118,23 +133,43 @@ public class SocketController extends TextWebSocketHandler {
             BaseMessage.getError("join", "Name is invalid").sendTo(sender);
             return;
         }
+        String playerName = joinMessage.getName().trim();
 
         Lobby lobby = codeToLobby.get(roomCode);
-        Optional<Player> playerInLobby = lobby.getConnectedPlayer().stream().filter((p) -> p.getName().equals(joinMessage.getName())).findAny();
+        Optional<Player> playerInLobby = lobby.getConnectedPlayer().stream().filter((p) -> p.getName().equals(playerName)).findAny();
         if (playerInLobby.isPresent() && playerInLobby.get().isConnected()) {
             BaseMessage.getError("join", "Player name already exists").sendTo(sender);
             return;
         }
 
-        //one might let users allow
-        Player player = playerInLobby.orElseGet(() -> new Player(joinMessage.getName(), joinMessage.getRoom()));
-        //TODO: Tell the player about the current gamestate when joining as existing player
+        if(playerInLobby.isEmpty() && lobby.getGame() != null && lobby.isGameStarted()) {
+            BaseMessage.getError("join", "Game is currently running. Please wait to the end").sendTo(sender);
+            return;
+        }
 
+        Player player = playerInLobby.orElse(new Player(playerName, roomCode));
         player.setSession(sender);
         player.setConnected(true);
-
         socketToPlayer.put(sender, player);
+
+        //tell player current game state
+        if(playerInLobby.isPresent() && lobby.getGame() != null && lobby.isGameStarted()) {
+            new StartGameTrigger().sendTo(sender);
+            lobby.getNextStoryMessage(player).sendTo(sender);
+            lobby.sendGameStateUpdate();
+            lobby.sendLobbyChangeUpdate();
+            if(!lobby.getGame().hasPlayerSubmitted(player)) {
+                lobby.getNextStoryMessage(player).sendTo(sender);
+            }
+            return;
+        }
+
         lobby.addPlayer(player);
+        if(lobby.getState() == LobbyState.EVALUATION) {
+            new EndGameTrigger().sendTo(sender);
+            lobby.sendNextStory(player);
+            //TODO: send already revealed messages
+        }
     }
 
     private void handleStart(WebSocketSession sender, BaseMessage message) {
@@ -148,7 +183,7 @@ public class SocketController extends TextWebSocketHandler {
 
         Player player = socketToPlayer.get(sender);
         Lobby lobby = codeToLobby.get(player.getConnectedRoom());
-        lobby.acceptStory(player, storyMessage.getStory());
+        lobby.acceptStory(player, storyMessage.getStory().trim());
     }
     
     private void revealStory(WebSocketSession sender, BaseMessage message) {
@@ -159,10 +194,10 @@ public class SocketController extends TextWebSocketHandler {
         Game game = lobby.getGame();
         
         if (player != lobby.getHost()) return;
-        if (game == null || !game.isGameOver()) return;
+        if (game == null || game.isGameRunning()) return;
         if (game.allStoriesRevealed()) return;
         
-        lobby.send(game.advanceReveal());
+        lobby.send(game.advanceReveal());   //todo: set lobby state to lobby
     }
 
     private void nextStory(WebSocketSession sender, BaseMessage message) {

@@ -1,6 +1,9 @@
 <script lang="ts">
   import { lobbyStore } from "../services/lobbyService";
-  import { addEventHandler } from "../services/websocketService";
+  import {
+    addEventHandler,
+    removeEventHandler,
+  } from "../services/websocketService";
   import {
     sendRequestRevealMessage,
     sendNextStoryRequest,
@@ -11,14 +14,15 @@
     NextStoryMessage,
   } from "../services/messageTypes";
   import { displayLobby } from "../services/navigationService";
-    import { download } from "../services/downloadService";
+  import { download } from "../services/downloadService";
+  import { onDestroy } from "svelte";
 
   let wasStoryEnd = false;
   let wasLastStory = false;
   let revealedParts: Array<{ text: string; writer: string }> = [];
   let currentCreator = "";
 
-  addEventHandler("next_story", {
+  let handler = addEventHandler("next_story", {
     onSuccess: (e) => {
       const data = e as NextStoryMessage;
       console.log(data);
@@ -28,7 +32,7 @@
     },
   });
 
-  addEventHandler("reveal_story", {
+  let revealHandler = addEventHandler("reveal_story", {
     onSuccess: (e) => {
       const data = e as StoryRevealMessage;
 
@@ -64,6 +68,11 @@
 
     download(filename, text);
   }
+
+  onDestroy(() => {
+    removeEventHandler(handler);
+    removeEventHandler(revealHandler);
+  });
 </script>
 
 <div class="flex flex-col items-center">
