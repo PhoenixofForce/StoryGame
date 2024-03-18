@@ -1,7 +1,12 @@
 <script lang="ts">
-  import { sendJoinMessage, addEventHandler } from "../services/gameService";
+  import { sendJoinMessage } from "../services/gameService";
   import type { BaseMessage } from "../services/messageTypes";
   import { displayLobby } from "../services/navigationService";
+  import { onDestroy } from "svelte";
+  import {
+    addEventHandler,
+    removeEventHandler,
+  } from "../services/websocketService";
 
   let username = "";
   let roomCode = "";
@@ -16,17 +21,22 @@
     sendJoinMessage(username, roomCode, type);
   }
 
-  addEventHandler("join", {
+  let joinHandler = addEventHandler("join", {
     onError: handleJoinError,
   });
 
-  addEventHandler("lobby-change", {
+  let lobbyHandler = addEventHandler("lobby-change", {
     onSuccess: displayLobby,
   });
 
   function handleJoinError(error: BaseMessage) {
     errorMessage = error.message!;
   }
+
+  onDestroy(() => {
+    removeEventHandler(joinHandler);
+    removeEventHandler(lobbyHandler);
+  });
 </script>
 
 <div class="mt-24 xl:mt-64">

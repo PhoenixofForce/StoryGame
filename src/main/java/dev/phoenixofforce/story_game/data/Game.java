@@ -38,9 +38,13 @@ public class Game {
 			.map(stories::get)
 			.allMatch(s -> s.getLength() > currentRound);
 	}
+
+	public boolean hasPlayerSubmitted(Player player) {
+		return stories.containsKey(player) && stories.get(player).getLength() > currentRound;
+	}
 	
-	public boolean isGameOver() {
-		return stories.values().stream().allMatch(s -> s.getLength() >= maxRounds);
+	public boolean isGameRunning() {
+		return !stories.values().stream().allMatch(s -> s.getLength() >= maxRounds);
 	}
 
 	public boolean allStoriesRevealed() {
@@ -59,7 +63,7 @@ public class Game {
 	}
 
 	public String getStorySnippet(Player player) {
-		return stories.get(player).getStorySnippet();
+		return stories.containsKey(player)? stories.get(player).getStorySnippet(): "";
 	}
 
 	private void rotateStories() {

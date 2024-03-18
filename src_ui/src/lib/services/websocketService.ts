@@ -1,5 +1,5 @@
 import type { BaseMessage } from "./messageTypes";
-export { connect, sendMessage, addEventHandler };
+export { connect, sendMessage, addEventHandler, removeEventHandler };
 
 let socket: WebSocket;
 
@@ -31,22 +31,29 @@ function sendMessage(data: BaseMessage) {
     socket.send(JSON.stringify(data));
 }
 
-let eventHandler: { eventType: string, handler: SocketEventHandler }[] = [];
+let eventHandler: { eventType: string, handler: SocketEventHandler, id: number }[] = [];
 
 interface SocketEventHandler {
     onSuccess?: (data: BaseMessage) => void;
     onError?: (data: BaseMessage) => void;
 };
 
-function addEventHandler(eventType: string, handler: SocketEventHandler) {
+function addEventHandler(eventType: string, handler: SocketEventHandler): number {
+    let id = Math.random();
     eventHandler.push({
         eventType: eventType,
-        handler: handler
+        handler: handler,
+        id: id,
     });
+    return id;
+}
+
+function removeEventHandler(id: number) {
+    eventHandler = eventHandler.filter(handler => handler.id != id);
 }
 
 function fireEvent(type: string, isError: boolean, data: any) {
-    console.log("fire", type)
+    console.log(type, data)
     eventHandler.filter(e => e.eventType === type)
         .forEach(e => {
             if (isError && e.handler.onError) e.handler.onError(data);
