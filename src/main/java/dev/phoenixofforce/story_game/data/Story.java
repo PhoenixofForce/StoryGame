@@ -31,13 +31,22 @@ public class Story {
 			return "";
 		}
 
-		String lastPart = storyParts.get(storyParts.size() - 1).getValue();
-		String[] sentences = lastPart.split("[.?!]");
+		return "... "  + prepareStoryText(storyParts.getLast().getValue());
+	}
 
-		String lastSentence = sentences[sentences.length - 1];
-		lastSentence += lastPart.substring(lastPart.indexOf(lastSentence) + lastSentence.length());
+	public static String prepareStoryText(String inputText) {
+		final int MIN_SENTENCE_LENGTH = 5;
 
-		int snippetStart = lastSentence.length() - Math.min(50, lastSentence.length());
-		return "... "  + lastSentence.substring(snippetStart);
+		String[] sentences = inputText.split("[.?!]");
+		int sentence_to_show = sentences.length - 1;
+		while (sentence_to_show >= 1 && sentences[sentence_to_show].trim().length() < MIN_SENTENCE_LENGTH) {
+			sentence_to_show -= 1;
+		}
+		int snippetStart = 0;
+		for (int j = 0; j < sentence_to_show; j++) {
+			snippetStart += sentences[j].length() + 1;
+		}
+
+		return inputText.substring(snippetStart);
 	}
 }

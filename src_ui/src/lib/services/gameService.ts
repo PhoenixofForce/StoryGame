@@ -1,7 +1,5 @@
 import type { JoinMessage } from "./messageTypes";
-import { connect, sendMessage, addEventHandler } from "./websocketService";
-
-export { addEventHandler };
+import { connect, sendMessage } from "./websocketService";
 
 const url = import.meta.env.VITE_API_URL;
 

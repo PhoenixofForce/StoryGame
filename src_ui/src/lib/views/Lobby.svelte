@@ -1,10 +1,15 @@
 <script lang="ts">
   import PlayerDisplay from "../components/PlayerDisplay.svelte";
   import { lobbyStore } from "../services/lobbyService";
-  import { sendMessage, addEventHandler } from "../services/websocketService";
+  import {
+    sendMessage,
+    addEventHandler,
+    removeEventHandler,
+  } from "../services/websocketService";
   import { displayInGame } from "../services/navigationService";
+  import { onDestroy } from "svelte";
 
-  addEventHandler("start_game", {
+  let handler = addEventHandler("start_game", {
     onSuccess: (e) => {
       console.log("start: ", e);
       displayInGame();
@@ -31,6 +36,10 @@
     if (player === $lobbyStore.host) color = "yellow";
     return color;
   }
+
+  onDestroy(() => {
+    removeEventHandler(handler);
+  });
 </script>
 
 <div class="md:fixed md:top-5 md_left-7">

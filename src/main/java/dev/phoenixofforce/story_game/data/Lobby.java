@@ -18,9 +18,15 @@ public class Lobby {
     private final List<Player> connectedPlayer = Collections.synchronizedList(new ArrayList<>());
     private final String roomCode;
     private Game game;
+    private LobbyState state = LobbyState.LOBBY;
 
     public void addPlayer(Player player) {
         this.connectedPlayer.add(player);
+        sendLobbyChangeUpdate();
+    }
+
+    public void removePlayer(Player player) {
+        this.connectedPlayer.remove(player);
         sendLobbyChangeUpdate();
     }
 
@@ -36,7 +42,7 @@ public class Lobby {
         connectedPlayer.forEach(p -> messageGenerator.apply(p).sendTo(p.getSession()));
     }
 
-    private void sendLobbyChangeUpdate() {
+    public void sendLobbyChangeUpdate() {
         sendPersonalized(player -> {
             LobbyStateMessage stateMessage = new LobbyStateMessage();
             stateMessage.setRoomCode(roomCode);
@@ -49,47 +55,58 @@ public class Lobby {
 
     public void startGame(Player starter) {
         if(!starter.getSession().equals(getHost().getSession())) return;
+        state = LobbyState.GAME;
+
         send(new StartGameTrigger());
         game = new Game(connectedPlayer.size(), new ArrayList<>(connectedPlayer.stream().toList()));
 
-        sendPersonalized(player -> {
-            StartRoundMessage message = new StartRoundMessage();
-            message.setCurrentRound(game.getCurrentRound() + 1);
-            message.setMaxRounds(game.getMaxRounds());
-            message.setLastStorySnippet(game.getStorySnippet(player));
-            return message;
-        });
+        sendPersonalized(this::getNextStoryMessage);
     }
 
     public void acceptStory(Player writer, String story) {
+        if(game.hasPlayerSubmitted(writer)) return;
         game.addStoryPart(writer, story);
 
         if (!game.isRoundOver()) {
-            send(new GameStateUpdateMessage(game.getFinishedPlayers()));
+            sendGameStateUpdate();
             return;
         }
+
         if (game.getCurrentRound() >= game.getMaxRounds() - 1) {
+            state = LobbyState.EVALUATION;
+
             send(new EndGameTrigger());
             try {
                 Thread.sleep(20);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            } catch (InterruptedException ignored) {}
             sendNextStory();
             return;
         }
-        game.advanceRound();
 
-        sendPersonalized(player -> {
-            StartRoundMessage message = new StartRoundMessage();
-            message.setCurrentRound(game.getCurrentRound() + 1);
-            message.setMaxRounds(game.getMaxRounds());
-            message.setLastStorySnippet(game.getStorySnippet(player));
-            return message;
-        });
+        game.advanceRound();
+        sendPersonalized(this::getNextStoryMessage);
+    }
+
+    public void sendGameStateUpdate() {
+        send(new GameStateUpdateMessage(game.getFinishedPlayers()));
+    }
+
+    public StartRoundMessage getNextStoryMessage(Player player) {
+        StartRoundMessage message = new StartRoundMessage();
+        message.setCurrentRound(game.getCurrentRound() + 1);
+        message.setMaxRounds(game.getMaxRounds());
+        message.setLastStorySnippet(game.getStorySnippet(player));
+        return message;
     }
 
     public void sendNextStory() {
         send(new NextStoryMessage(game.getCurrentStoriesAuthor()));
+    }
+    public void sendNextStory(Player player) {
+        new NextStoryMessage(game.getCurrentStoriesAuthor()).sendTo(player.getSession());
+    }
+
+    public boolean isGameStarted() {
+        return game != null && state == LobbyState.GAME;
     }
 }

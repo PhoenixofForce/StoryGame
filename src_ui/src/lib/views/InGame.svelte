@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { addEventHandler } from "../services/websocketService";
+  import {
+    addEventHandler,
+    removeEventHandler,
+  } from "../services/websocketService";
   import { sendSubmitStoryMessage } from "../services/gameService";
   import { lobbyStore } from "../services/lobbyService";
   import type {
@@ -7,6 +10,7 @@
     StartRoundTriggerMessage,
   } from "../services/messageTypes";
   import { displayEvaluation } from "../services/navigationService";
+  import { onDestroy } from "svelte";
 
   let storyEnd = "";
   let story = "";
@@ -17,35 +21,43 @@
 
   let playersReady = 0;
 
-  addEventHandler("start_round", {
-    onSuccess: (e) => {
-      const data = e as StartRoundTriggerMessage;
-      storyEnd = data.lastStorySnippet;
-      currentRound = data.currentRound;
-      maxRounds = data.maxRounds;
+  let handlers = [
+    addEventHandler("start_round", {
+      onSuccess: (e) => {
+        const data = e as StartRoundTriggerMessage;
+        storyEnd = data.lastStorySnippet;
+        currentRound = data.currentRound;
+        maxRounds = data.maxRounds;
 
-      story = "";
-      submittedStory = false;
-      playersReady = 0;
-    },
-  });
+        story = "";
+        submittedStory = false;
+        playersReady = 0;
+      },
+    }),
 
-  addEventHandler("game-update", {
-    onSuccess: (e) => {
-      const data = e as GameStateUpdateMessage;
-      playersReady = data.finishedPlayers;
-    },
-  });
+    addEventHandler("game-update", {
+      onSuccess: (e) => {
+        const data = e as GameStateUpdateMessage;
+        playersReady = data.finishedPlayers;
+      },
+    }),
 
-  addEventHandler("end_game", {
-    onSuccess: displayEvaluation,
-  });
+    addEventHandler("end_game", {
+      onSuccess: displayEvaluation,
+    }),
+  ];
 
   function sendStory() {
     sendSubmitStoryMessage(story);
     story = "";
     submittedStory = true;
   }
+
+  onDestroy(() => {
+    for (let handler of handlers) {
+      removeEventHandler(handler);
+    }
+  });
 </script>
 
 <div class="">
