@@ -74,14 +74,16 @@ public class Game {
 			shift = playerOrder.size() - shift;
 		}
 
-		Story firstStory = stories.get(playerOrder.get(0));
-
-		for (int i = 0; i < playerOrder.size() - 1; i++) {
+		Map<Player, Story> newStories = new HashMap<>();
+		for (int i = 0; i < playerOrder.size(); i++) {
 			Player player = playerOrder.get(i);
 			Story nextStory = stories.get(playerOrder.get((i + shift) % playerOrder.size()));
-			stories.put(player, nextStory);
+			newStories.put(player, nextStory);
 		}
-		stories.put(playerOrder.get((playerOrder.size() - shift) % playerOrder.size()), firstStory);
+
+        for (Player player : playerOrder) {
+            stories.put(player, newStories.get(player));
+        }
 	}
 	
 	private Story getStory(int index) {
