@@ -10,13 +10,11 @@
 
   let username = "";
   let roomCode = "";
-  let cameFromLink = false;
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   if (urlParams.has("c")) {
     roomCode = urlParams.get("c") as string;
-    cameFromLink = true;
   }
 
   let errorMessage = "";
@@ -55,11 +53,7 @@
 
   <form on:submit|preventDefault={() => {}}>
     <input bind:value={username} placeholder="Username" />
-    <input
-      disabled={cameFromLink}
-      bind:value={roomCode}
-      placeholder="Room Code"
-    />
+    <input bind:value={roomCode} placeholder="Room Code" />
     <button
       class="blue w-96 mt-8"
       on:click={() => connectToSocket()}
