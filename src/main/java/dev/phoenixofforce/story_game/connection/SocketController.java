@@ -81,20 +81,26 @@ public class SocketController extends TextWebSocketHandler {
     private void register(WebSocketSession sender, BaseMessage message) throws IOException {
         if(!(message instanceof PlayerJoinMessage playerJoinMessage)) return;
 
-        if(playerJoinMessage.getJoinType().equals("create")) {
-            createRoom(sender, playerJoinMessage);
-        } else if(playerJoinMessage.getJoinType().equals("join")) {
+        String roomCode = getRoomCode(playerJoinMessage);
+        if(codeToLobby.containsKey(roomCode)) {
             joinRoom(sender, playerJoinMessage);
+        } else {
+            createRoom(sender, playerJoinMessage);
         }
+
     }
 
-    private void createRoom(WebSocketSession sender, PlayerJoinMessage joinMessage) {
+    private String getRoomCode(PlayerJoinMessage joinMessage) {
         String roomCode = joinMessage.getRoom();
         if(roomCode == null || roomCode.isBlank()) {
             roomCode = "Foo Bar"; // TODO: generate room code
         }
         roomCode = roomCode.trim();
+        return roomCode;
+    }
 
+    private void createRoom(WebSocketSession sender, PlayerJoinMessage joinMessage) {
+        String roomCode = getRoomCode(joinMessage);
         if(codeToLobby.containsKey(roomCode)) {
             BaseMessage.getError("join", "Room code already exists").sendTo(sender);
             return;
@@ -117,13 +123,7 @@ public class SocketController extends TextWebSocketHandler {
     }
 
     private void joinRoom(WebSocketSession sender, PlayerJoinMessage joinMessage) {
-        String roomCode = joinMessage.getRoom();
-        if(roomCode == null || roomCode.isBlank()) {
-            BaseMessage.getError("join", "Room code is invalid").sendTo(sender);
-            return;
-        }
-        roomCode = roomCode.trim();
-
+        String roomCode = getRoomCode(joinMessage);
         if(!codeToLobby.containsKey(roomCode)) {
             BaseMessage.getError("join", "Room does not exist").sendTo(sender);
             return;

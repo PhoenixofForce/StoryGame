@@ -9,6 +9,5 @@ public class PlayerJoinMessage extends BaseMessage {
 
     private String name;
     private String room;
-    private String joinType;
 
 }

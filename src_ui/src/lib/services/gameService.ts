@@ -3,14 +3,13 @@ import { connect, sendMessage } from "./websocketService";
 
 const url = import.meta.env.VITE_API_URL;
 
-export function sendJoinMessage(username: string, roomCode: string, type: "join" | "create") {
+export function sendJoinMessage(username: string, roomCode: string) {
     const data: JoinMessage = {
         type: "join",
         error: false,
         message: "",
         name: username,
-        room: roomCode,
-        joinType: type,
+        room: roomCode
     }
 
     connect(url).then(() => {

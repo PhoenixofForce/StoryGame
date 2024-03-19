@@ -5,6 +5,13 @@
   import Evaluation from "./lib/views/Evaluation.svelte";
 
   import { viewStore } from "./lib/services/navigationService";
+
+  window.onbeforeunload = function () {
+    if ($viewStore === "login") {
+      return undefined;
+    }
+    return "Are you sure you want to leave?";
+  };
 </script>
 
 <main>

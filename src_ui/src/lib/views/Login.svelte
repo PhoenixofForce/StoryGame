@@ -10,15 +10,21 @@
 
   let username = "";
   let roomCode = "";
+  let cameFromLink = false;
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  if (urlParams.has("c")) {
+    roomCode = urlParams.get("c") as string;
+    cameFromLink = true;
+  }
 
   let errorMessage = "";
-
-  $: canJoinGame = username.length > 0 && roomCode.length > 0;
   $: canCreateGame = username.length > 0;
 
-  function connectToSocket(type: "join" | "create") {
+  function connectToSocket() {
     errorMessage = "";
-    sendJoinMessage(username, roomCode, type);
+    sendJoinMessage(username, roomCode);
   }
 
   let joinHandler = addEventHandler("join", {
@@ -49,16 +55,16 @@
 
   <form on:submit|preventDefault={() => {}}>
     <input bind:value={username} placeholder="Username" />
-    <input bind:value={roomCode} placeholder="Room Code" />
-    <div class="buttons">
-      <button on:click={() => connectToSocket("join")} disabled={!canJoinGame}
-        >Join Game</button
-      >
-      <button
-        on:click={() => connectToSocket("create")}
-        disabled={!canCreateGame}>Create Game</button
-      >
-    </div>
+    <input
+      disabled={cameFromLink}
+      bind:value={roomCode}
+      placeholder="Room Code"
+    />
+    <button
+      class="blue w-96 mt-8"
+      on:click={() => connectToSocket()}
+      disabled={!canCreateGame}>Play</button
+    >
   </form>
   <div class="text-red-600 italic text-sm text-center">{errorMessage}</div>
 </div>
@@ -69,13 +75,5 @@
     align-items: center;
     flex-direction: column;
     gap: 8px;
-  }
-
-  .buttons {
-    @apply flex w-full flex-col justify-center md:flex-row md:gap-6;
-  }
-
-  .buttons button {
-    margin-top: 16px;
   }
 </style>

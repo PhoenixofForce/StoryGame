@@ -33,6 +33,7 @@ input,
 textarea {
   @apply w-96 rounded-xl border-2 border-solid border-slate-300 px-3 py-1;
   @apply focus:rounded-2xl;
+  @apply disabled:text-slate-400
 }
 
 button {
