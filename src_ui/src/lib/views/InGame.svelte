@@ -60,11 +60,11 @@
   });
 </script>
 
-<div class="">
+<div class="absolute top-4 left-8">
   <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow">
     The Story Game
   </div>
-  <p class="mb-32 md:mb-64 italic text-slate-400">
+  <p class="italic text-slate-400">
     Round {currentRound} / {maxRounds}<br />
     {#if playersReady > 0}
       <span
@@ -72,28 +72,26 @@
       >
     {/if}
   </p>
+</div>
 
-  <div class="">
-    {#if !submittedStory}
-      <p style="text-align: left">{storyEnd}</p>
-      <textarea
-        bind:value={story}
-        placeholder="Type your message"
-        class="mb-4 w-full h-64"
-      />
-      <button
-        class="blue float-right w-full md:w-32"
-        disabled={!story}
-        on:click={sendStory}
-      >
-        Send
-      </button>
-    {:else}
-      <div class="tracking-widest text-center">
-        Waiting for other players...
-      </div>
-    {/if}
-  </div>
+<div class="mt-32 md:mt-64">
+  {#if !submittedStory}
+    <p style="text-align: left">{storyEnd}</p>
+    <textarea
+      bind:value={story}
+      placeholder="Type your message"
+      class="mb-4 w-full h-64"
+    />
+    <button
+      class="blue float-right w-full md:w-32"
+      disabled={!story}
+      on:click={sendStory}
+    >
+      Send
+    </button>
+  {:else}
+    <div class="tracking-widest text-center">Waiting for other players...</div>
+  {/if}
 </div>
 
 <style>

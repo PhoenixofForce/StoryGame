@@ -30,7 +30,11 @@
   });
 
   let lobbyHandler = addEventHandler("lobby-change", {
-    onSuccess: displayLobby,
+    onSuccess: (_) => {
+      window.history.pushState("page2", "Title", "/");
+
+      displayLobby();
+    },
   });
 
   function handleJoinError(error: BaseMessage) {
