@@ -48,8 +48,8 @@
   </p>
 
   <form on:submit|preventDefault={() => {}}>
-    <input bind:value={username} placeholder="Username" />
-    <input bind:value={roomCode} placeholder="Room Code" />
+    <input bind:value={username} placeholder="Username" class="w-96"/>
+    <input bind:value={roomCode} placeholder="Room Code" class="w-96"/>
     <div class="buttons">
       <button on:click={() => connectToSocket("join")} disabled={!canJoinGame}
         >Join Game</button

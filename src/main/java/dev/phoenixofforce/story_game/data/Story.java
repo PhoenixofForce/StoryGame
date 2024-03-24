@@ -34,8 +34,9 @@ public class Story {
 		return "... "  + prepareStoryText(storyParts.getLast().getValue());
 	}
 
+	//THIS FUNCTION HAS TO BE KEPT SYNCHRONIZED TO Ingame.highlightNextStoryText in the frontend
 	public static String prepareStoryText(String inputText) {
-		final int MIN_SENTENCE_LENGTH = 5;
+		final int MIN_SENTENCE_LENGTH = 10;
 
 		String[] sentences = inputText.split("[.?!]");
 		int sentence_to_show = sentences.length - 1;
