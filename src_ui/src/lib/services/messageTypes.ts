@@ -17,7 +17,6 @@ interface BaseMessage {
 interface JoinMessage extends BaseMessage {
     name: string,
     room: string,
-    joinType: string;
 }
 
 interface LobbyStateMessage extends BaseMessage {
