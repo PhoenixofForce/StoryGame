@@ -29,11 +29,24 @@ body {
   padding: 2rem;
 }
 
-input,
-textarea {
-  @apply w-96 rounded-xl border-2 border-solid border-slate-300 px-3 py-1;
+input, textarea, div.textarea {
+  @apply rounded-xl border-2 border-solid border-slate-300 px-3 py-1;
   @apply focus:rounded-2xl;
   @apply disabled:text-slate-400
+}
+
+div.textarea {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  /*word-break: break-all;*/
+  overflow: auto;
+  display: inline-block;
+}
+
+/*placeholder text for textarea, TODO: fix color*/
+[contentEditable=true]:empty:not(:focus)::before{
+    content:attr(placeholder);
+    color: #666;
 }
 
 button {
