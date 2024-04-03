@@ -88,7 +88,7 @@
           {part.writer}
         </div>
         <div
-          class=" px-3 py-1 rounded-full mb-2 shadow w-fit"
+          class=" px-16 py-2 rounded-full mb-2 shadow w-fit"
           class:bg-slate-100={$lobbyStore.you !== part.writer}
           class:bg-green-100={$lobbyStore.you === part.writer}
         >

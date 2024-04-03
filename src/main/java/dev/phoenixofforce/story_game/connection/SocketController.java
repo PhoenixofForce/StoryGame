@@ -6,10 +6,7 @@ import dev.phoenixofforce.story_game.connection.messages.trigger.EndGameTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
 import dev.phoenixofforce.story_game.connection.messages.trigger.StartGameTrigger;
-import dev.phoenixofforce.story_game.data.Game;
-import dev.phoenixofforce.story_game.data.Lobby;
-import dev.phoenixofforce.story_game.data.LobbyState;
-import dev.phoenixofforce.story_game.data.Player;
+import dev.phoenixofforce.story_game.data.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -27,21 +24,17 @@ public class SocketController extends TextWebSocketHandler {
         void apply(WebSocketSession sender, BaseMessage data) throws Exception;
     }
 
-    private final Map<String, CommandHandler> commands;
+    private final Map<String, CommandHandler> commands = Map.of(
+        "join", this::register,
+        "start_game", this::handleStart,
+        "submit_story", this::acceptStory,
+        "request_reveal", this::revealStory,
+        "next_story_trigger", this::nextStory,
+        "ping", this::ping
+        );
 
     private final Map<WebSocketSession, Player> socketToPlayer = Collections.synchronizedMap(new HashMap<>());
     private final Map<String, Lobby> codeToLobby = Collections.synchronizedMap(new HashMap<>());
-
-    public SocketController() {
-        commands = Map.of(
-            "join", this::register,
-            "start_game", this::handleStart,
-            "submit_story", this::acceptStory,
-            "request_reveal", this::revealStory,
-            "next_story_trigger", this::nextStory,
-            "ping", this::ping
-        );
-    }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
@@ -81,20 +74,35 @@ public class SocketController extends TextWebSocketHandler {
     private void register(WebSocketSession sender, BaseMessage message) throws IOException {
         if(!(message instanceof PlayerJoinMessage playerJoinMessage)) return;
 
-        if(playerJoinMessage.getJoinType().equals("create")) {
-            createRoom(sender, playerJoinMessage);
-        } else if(playerJoinMessage.getJoinType().equals("join")) {
+        String roomCode = getRoomCode(playerJoinMessage);
+        if(codeToLobby.containsKey(roomCode)) {
             joinRoom(sender, playerJoinMessage);
+        } else {
+            createRoom(sender, playerJoinMessage);
         }
+
+    }
+
+    private String getRoomCode(PlayerJoinMessage joinMessage) {
+        String roomCode = joinMessage.getRoom();
+        if(roomCode == null || roomCode.isBlank()) {
+            int generations = 0;
+            do {
+                roomCode = RoomCodeGeneration.generateRoomCode();
+                generations++;
+            } while(codeToLobby.containsKey(roomCode) && generations <= 10);
+
+            //Backup generation
+            while(codeToLobby.containsKey(roomCode)) {
+                roomCode = RoomCodeGeneration.getRandomString();
+            }
+        }
+        roomCode = roomCode.trim();
+        return roomCode;
     }
 
     private void createRoom(WebSocketSession sender, PlayerJoinMessage joinMessage) {
-        String roomCode = joinMessage.getRoom();
-        if(roomCode == null || roomCode.isBlank()) {
-            roomCode = "Foo Bar"; // TODO: generate room code
-        }
-        roomCode = roomCode.trim();
-
+        String roomCode = getRoomCode(joinMessage);
         if(codeToLobby.containsKey(roomCode)) {
             BaseMessage.getError("join", "Room code already exists").sendTo(sender);
             return;
@@ -117,13 +125,7 @@ public class SocketController extends TextWebSocketHandler {
     }
 
     private void joinRoom(WebSocketSession sender, PlayerJoinMessage joinMessage) {
-        String roomCode = joinMessage.getRoom();
-        if(roomCode == null || roomCode.isBlank()) {
-            BaseMessage.getError("join", "Room code is invalid").sendTo(sender);
-            return;
-        }
-        roomCode = roomCode.trim();
-
+        String roomCode = getRoomCode(joinMessage);
         if(!codeToLobby.containsKey(roomCode)) {
             BaseMessage.getError("join", "Room does not exist").sendTo(sender);
             return;
@@ -183,7 +185,7 @@ public class SocketController extends TextWebSocketHandler {
 
         Player player = socketToPlayer.get(sender);
         Lobby lobby = codeToLobby.get(player.getConnectedRoom());
-        lobby.acceptStory(player, storyMessage.getStory().trim());
+        lobby.acceptStory(player, storyMessage.getFullStory().trim(), storyMessage.getTeaser().trim());
     }
     
     private void revealStory(WebSocketSession sender, BaseMessage message) {

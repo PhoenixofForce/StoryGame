@@ -40,10 +40,26 @@
   onDestroy(() => {
     removeEventHandler(handler);
   });
+
+  function shareRoomCodeLink() {
+    const roomCodeLink =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname +
+      "?c=" +
+      encodeURIComponent($lobbyStore.roomCode);
+    navigator.clipboard.writeText(roomCodeLink);
+  }
 </script>
 
 <div class="md:fixed md:top-5 md_left-7">
-  <span class="font-semibold"> Room Code: '{$lobbyStore.roomCode}'</span>
+  <div class="mb-4">
+    <span class="font-semibold"> </span>
+    <button on:click={shareRoomCodeLink}>
+      Room Code '{$lobbyStore.roomCode}'
+    </button>
+  </div>
 
   <div>
     <PlayerDisplay

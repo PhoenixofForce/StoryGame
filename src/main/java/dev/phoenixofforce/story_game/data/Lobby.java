@@ -63,9 +63,9 @@ public class Lobby {
         sendPersonalized(this::getNextStoryMessage);
     }
 
-    public void acceptStory(Player writer, String story) {
+    public void acceptStory(Player writer, String story, String teaser) {
         if(game.hasPlayerSubmitted(writer)) return;
-        game.addStoryPart(writer, story);
+        game.addStoryPart(writer, story, teaser);
 
         if (!game.isRoundOver()) {
             sendGameStateUpdate();
