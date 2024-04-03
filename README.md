@@ -54,6 +54,14 @@ The backend currently does not support ssl/ tls so the website needs to be deplo
 
 ### Building Backend
 
+Perform a `maven clean install` with a plugin for the IDE of your choice or using the provided `mvnw`-Files 
+After that build your Dockerfile using
+```bash
+docker build -t Your_Image_Name_here .
+```
+
+### Deploying Backend
+
 Select your wanted version [here](https://github.com/PhoenixofForce/StoryGame/pkgs/container/storygame) and pull the image.
 ```bash
 docker pull ghcr.io/phoenixofforce/storygame:master
@@ -61,10 +69,10 @@ docker pull ghcr.io/phoenixofforce/storygame:master
 
 After that you can run the image with
 ```bash
-docker run -d -p 8080:8080 --restart=always --name StoryGame ghcr.io/phoenixofforce/storygame:master
+docker run -d -p 8080:8080 --restart=always --name StoryGame_Backend ghcr.io/phoenixofforce/storygame:master
 ```
 
-### Building Frontend
+### Frontend
 
 Depending on how you want to deploy the build page, you either have to adjust `base` inside `src_ui\vite.config.ts` or adjust the paths to the js and css files in the build html manually.
 Also adjust `src_ui\.env.production` to your needs.
@@ -79,6 +87,11 @@ This generated `src_ui\dist` folder, which contains the static html file.
 The easiest way to deploy this is to run
 ```bash
 python3 -m http.server
+```
+
+Otherwise, use the provided `Dockerfile.ui` to build your own image
+```bash
+docker build -f Dockerfile.ui -t Your_Image_Name_here .
 ```
 
 ## Contributing
