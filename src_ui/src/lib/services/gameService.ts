@@ -19,11 +19,12 @@ export function sendJoinMessage(username: string, roomCode: string) {
     });
 }
 
-export function sendSubmitStoryMessage(story: string) {
+export function sendSubmitStoryMessage(fullStory: string, teaser: string) {
     const data = {
         type: "submit_story",
         error: false,
-        story: story,
+        fullStory: fullStory,
+        teaser: teaser
     }
     sendMessage(data);
 }

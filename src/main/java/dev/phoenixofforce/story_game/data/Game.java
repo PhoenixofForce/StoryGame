@@ -57,8 +57,8 @@ public class Game {
 		rotateStories();
 	}
 
-	public void addStoryPart(Player player, String storyPart) {
-		stories.get(player).addStoryPart(player, storyPart);
+	public void addStoryPart(Player player, String storyPart, String teaser) {
+		stories.get(player).addStoryPart(player, storyPart, teaser);
 		finishedPlayers++;
 	}
 

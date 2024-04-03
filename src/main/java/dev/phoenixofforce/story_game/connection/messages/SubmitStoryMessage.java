@@ -6,5 +6,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SubmitStoryMessage extends BaseMessage {
-	private String story;
+	private String fullStory;
+	private String teaser;
 }
