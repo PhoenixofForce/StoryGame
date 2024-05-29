@@ -13,14 +13,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - dockerfile: ./Dockerfile
-            image: ghcr.io/phoenixofforce/storygame-service
-          - dockerfile: ./Dockerfile.ui
-            image: ghcr.io/phoenixofforce/storygame-ui
     permissions:
       contents: read
       packages: write
@@ -33,18 +25,6 @@ jobs:
       with:
         java-version: 21
     - run: mvn verify -DskipTests
-
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 18
-
-    - run: npm install
-      working-directory: src_ui
-
-    - name: Build static page
-      run: npm run build
-      working-directory: src_ui
     
     - name: Log in to the Container registry
       uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
@@ -57,13 +37,13 @@ jobs:
       id: meta
       uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
       with:
-        images: ${{ matrix.image }}
+        images: ${{ ghcr.io/phoenixofforce/storygame-service }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
       with:
         context: .
-        file: ${{ matrix.dockerfile }}
+        file: ./Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
