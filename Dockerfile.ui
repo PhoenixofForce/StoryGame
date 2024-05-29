@@ -1,2 +1,9 @@
-FROM httpd:2.4
-COPY src_ui/dist/ /usr/local/apache2/htdocs/
+FROM python:3
+
+ENV api=ws://localhost:8080/hello
+ENV rest=http://localhost:8080/ping
+
+COPY src_ui/dist/ /dist/
+COPY src_ui/start.py start.py
+
+CMD python3 start.py $api $rest
