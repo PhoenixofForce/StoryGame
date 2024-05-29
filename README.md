@@ -64,12 +64,12 @@ docker build -t Your_Image_Name_here .
 
 Select your wanted version [here](https://github.com/PhoenixofForce/StoryGame/pkgs/container/storygame) and pull the image.
 ```bash
-docker pull ghcr.io/phoenixofforce/storygame:master
+docker pull ghcr.io/phoenixofforce/storygame-service:master
 ```
 
 After that you can run the image with
 ```bash
-docker run -d -p 8080:8080 --restart=always --name StoryGame_Backend ghcr.io/phoenixofforce/storygame:master
+docker run -d -p 8080:8080 --restart=always --name StoryGame_Backend ghcr.io/phoenixofforce/storygame-service:master
 ```
 
 ### Frontend
@@ -89,10 +89,12 @@ The easiest way to deploy this is to run
 python3 -m http.server
 ```
 
-Otherwise, use the provided `Dockerfile.ui` to build your own image
+Otherwise, pull and the docker file with the following commands
 ```bash
-docker build -f Dockerfile.ui -t Your_Image_Name_here .
+docker pull ghcr.io/phoenixofforce/storygame-ui:master
+docker run -d -p 8000:8000 --restart=always -e api={insert url to backend websockets endpoint} -e rest="insert url to backend rest endpoint" --name StoryGame_Frontend ghcr.io/phoenixofforce/storygame-ui:master
 ```
+
 
 ## Contributing
 
