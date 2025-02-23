@@ -1,0 +1,16 @@
+version: "3.8"
+services:
+  backend:
+    image: ghcr.io/phoenixofforce/storygame-service:master
+    restart: unless-stopped
+    ports:
+      - ${BACKEND_PORT:-8080}:8080
+
+  frontend:
+    image: ghcr.io/phoenixofforce/storygame-ui:master
+    restart: unless-stopped
+    environment:
+      - api=ws://${BACKEND_URL:-localhost:8080}/hello
+      - rest=http://${BACKEND_URL:-localhost:8080}/ping
+    ports:
+      - ${FRONTEND_PORT:-8000}:8000
