@@ -24,13 +24,17 @@ jobs:
         SAFE_BRANCH_NAME=$(echo "$BRANCH_NAME" | tr '/' '-')
         DATE=$(date +%Y-%m-%d)
         
-        TAGS="${SAFE_BRANCH_NAME}-${DATE}"
+        echo "${SAFE_BRANCH_NAME}-${DATE}" >> tags.txt
         
         if [ "$BRANCH_NAME" = "master" ]; then
-          TAGS="$TAGS,latest,latest-${DATE}"
+        echo "latest" >> tags.txt
+        echo "latest-${DATE}" >> tags.txt
         fi
         
-        echo "IMAGE_TAGS=$TAGS" >> $GITHUB_ENV
+        TAGS=$(paste -sd '\n' tags.txt)
+        echo "IMAGE_TAGS<<EOF" >> $GITHUB_ENV
+        echo "$TAGS" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
 
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -59,8 +63,7 @@ jobs:
       uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-ui
-        tags: |
-          ${{ env.IMAGE_TAGS }}
+        tags: ${{ env.IMAGE_TAGS }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
