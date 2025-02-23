@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches: [ "master" ]
+    paths:
+      - src/**
+      - Dockerfile
 
 env:
   REGISTRY: ghcr.io
