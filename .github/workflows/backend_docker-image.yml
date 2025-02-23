@@ -28,7 +28,6 @@ jobs:
         
         if [ "$BRANCH_NAME" = "master" ]; then
         echo "latest" >> tags.txt
-        echo "latest-${DATE}" >> tags.txt
         fi
         
         TAGS=$(paste -sd '\n' tags.txt)

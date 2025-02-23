@@ -31,7 +31,7 @@ public class Lobby {
     }
 
     public Player getHost() {
-        return connectedPlayer.get(0);
+        return connectedPlayer.getFirst();
     }
 
     public void send(BaseMessage message) {
@@ -48,7 +48,7 @@ public class Lobby {
             stateMessage.setRoomCode(roomCode);
             stateMessage.setPlayers(connectedPlayer.stream().map(Player::getName).toList());
             stateMessage.setYou(player.getName());
-            stateMessage.setHost(connectedPlayer.get(0).getName());
+            stateMessage.setHost(connectedPlayer.getFirst().getName());
             return stateMessage;
         });
     }
@@ -102,6 +102,7 @@ public class Lobby {
     public void sendNextStory() {
         send(new NextStoryMessage(game.getCurrentStoriesAuthor()));
     }
+
     public void sendNextStory(Player player) {
         new NextStoryMessage(game.getCurrentStoriesAuthor()).sendTo(player.getSession());
     }

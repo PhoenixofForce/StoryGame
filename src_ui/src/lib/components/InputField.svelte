@@ -157,7 +157,7 @@
   bind:textContent={fullStory}
   bind:this={textArea}
   placeholder="Type your message"
-  class="textarea mb-4 w-full h-64"
+  class="textarea w-full h-64"
   on:input={highlight_text}
   on:paste={onPaste}
 />

@@ -89,14 +89,15 @@ public class Game {
 	private Story getStory(int index) {
 		return stories.get(playerOrder.get(index));
 	}
+
 	public StoryRevealMessage advanceReveal() {
 		if (allStoriesRevealed()) return null;
 
 		Story story = getStory(revealedStoryIndex);
-		Map.Entry<Player, String> storyPart = story.getStoryPart(revealedStoryPartIndex);
+		Chapter storyPart = story.getStoryPart(revealedStoryPartIndex);
 		StoryRevealMessage message = new StoryRevealMessage();
-		message.setWriter(storyPart.getKey().getName());
-		message.setText(storyPart.getValue());
+		message.setWriter(storyPart.getAuthor().getName());
+		message.setText(storyPart.getText());
 
 		message.setStoryEnd(revealedStoryPartIndex == story.getLength() - 1);
 		++revealedStoryPartIndex;
@@ -111,7 +112,7 @@ public class Game {
 	}
 
 	public String getCurrentStoriesAuthor() {
-		return getStory(revealedStoryIndex).getStoryPart(0).getKey().getName();
+		return getStory(revealedStoryIndex).getStoryPart(0).getAuthor().getName();
 	}
 
 }

@@ -2,6 +2,7 @@ import type { JoinMessage } from "./messageTypes";
 import { connect, sendMessage } from "./websocketService";
 
 const url = import.meta.env.VITE_API_URL;
+const fullUrl = url + "/game";
 
 export function sendJoinMessage(username: string, roomCode: string) {
     const data: JoinMessage = {
@@ -12,7 +13,7 @@ export function sendJoinMessage(username: string, roomCode: string) {
         room: roomCode
     }
 
-    connect(url).then(() => {
+    connect(fullUrl).then(() => {
         sendMessage(data);
     }).catch(() => {
         console.log("something whent wrong");

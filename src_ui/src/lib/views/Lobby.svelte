@@ -56,7 +56,7 @@
 <div class="md:fixed md:top-5 md_left-7">
   <div class="mb-4">
     <span class="font-semibold"> </span>
-    <button on:click={shareRoomCodeLink}>
+    <button on:click={shareRoomCodeLink} title="Copy link to Clipboard">
       Room Code '{$lobbyStore.roomCode}'
     </button>
   </div>
