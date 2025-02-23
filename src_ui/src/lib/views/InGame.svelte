@@ -12,6 +12,7 @@
   } from "../services/messageTypes";
   import { displayEvaluation } from "../services/navigationService";
   import { onDestroy } from "svelte";
+  import Spinner from "../components/Spinner.svelte";
 
   let fullStory = "";
   let storyEnd = "";
@@ -77,22 +78,30 @@
   </p>
 </div>
 
-<div class="mt-32 md:mt-64">
-  {#if !submittedStory}
+{#if !submittedStory}
+  <div class="mt-32 md:mt-64">
     <p style="text-align: left">{storyEnd}</p>
     <InputField bind:this={storyInputField} bind:fullStory />
-    <button
-      class="blue float-right w-full md:w-32"
-      disabled={!fullStory ||
-        fullStory.length < storyInputField.MIN_SENTENCE_LENGTH}
-      on:click={sendStory}
-    >
-      Send
-    </button>
-  {:else}
-    <div class="tracking-widest text-center">Waiting for other players...</div>
-  {/if}
-</div>
+    <div class="h-fit">
+      <span class="inline-block italic text-slate-400"
+        ><b>Hint</b> Use ~ to control what the next player can see.</span
+      >
+      <button
+        class="blue float-right w-full md:w-32 mt-4"
+        disabled={!fullStory ||
+          fullStory.length < storyInputField.MIN_SENTENCE_LENGTH}
+        on:click={sendStory}
+      >
+        Send
+      </button>
+    </div>
+  </div>
+{:else}
+  <div class="mt-72 w-full flex flex-col items-center justify-center">
+    <Spinner />
+    <div class="tracking-widest mt-8">Waiting for other players...</div>
+  </div>
+{/if}
 
 <style>
 </style>

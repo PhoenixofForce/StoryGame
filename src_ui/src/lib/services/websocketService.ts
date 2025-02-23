@@ -62,9 +62,11 @@ function fireEvent(type: string, isError: boolean, data: any) {
 }
 
 function startHeartbeat() {
+    const baseUrl = import.meta.env.VITE_REST_URL;
+    const fullUrl = baseUrl + "/ping";
     setInterval(
         () => {
-            fetch(import.meta.env.VITE_REST_URL).then((response) => { });
+            fetch(fullUrl).then((response) => { });
             sendMessage({
                 type: "ping",
                 error: false,

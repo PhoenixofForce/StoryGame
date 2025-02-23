@@ -4,7 +4,7 @@ export const canSpeak = writable(true);
 
 let currentUtterance: SpeechSynthesisUtterance;
 export function speak(text: string) {
-    window.speechSynthesis.cancel();
+    cancel();
 
     canSpeak.set(false);
     currentUtterance = new SpeechSynthesisUtterance(text);
@@ -18,4 +18,8 @@ export function speak(text: string) {
     currentUtterance.onend = (_) => {
         canSpeak.set(true);
     }
+}
+
+export function cancel() {
+    window.speechSynthesis.cancel();
 }

@@ -25,7 +25,6 @@
   let handler = addEventHandler("next_story", {
     onSuccess: (e) => {
       const data = e as NextStoryMessage;
-      console.log(data);
       currentCreator = data.creator;
       revealedParts = [];
       wasStoryEnd = false;
@@ -88,7 +87,7 @@
           {part.writer}
         </div>
         <div
-          class=" px-16 py-2 rounded-full mb-2 shadow w-fit"
+          class=" px-5 py-2 rounded-3xl mb-2 shadow w-fit"
           class:bg-slate-100={$lobbyStore.you !== part.writer}
           class:bg-green-100={$lobbyStore.you === part.writer}
         >
