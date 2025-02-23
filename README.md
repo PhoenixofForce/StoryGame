@@ -50,7 +50,13 @@ npm run dev
 When changing a file, the page gets rebuild automatically and shows you the new version.
 
 ## Building & Deployment
-The backend currently does not support ssl/ tls so the website needs to be deployed without https (for now).
+
+The easiest way to deploy the application is to pull the docker compose file and perform a `docker compose up`. There are some variables that you can set depending on your environment.
+
+```bash
+curl https://raw.githubusercontent.com/PhoenixofForce/StoryGame/refs/heads/master/docker-comppose.yml > docker-comppose.yml
+docker-compose up -d
+```
 
 ### Building Backend
 
