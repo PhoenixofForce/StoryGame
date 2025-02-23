@@ -31,7 +31,7 @@
 
   let lobbyHandler = addEventHandler("lobby-change", {
     onSuccess: (_) => {
-      window.history.pushState("page2", "Title", "/");
+      window.history.pushState("page2", "Title", location.pathname);
 
       displayLobby();
     },
@@ -56,8 +56,8 @@
   </p>
 
   <form on:submit|preventDefault={() => {}}>
-    <input bind:value={username} placeholder="Username" class="w-96"/>
-    <input bind:value={roomCode} placeholder="Room Code" class="w-96"/>
+    <input bind:value={username} placeholder="Username" class="w-96" />
+    <input bind:value={roomCode} placeholder="Room Code" class="w-96" />
     <button
       class="blue w-96 mt-8"
       on:click={() => connectToSocket()}
