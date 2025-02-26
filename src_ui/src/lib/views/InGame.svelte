@@ -64,8 +64,8 @@
   });
 </script>
 
-<div class="absolute top-4 left-8">
-  <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow">
+<div class="absolute left-8 top-4">
+  <div class="mb-4 text-5xl font-bold tracking-wide drop-shadow-sm">
     The Story Game
   </div>
   <p class="italic text-slate-400">
@@ -87,7 +87,7 @@
         ><b>Hint</b> Use ~ to control what the next player can see.</span
       >
       <button
-        class="blue float-right w-full md:w-32 mt-4"
+        class="blue float-right mt-4 w-full md:w-32"
         disabled={!fullStory ||
           fullStory.length < storyInputField.MIN_SENTENCE_LENGTH}
         on:click={sendStory}
@@ -97,9 +97,9 @@
     </div>
   </div>
 {:else}
-  <div class="mt-72 w-full flex flex-col items-center justify-center">
+  <div class="mt-72 flex w-full flex-col items-center justify-center">
     <Spinner />
-    <div class="tracking-widest mt-8">Waiting for other players...</div>
+    <div class="mt-8 tracking-widest">Waiting for other players...</div>
   </div>
 {/if}
 

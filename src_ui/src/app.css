@@ -1,6 +1,22 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -53,7 +69,7 @@ div.textarea {
 button {
   @apply font-medium rounded-3xl border-2 border-solid border-slate-300 bg-slate-100 px-4 py-1 text-slate-700;
   @apply disabled:font-normal disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-300;
-  @apply shadow hover:enabled:scale-105 hover:enabled:bg-slate-200;
+  @apply shadow-sm hover:enabled:scale-105 hover:enabled:bg-slate-200;
 }
 
 button.blue {

@@ -78,7 +78,7 @@
   <h1 class="text-lg font-bold">
     Story from {currentCreator}
   </h1>
-  <hr class="h-px bg-gray-200 w-full dark:bg-gray-800 my-4" />
+  <hr class="my-4 h-px w-full bg-gray-200 dark:bg-gray-800" />
 
   <div class="messages flex flex-col">
     {#each revealedParts as part}
@@ -87,7 +87,7 @@
           {part.writer}
         </div>
         <div
-          class=" px-5 py-2 rounded-3xl mb-2 shadow w-fit"
+          class=" mb-2 w-fit rounded-3xl px-5 py-2 shadow-sm"
           class:bg-slate-100={$lobbyStore.you !== part.writer}
           class:bg-green-100={$lobbyStore.you === part.writer}
         >
@@ -99,7 +99,7 @@
 
   <div class="mt-6">
     {#if wasStoryEnd}
-      <button class="w-full md:w-32 mb-4" on:click={downloadStory}>
+      <button class="mb-4 w-full md:w-32" on:click={downloadStory}>
         Download
       </button>
       {#if wasLastStory}
@@ -119,7 +119,7 @@
         </button>
       {:else}
         <button
-          class=" w-full md:w-fit blue tracking-wide font-bold px-6 py-3 rounded-full shadow"
+          class=" blue w-full rounded-full px-6 py-3 font-bold tracking-wide shadow-sm md:w-fit"
           on:click={next}
           disabled={!$canSpeak}
         >

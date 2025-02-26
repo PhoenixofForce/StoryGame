@@ -48,10 +48,10 @@
 </script>
 
 <div class="mt-24 xl:mt-64">
-  <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow text-center">
+  <div class="mb-4 text-center text-5xl font-bold tracking-wide drop-shadow-sm">
     The Story Game
   </div>
-  <p class="mb-32 xl:mb-52 italic text-slate-400 text-center">
+  <p class="mb-32 text-center italic text-slate-400 xl:mb-52">
     ~ This site is currently under construction ~
   </p>
 
@@ -59,12 +59,12 @@
     <input bind:value={username} placeholder="Username" class="w-96" />
     <input bind:value={roomCode} placeholder="Room Code" class="w-96" />
     <button
-      class="blue w-96 mt-8"
+      class="blue mt-8 w-96"
       on:click={() => connectToSocket()}
       disabled={!canCreateGame}>Play</button
     >
   </form>
-  <div class="text-red-600 italic text-sm text-center">{errorMessage}</div>
+  <div class="text-center text-sm italic text-red-600">{errorMessage}</div>
 </div>
 
 <style>

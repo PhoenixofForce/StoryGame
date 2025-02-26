@@ -53,7 +53,7 @@
   }
 </script>
 
-<div class="md:fixed md:top-5 md_left-7">
+<div class="md_left-7 md:fixed md:top-5">
   <div class="mb-4">
     <span class="font-semibold"> </span>
     <button on:click={shareRoomCodeLink} title="Copy link to Clipboard">
@@ -73,12 +73,12 @@
   </div>
 </div>
 
-<div class="flex justify-center items-center">
+<div class="flex items-center justify-center">
   <div class="flex flex-col">
-    <h2 class="text-center font-bold tracking-wide mb-2 text-slate-700">
+    <h2 class="mb-2 text-center font-bold tracking-wide text-slate-700">
       Settings
     </h2>
-    <div class="card bg-gray-50 px-8 py-5 border-2 border-slate-300 rounded-lg">
+    <div class="card rounded-lg border-2 border-slate-300 bg-gray-50 px-8 py-5">
       <input
         disabled={true}
         type="number"
@@ -91,7 +91,7 @@
 
     <button
       on:click={startGame}
-      class="w-full blue mt-4 md:w-32 float-right ml-auto"
+      class="blue float-right ml-auto mt-4 w-full md:w-32"
       disabled={$lobbyStore.you !== $lobbyStore.host}
     >
       Start Game</button
