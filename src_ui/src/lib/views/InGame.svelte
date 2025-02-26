@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Send } from "lucide-svelte";
   import InputField from "../components/InputField.svelte";
   import {
     addEventHandler,
@@ -87,12 +88,12 @@
         ><b>Hint</b> Use ~ to control what the next player can see.</span
       >
       <button
-        class="blue float-right mt-4 w-full md:w-32"
+        class="float-right mt-4 w-full bg-gradient-to-tr from-lime-100 to-orange-100 py-2 md:w-48"
         disabled={!fullStory ||
           fullStory.length < storyInputField.MIN_SENTENCE_LENGTH}
         on:click={sendStory}
       >
-        Send
+        <Send class="mr-1" /> Send
       </button>
     </div>
   </div>

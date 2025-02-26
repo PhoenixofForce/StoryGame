@@ -1,4 +1,10 @@
 <script lang="ts">
+  import {
+    ArrowBigDownDash,
+    Undo,
+    ChevronLast,
+    ChevronRight,
+  } from "lucide-svelte";
   import { lobbyStore } from "../services/lobbyService";
   import {
     addEventHandler,
@@ -80,7 +86,7 @@
   </h1>
   <hr class="my-4 h-px w-full bg-gray-200 dark:bg-gray-800" />
 
-  <div class="messages flex flex-col">
+  <div class="messages flex flex-col rounded-2xl bg-white p-2 shadow">
     {#each revealedParts as part}
       <div class:self-end={$lobbyStore.you === part.writer}>
         <div class="font-bold" class:text-end={$lobbyStore.you === part.writer}>
@@ -95,38 +101,40 @@
         </div>
       </div>
     {/each}
-  </div>
-
-  <div class="mt-6">
-    {#if wasStoryEnd}
-      <button class="mb-4 w-full md:w-32" on:click={downloadStory}>
-        Download
-      </button>
-      {#if wasLastStory}
-        <button class="w-full md:w-fit" on:click={displayLobby}>
-          Back to Lobby
-        </button>
-      {/if}
-    {/if}
-    {#if $lobbyStore.you === $lobbyStore.host && !wasLastStory}
+    <div class="mt-6 w-fit place-self-center">
       {#if wasStoryEnd}
         <button
-          class="green w-full md:w-fit"
-          on:click={next}
-          disabled={!$canSpeak}
+          class="whitespace-break-nowrap mb-4 w-full md:w-fit"
+          on:click={downloadStory}
         >
-          Click to reveal next Story
+          <ArrowBigDownDash class="mr-1" /> Download
         </button>
-      {:else}
-        <button
-          class=" blue w-full rounded-full px-6 py-3 font-bold tracking-wide shadow-sm md:w-fit"
-          on:click={next}
-          disabled={!$canSpeak}
-        >
-          Click to reveal next Message
-        </button>
+        {#if wasLastStory}
+          <button class="w-full md:w-fit" on:click={displayLobby}>
+            <Undo class="mr-1" /> Back to Lobby
+          </button>
+        {/if}
       {/if}
-    {/if}
+      {#if $lobbyStore.you === $lobbyStore.host && !wasLastStory}
+        {#if wasStoryEnd}
+          <button
+            class="green w-full md:w-fit"
+            on:click={next}
+            disabled={!$canSpeak}
+          >
+            <ChevronLast class="mr-1" /> Next Story
+          </button>
+        {:else}
+          <button
+            class=" blue w-full rounded-full px-6 py-3 font-bold tracking-wide shadow-sm md:w-fit"
+            on:click={next}
+            disabled={!$canSpeak}
+          >
+            <ChevronRight class="mr-1" /> Next Message
+          </button>
+        {/if}
+      {/if}
+    </div>
   </div>
 </div>
 

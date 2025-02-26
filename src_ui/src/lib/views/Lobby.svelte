@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PenTool } from "lucide-svelte";
   import PlayerDisplay from "../components/PlayerDisplay.svelte";
   import { lobbyStore } from "../services/lobbyService";
   import {
@@ -73,12 +74,14 @@
   </div>
 </div>
 
-<div class="flex items-center justify-center">
+<div class=" flex items-center justify-center">
   <div class="flex flex-col">
     <h2 class="mb-2 text-center font-bold tracking-wide text-slate-700">
       Settings
     </h2>
-    <div class="card rounded-lg border-2 border-slate-300 bg-gray-50 px-8 py-5">
+    <div
+      class="card relative rounded-lg border-2 border-slate-300 bg-gray-50 px-8 py-5"
+    >
       <input
         disabled={true}
         type="number"
@@ -87,15 +90,14 @@
       />
 
       <p class="mt-2">Settings are currently not supported...</p>
+      <button
+        on:click={startGame}
+        class="absolute bottom-4 right-8 float-right w-full bg-gradient-to-tr from-lime-100 to-orange-100 py-2 md:w-48"
+        disabled={$lobbyStore.you !== $lobbyStore.host}
+      >
+        <PenTool class="mr-1" /> Start Game</button
+      >
     </div>
-
-    <button
-      on:click={startGame}
-      class="blue float-right ml-auto mt-4 w-full md:w-32"
-      disabled={$lobbyStore.you !== $lobbyStore.host}
-    >
-      Start Game</button
-    >
   </div>
 </div>
 

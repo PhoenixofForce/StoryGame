@@ -14,7 +14,7 @@
   };
 </script>
 
-<main>
+<main class="w-full">
   {#if import.meta.env.DEV}
     <span class="fixed top-0 left-0">State: {$viewStore}</span>
   {/if}
