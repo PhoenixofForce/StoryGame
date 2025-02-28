@@ -8,6 +8,7 @@
     addEventHandler,
     removeEventHandler,
   } from "../services/websocketService";
+  import Card from "../components/Card.svelte";
 
   let username = "";
   let roomCode = "";
@@ -49,14 +50,12 @@
 </script>
 
 <div class="mt-24 w-full xl:mt-32">
-  <div
-    class="w-full place-self-center rounded-2xl bg-slate-50 px-8 py-32 shadow-lg sm:w-fit md:px-48 xl:py-16"
-  >
+  <Card classes="px-8 py-16 md:px-48">
     <div class="mb-4 text-center text-5xl font-bold tracking-wide drop-shadow">
       The Story Game
     </div>
     <hr />
-    <p class="mb-32 text-center italic text-slate-400 xl:mb-52">
+    <p class="mb-16 text-center italic text-slate-400 xl:mb-52">
       ~ This site is currently under construction ~
     </p>
 
@@ -68,7 +67,7 @@
       />
       <input bind:value={roomCode} placeholder="Room Code" class="w-full" />
       <button
-        class="mt-8 w-full bg-gradient-to-tr from-lime-100 to-orange-100 py-2"
+        class="mt-6 w-full bg-gradient-to-tr from-lime-100 to-orange-100 py-2"
         on:click={() => connectToSocket()}
         disabled={!canCreateGame}
       >
@@ -76,7 +75,7 @@
       </button>
     </form>
     <div class="text-center text-sm italic text-red-600">{errorMessage}</div>
-  </div>
+  </Card>
 </div>
 
 <style>

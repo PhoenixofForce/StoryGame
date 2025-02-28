@@ -80,13 +80,13 @@
 </div>
 
 {#if !submittedStory}
-  <div class="mt-32 md:mt-64">
+  <div class="mt-52 px-4 md:mt-64 md:px-0">
     <p style="text-align: left">{storyEnd}</p>
     <InputField bind:this={storyInputField} bind:fullStory />
     <div class="h-fit">
-      <span class="inline-block italic text-slate-400"
-        ><b>Hint</b> Use ~ to control what the next player can see.</span
-      >
+      <span class="inline-block text-sm italic text-slate-400 md:text-base">
+        <b>Hint</b> Use ~ to control what the next player can see.
+      </span>
       <button
         class="float-right mt-4 w-full bg-gradient-to-tr from-lime-100 to-orange-100 py-2 md:w-48"
         disabled={!fullStory ||
@@ -100,7 +100,9 @@
 {:else}
   <div class="mt-72 flex w-full flex-col items-center justify-center">
     <Spinner />
-    <div class="mt-8 tracking-widest">Waiting for other players...</div>
+    <div class="mt-8 tracking-widest text-slate-500">
+      Waiting for other players...
+    </div>
   </div>
 {/if}
 
