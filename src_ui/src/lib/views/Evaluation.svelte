@@ -23,6 +23,7 @@
   import { download } from "../services/downloadService";
   import { onDestroy } from "svelte";
   import Card from "../components/Card.svelte";
+  import Button from "../components/Button.svelte";
 
   let wasStoryEnd = false;
   let wasLastStory = false;
@@ -79,6 +80,32 @@
     removeEventHandler(handler);
     removeEventHandler(revealHandler);
   });
+
+  $: buttons = [
+    {
+      text: "To Lobby",
+      icon: Undo,
+      onClick: displayLobby,
+      visible: wasStoryEnd && wasLastStory,
+      disabled: false,
+    },
+    {
+      text: "Download",
+      icon: ArrowBigDownDash,
+      onClick: downloadStory,
+      visible: wasStoryEnd,
+      disabled: false,
+    },
+    {
+      text: "Next " + (wasStoryEnd ? "Story" : "Message"),
+      icon: wasStoryEnd ? ChevronLast : ChevronRight,
+      onClick: next,
+      visible: $lobbyStore.you === $lobbyStore.host && !wasLastStory,
+      disabled: !$canSpeak,
+    },
+  ];
+  $: visibleButtons = buttons.filter((b) => b.visible);
+  $: lastVisibleButtonIndex = visibleButtons.length - 1;
 </script>
 
 <div class="flex flex-col items-center">
@@ -106,41 +133,19 @@
     <div
       class="mt-6 flex w-full flex-col-reverse flex-nowrap gap-3 place-self-center sm:flex-row sm:justify-center"
     >
-      {#if wasStoryEnd}
-        {#if wasLastStory}
-          <button
-            class="sm:max-w-50 w-full whitespace-nowrap sm:w-auto md:flex-1"
-            on:click={displayLobby}
+      {#each visibleButtons as button, i}
+        {#if button.visible}
+          <Button
+            type={i == lastVisibleButtonIndex ? "primary" : "default"}
+            icon={button.icon}
+            onClick={button.onClick}
+            classes="sm:max-w-50 w-full sm:w-auto md:flex-1"
+            disabled={button.disabled}
           >
-            <Undo class="mr-1" /> Back to Lobby
-          </button>
+            {button.text}
+          </Button>
         {/if}
-        <button
-          class="sm:max-w-50 w-full flex-1 whitespace-nowrap last:bg-gradient-to-tr last:from-lime-100 last:to-orange-100 sm:w-auto"
-          on:click={downloadStory}
-        >
-          <ArrowBigDownDash class="mr-1" /> Download
-        </button>
-      {/if}
-      {#if $lobbyStore.you === $lobbyStore.host && !wasLastStory}
-        {#if wasStoryEnd}
-          <button
-            class="sm:max-w-50 w-full flex-1 whitespace-nowrap last:bg-gradient-to-tr last:from-lime-100 last:to-orange-100 sm:w-auto"
-            on:click={next}
-            disabled={!$canSpeak}
-          >
-            <ChevronLast class="mr-1" /> Next Story
-          </button>
-        {:else}
-          <button
-            class="sm:max-w-50 w-full flex-1 whitespace-nowrap last:bg-gradient-to-tr last:from-lime-100 last:to-orange-100 sm:w-auto"
-            on:click={next}
-            disabled={!$canSpeak}
-          >
-            <ChevronRight class="mr-1" /> Next Message
-          </button>
-        {/if}
-      {/if}
+      {/each}
     </div>
   </Card>
 </div>

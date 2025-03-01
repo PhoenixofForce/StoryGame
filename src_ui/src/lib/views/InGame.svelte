@@ -14,6 +14,7 @@
   import { displayEvaluation } from "../services/navigationService";
   import { onDestroy } from "svelte";
   import Spinner from "../components/Spinner.svelte";
+  import Button from "../components/Button.svelte";
 
   let fullStory = "";
   let storyEnd = "";
@@ -66,7 +67,9 @@
 </script>
 
 <div class="absolute left-8 top-4">
-  <div class="mb-4 text-5xl font-bold tracking-wide drop-shadow-sm">
+  <div
+    class="mb-2 text-4xl font-bold tracking-wide drop-shadow-sm sm:mb-4 sm:text-5xl"
+  >
     The Story Game
   </div>
   <p class="italic text-slate-400">
@@ -80,21 +83,23 @@
 </div>
 
 {#if !submittedStory}
-  <div class="mt-52 px-4 md:mt-64 md:px-0">
+  <div class="mt-52 px-8 md:mt-64 md:px-16">
     <p style="text-align: left">{storyEnd}</p>
     <InputField bind:this={storyInputField} bind:fullStory />
     <div class="h-fit">
       <span class="inline-block text-sm italic text-slate-400 md:text-base">
         <b>Hint</b> Use ~ to control what the next player can see.
       </span>
-      <button
-        class="float-right mt-4 w-full bg-gradient-to-tr from-lime-100 to-orange-100 py-2 md:w-48"
+      <Button
+        type="primary"
+        classes="float-right mt-4 w-full md:w-48"
+        icon={Send}
+        onClick={sendStory}
         disabled={!fullStory ||
           fullStory.length < storyInputField.MIN_SENTENCE_LENGTH}
-        on:click={sendStory}
       >
-        <Send class="mr-1" /> Send
-      </button>
+        Send
+      </Button>
     </div>
   </div>
 {:else}

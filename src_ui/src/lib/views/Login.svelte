@@ -9,6 +9,7 @@
     removeEventHandler,
   } from "../services/websocketService";
   import Card from "../components/Card.svelte";
+  import Button from "../components/Button.svelte";
 
   let username = "";
   let roomCode = "";
@@ -66,13 +67,16 @@
         class="w-full xl:w-96"
       />
       <input bind:value={roomCode} placeholder="Room Code" class="w-full" />
-      <button
-        class="mt-6 w-full bg-gradient-to-tr from-lime-100 to-orange-100 py-2"
-        on:click={() => connectToSocket()}
+
+      <Button
+        type="primary"
+        classes="mt-6 w-full p-20"
+        icon={DoorOpen}
+        onClick={() => connectToSocket()}
         disabled={!canCreateGame}
       >
-        <DoorOpen class="mr-1" /> Enter Room
-      </button>
+        Enter Room
+      </Button>
     </form>
     <div class="text-center text-sm italic text-red-600">{errorMessage}</div>
   </Card>

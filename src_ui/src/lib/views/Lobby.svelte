@@ -10,6 +10,7 @@
   import { displayInGame } from "../services/navigationService";
   import { onDestroy } from "svelte";
   import Card from "../components/Card.svelte";
+  import Button from "../components/Button.svelte";
 
   let handler = addEventHandler("start_game", {
     onSuccess: (e) => {
@@ -58,10 +59,9 @@
 <div class="md:fixed md:left-12 md:top-5">
   <div class="mb-4">
     <span class="font-semibold"> </span>
-    <button on:click={shareRoomCodeLink} title="Copy link to Clipboard">
-      <Clipboard class="mr-1" />
+    <Button icon={Clipboard} onClick={shareRoomCodeLink}>
       {$lobbyStore.roomCode}
-    </button>
+    </Button>
   </div>
 
   <div>
@@ -96,13 +96,15 @@
           <p class="mt-2">Settings are currently not supported...</p>
         </div>
         <div class="flex w-full flex-row flex-nowrap justify-end">
-          <button
-            on:click={startGame}
-            class="w-full place-self-center bg-gradient-to-tr from-lime-100 to-orange-100 py-2 md:w-48"
+          <Button
+            icon={PenTool}
+            onClick={startGame}
             disabled={$lobbyStore.you !== $lobbyStore.host}
+            type="primary"
+            classes="w-full md:w-48"
           >
-            <PenTool class="mr-1" strokeWidth={1} /> Start Game</button
-          >
+            Start Game
+          </Button>
         </div>
       </div>
     </Card>
