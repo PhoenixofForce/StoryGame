@@ -82,7 +82,7 @@
       Settings
     </h2>
     <Card
-      classes="w-128 h-128 xl:h-200 xl:w-222 xl:p-38 px-8 py-8 rounded-lg  py-5 xl:py-16"
+      classes="w-128 md:w-175 h-128 xl:h-200 xl:w-222 xl:p-38 px-8 py-8 rounded-lg  py-5 xl:py-16"
     >
       <div class="align-center flex h-full w-full flex-col justify-between">
         <div>

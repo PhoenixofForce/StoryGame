@@ -125,6 +125,8 @@
           class=" mb-2 w-fit rounded-3xl px-5 py-2 shadow-sm"
           class:bg-slate-100={$lobbyStore.you !== part.writer}
           class:bg-green-100={$lobbyStore.you === part.writer}
+          class:dark:bg-slate-600={$lobbyStore.you !== part.writer}
+          class:dark:bg-green-700={$lobbyStore.you === part.writer}
         >
           {part.text}
         </div>

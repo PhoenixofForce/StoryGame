@@ -5,6 +5,7 @@
   import Evaluation from "./lib/views/Evaluation.svelte";
 
   import { viewStore } from "./lib/services/navigationService";
+  import Controls from "./lib/components/Controls.svelte";
 
   window.onbeforeunload = function () {
     if ($viewStore === "login") {
@@ -16,8 +17,9 @@
 
 <main class="w-full">
   {#if import.meta.env.DEV}
-    <span class="fixed top-0 left-0">State: {$viewStore}</span>
+    <span class="fixed left-0 top-0">State: {$viewStore}</span>
   {/if}
+  <Controls />
 
   {#if $viewStore === "login"}
     <Login />

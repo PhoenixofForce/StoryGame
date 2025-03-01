@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
@@ -24,13 +25,14 @@
   font-weight: 400;
 
   color-scheme: light;
-  color: #213547;
   background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  @apply text-slate-700 dark:text-slate-100;
 }
 
 body {
@@ -38,6 +40,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   @apply bg-gradient-to-tr from-sky-100 to-lime-100;
+  @apply dark:from-sky-900 dark:to-purple-950;
 }
 
 #app {
@@ -49,8 +52,8 @@ body {
 input,
 textarea,
 div.textarea {
-  @apply rounded-xl border border-solid border-slate-300 bg-white px-3 py-1;
-  @apply disabled:text-slate-400;
+  @apply rounded-xl border border-solid border-slate-300 bg-white px-3 py-1 dark:border-slate-300 dark:dark:bg-slate-500;
+  @apply disabled:border-slate-400 disabled:text-slate-200 dark:disabled:border-slate-400;
 }
 
 div.textarea {
@@ -71,8 +74,8 @@ svg {
   display: inline;
 }
 
-button {
-  @apply rounded-3xl border-2 border-solid border-slate-300 bg-slate-100 px-4 py-2 font-medium text-slate-700;
-  @apply disabled:border-slate-200 disabled:bg-slate-50 disabled:font-normal disabled:text-slate-300;
-  @apply enabled:shadow hover:enabled:scale-105 hover:enabled:bg-slate-200 hover:enabled:shadow-md;
+button:not(.plain) {
+  @apply rounded-3xl border-2 border-solid border-slate-300 bg-slate-100 px-4 py-2 font-medium text-slate-700 dark:bg-slate-600 dark:text-slate-100;
+  @apply disabled:border-slate-200 disabled:bg-slate-50 disabled:font-normal disabled:text-slate-300 dark:disabled:border-slate-600 dark:disabled:text-slate-400;
+  @apply enabled:shadow hover:enabled:scale-105 hover:enabled:bg-slate-200 hover:enabled:shadow-md dark:hover:enabled:bg-slate-500;
 }

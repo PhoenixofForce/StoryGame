@@ -9,7 +9,8 @@
   export let type: "primary" | "default" = "default";
 
   const typeToClassesMap = {
-    primary: "bg-gradient-to-tr from-lime-100 to-orange-100",
+    primary:
+      "bg-gradient-to-tr from-lime-100 to-orange-100 dark:from-green-800 dark:to-sky-800",
     default: "",
   };
 </script>
