@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { PenTool, Clipboard } from "lucide-svelte";
   import PlayerDisplay from "../components/PlayerDisplay.svelte";
   import { lobbyStore } from "../services/lobbyService";
   import {
@@ -8,6 +9,8 @@
   } from "../services/websocketService";
   import { displayInGame } from "../services/navigationService";
   import { onDestroy } from "svelte";
+  import Card from "../components/Card.svelte";
+  import Button from "../components/Button.svelte";
 
   let handler = addEventHandler("start_game", {
     onSuccess: (e) => {
@@ -53,12 +56,12 @@
   }
 </script>
 
-<div class="md:fixed md:top-5 md_left-7">
+<div class="md:fixed md:left-12 md:top-5">
   <div class="mb-4">
     <span class="font-semibold"> </span>
-    <button on:click={shareRoomCodeLink} title="Copy link to Clipboard">
-      Room Code '{$lobbyStore.roomCode}'
-    </button>
+    <Button icon={Clipboard} onClick={shareRoomCodeLink}>
+      {$lobbyStore.roomCode}
+    </Button>
   </div>
 
   <div>
@@ -73,39 +76,40 @@
   </div>
 </div>
 
-<div class="flex justify-center items-center">
+<div class=" flex items-center justify-center">
   <div class="flex flex-col">
-    <h2 class="text-center font-bold tracking-wide mb-2 text-slate-700">
+    <h2 class="mb-2 text-center font-bold tracking-wide text-slate-700">
       Settings
     </h2>
-    <div class="card bg-gray-50 px-8 py-5 border-2 border-slate-300 rounded-lg">
-      <input
-        disabled={true}
-        type="number"
-        class="w-full"
-        placeholder="Number of Rounds"
-      />
-
-      <p class="mt-2">Settings are currently not supported...</p>
-    </div>
-
-    <button
-      on:click={startGame}
-      class="w-full blue mt-4 md:w-32 float-right ml-auto"
-      disabled={$lobbyStore.you !== $lobbyStore.host}
+    <Card
+      classes="w-128 md:w-175 h-128 xl:h-200 xl:w-222 xl:p-38 px-8 py-8 rounded-lg  py-5 xl:py-16"
     >
-      Start Game</button
-    >
+      <div class="align-center flex h-full w-full flex-col justify-between">
+        <div>
+          <input
+            disabled={true}
+            type="number"
+            class="w-full"
+            placeholder="Number of Rounds"
+          />
+
+          <p class="mt-2">Settings are currently not supported...</p>
+        </div>
+        <div class="flex w-full flex-row flex-nowrap justify-end">
+          <Button
+            icon={PenTool}
+            onClick={startGame}
+            disabled={$lobbyStore.you !== $lobbyStore.host}
+            type="primary"
+            classes="w-full md:w-48"
+          >
+            Start Game
+          </Button>
+        </div>
+      </div>
+    </Card>
   </div>
 </div>
 
 <style>
-  .card {
-    max-width: 600px;
-    min-width: 300px;
-    max-height: 800px;
-    min-height: 300px;
-    width: 40vw;
-    height: 70vh;
-  }
 </style>

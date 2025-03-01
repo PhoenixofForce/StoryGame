@@ -1,4 +1,10 @@
 <script lang="ts">
+  import {
+    ArrowBigDownDash,
+    Undo,
+    ChevronLast,
+    ChevronRight,
+  } from "lucide-svelte";
   import { lobbyStore } from "../services/lobbyService";
   import {
     addEventHandler,
@@ -16,6 +22,8 @@
   import { displayLobby } from "../services/navigationService";
   import { download } from "../services/downloadService";
   import { onDestroy } from "svelte";
+  import Card from "../components/Card.svelte";
+  import Button from "../components/Button.svelte";
 
   let wasStoryEnd = false;
   let wasLastStory = false;
@@ -72,68 +80,77 @@
     removeEventHandler(handler);
     removeEventHandler(revealHandler);
   });
+
+  $: buttons = [
+    {
+      text: "To Lobby",
+      icon: Undo,
+      onClick: displayLobby,
+      visible: wasStoryEnd && wasLastStory,
+      disabled: false,
+    },
+    {
+      text: "Download",
+      icon: ArrowBigDownDash,
+      onClick: downloadStory,
+      visible: wasStoryEnd,
+      disabled: false,
+    },
+    {
+      text: "Next " + (wasStoryEnd ? "Story" : "Message"),
+      icon: wasStoryEnd ? ChevronLast : ChevronRight,
+      onClick: next,
+      visible: $lobbyStore.you === $lobbyStore.host && !wasLastStory,
+      disabled: !$canSpeak,
+    },
+  ];
+  $: visibleButtons = buttons.filter((b) => b.visible);
+  $: lastVisibleButtonIndex = visibleButtons.length - 1;
 </script>
 
 <div class="flex flex-col items-center">
+  <!-- Move this down as header of the Card -->
   <h1 class="text-lg font-bold">
     Story from {currentCreator}
   </h1>
-  <hr class="h-px bg-gray-200 w-full dark:bg-gray-800 my-4" />
+  <hr class="my-4 h-px w-full bg-gray-200 dark:bg-gray-800" />
 
-  <div class="messages flex flex-col">
+  <Card classes="px-8 py-16 sm:px-36 flex flex-col min-w-3/4 ">
     {#each revealedParts as part}
       <div class:self-end={$lobbyStore.you === part.writer}>
         <div class="font-bold" class:text-end={$lobbyStore.you === part.writer}>
           {part.writer}
         </div>
         <div
-          class=" px-5 py-2 rounded-3xl mb-2 shadow w-fit"
+          class=" mb-2 w-fit rounded-3xl px-5 py-2 shadow-sm"
           class:bg-slate-100={$lobbyStore.you !== part.writer}
           class:bg-green-100={$lobbyStore.you === part.writer}
+          class:dark:bg-slate-600={$lobbyStore.you !== part.writer}
+          class:dark:bg-green-700={$lobbyStore.you === part.writer}
         >
           {part.text}
         </div>
       </div>
     {/each}
-  </div>
-
-  <div class="mt-6">
-    {#if wasStoryEnd}
-      <button class="w-full md:w-32 mb-4" on:click={downloadStory}>
-        Download
-      </button>
-      {#if wasLastStory}
-        <button class="w-full md:w-fit" on:click={displayLobby}>
-          Back to Lobby
-        </button>
-      {/if}
-    {/if}
-    {#if $lobbyStore.you === $lobbyStore.host && !wasLastStory}
-      {#if wasStoryEnd}
-        <button
-          class="green w-full md:w-fit"
-          on:click={next}
-          disabled={!$canSpeak}
-        >
-          Click to reveal next Story
-        </button>
-      {:else}
-        <button
-          class=" w-full md:w-fit blue tracking-wide font-bold px-6 py-3 rounded-full shadow"
-          on:click={next}
-          disabled={!$canSpeak}
-        >
-          Click to reveal next Message
-        </button>
-      {/if}
-    {/if}
-  </div>
+    <div
+      class="mt-6 flex w-full flex-col-reverse flex-nowrap gap-3 place-self-center sm:flex-row sm:justify-center"
+    >
+      {#each visibleButtons as button, i}
+        {#if button.visible}
+          <Button
+            type={i == lastVisibleButtonIndex ? "primary" : "default"}
+            icon={button.icon}
+            onClick={button.onClick}
+            classes="sm:max-w-50 w-full sm:w-auto md:flex-1"
+            disabled={button.disabled}
+          >
+            {button.text}
+          </Button>
+        {/if}
+      {/each}
+    </div>
+  </Card>
 </div>
 
 <style>
-  .messages {
-    width: 60%;
-    max-width: 800px;
-    min-width: 300px;
-  }
 </style>

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Send } from "lucide-svelte";
   import InputField from "../components/InputField.svelte";
   import {
     addEventHandler,
@@ -13,6 +14,7 @@
   import { displayEvaluation } from "../services/navigationService";
   import { onDestroy } from "svelte";
   import Spinner from "../components/Spinner.svelte";
+  import Button from "../components/Button.svelte";
 
   let fullStory = "";
   let storyEnd = "";
@@ -64,8 +66,10 @@
   });
 </script>
 
-<div class="absolute top-4 left-8">
-  <div class="text-5xl mb-4 font-bold tracking-wide drop-shadow">
+<div class="absolute left-8 top-4">
+  <div
+    class="mb-2 text-4xl font-bold tracking-wide drop-shadow-sm sm:mb-4 sm:text-5xl"
+  >
     The Story Game
   </div>
   <p class="italic text-slate-400">
@@ -79,27 +83,31 @@
 </div>
 
 {#if !submittedStory}
-  <div class="mt-32 md:mt-64">
+  <div class="mt-52 px-8 md:mt-64 md:px-16">
     <p style="text-align: left">{storyEnd}</p>
     <InputField bind:this={storyInputField} bind:fullStory />
     <div class="h-fit">
-      <span class="inline-block italic text-slate-400"
-        ><b>Hint</b> Use ~ to control what the next player can see.</span
-      >
-      <button
-        class="blue float-right w-full md:w-32 mt-4"
+      <span class="inline-block text-sm italic text-slate-400 md:text-base">
+        <b>Hint</b> Use ~ to control what the next player can see.
+      </span>
+      <Button
+        type="primary"
+        classes="float-right mt-4 w-full md:w-48"
+        icon={Send}
+        onClick={sendStory}
         disabled={!fullStory ||
           fullStory.length < storyInputField.MIN_SENTENCE_LENGTH}
-        on:click={sendStory}
       >
         Send
-      </button>
+      </Button>
     </div>
   </div>
 {:else}
-  <div class="mt-72 w-full flex flex-col items-center justify-center">
+  <div class="mt-72 flex w-full flex-col items-center justify-center">
     <Spinner />
-    <div class="tracking-widest mt-8">Waiting for other players...</div>
+    <div class="mt-8 tracking-widest text-slate-500">
+      Waiting for other players...
+    </div>
   </div>
 {/if}
 

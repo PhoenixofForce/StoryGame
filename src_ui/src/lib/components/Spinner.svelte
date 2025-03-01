@@ -3,7 +3,7 @@
 </script>
 
 <svg
-  class="text-gray-300 animate-spin"
+  class="animate-spin text-slate-300"
   viewBox="0 0 64 64"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
@@ -23,7 +23,7 @@
     stroke-width="5"
     stroke-linecap="round"
     stroke-linejoin="round"
-    class="text-sky-800"
+    class="text-lime-600"
   >
   </path>
 </svg>
