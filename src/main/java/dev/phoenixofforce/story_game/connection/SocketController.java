@@ -198,8 +198,12 @@ public class SocketController extends TextWebSocketHandler {
         if (player != lobby.getHost()) return;
         if (game == null || game.isGameRunning()) return;
         if (game.allStoriesRevealed()) return;
-        
-        lobby.send(game.advanceReveal());   //todo: set lobby state to lobby
+
+        StoryRevealMessage messageToSend = game.advanceReveal();
+        if(game.allStoriesRevealed()) {
+            lobby.setState(LobbyState.LOBBY);
+        }
+        lobby.send(messageToSend);
     }
 
     private void nextStory(WebSocketSession sender, BaseMessage message) {
