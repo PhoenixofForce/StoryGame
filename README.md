@@ -29,6 +29,11 @@ Set the dev-dev as an environment variable
 - in your run configuration `spring.profiles.active=dev` or
 - as an JVM parameter `-Dspring.profiles.active=dev`
 
+#### Generate Frontend Files
+```bash
+.\mvnw process-classes
+```
+
 ### Setup Frontend
 
 Move to the ui folder
