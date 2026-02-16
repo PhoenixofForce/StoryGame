@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM eclipse-temurin:21-jre-alpine
 
 FROM openjdk:21-jdk
 EXPOSE 8080
