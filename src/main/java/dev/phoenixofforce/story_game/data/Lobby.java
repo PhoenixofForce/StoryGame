@@ -1,5 +1,6 @@
 package dev.phoenixofforce.story_game.data;
 
+import dev.phoenixofforce.story_game.game.Game;
 import dev.phoenixofforce.story_game.connection.messages.*;
 import dev.phoenixofforce.story_game.connection.messages.trigger.EndGameTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.StartGameTrigger;
