@@ -19,11 +19,11 @@ export function speak(text: string) {
   setTimeout(() => {
     canSpeak.set(true);
   }, 1000);
-  currentUtterance.onend = (_) => {
+  currentUtterance.onend = () => {
     canSpeak.set(true);
   };
 }
 
 export function cancel() {
-  window.speechSynthesis.cancel();
+  globalThis.speechSynthesis.cancel();
 }

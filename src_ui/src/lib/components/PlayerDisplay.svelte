@@ -5,7 +5,7 @@
 </script>
 
 <div>
-  {#each playerNames as player}
+  {#each playerNames as player (player.name)}
     <PlayerPlague
       name={player.name}
       color={player.color ? player.color : "slate"}

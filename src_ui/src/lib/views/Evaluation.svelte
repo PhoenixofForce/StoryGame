@@ -22,7 +22,7 @@
   import { displayLobby } from "../services/navigationService";
   import { download } from "../services/downloadService";
   import { onDestroy } from "svelte";
-  import Card from "../components/Card.svelte";
+  import PageLayout from "../components/PageLayout.svelte";
   import Button from "../components/Button.svelte";
 
   let wasStoryEnd = false;
@@ -108,49 +108,51 @@
   $: lastVisibleButtonIndex = visibleButtons.length - 1;
 </script>
 
-<div class="flex flex-col items-center">
-  <!-- Move this down as header of the Card -->
-  <h1 class="text-lg font-bold">
-    Story from {currentCreator}
-  </h1>
-  <hr class="my-4 h-px w-full bg-gray-200 dark:bg-gray-800" />
+<PageLayout>
+  <svelte:fragment slot="title">
+    <h2 class="font-bold tracking-wide text-slate-700 dark:text-slate-100">
+      Story from {currentCreator}
+    </h2>
+  </svelte:fragment>
 
-  <Card classes="px-8 py-16 sm:px-36 flex flex-col min-w-3/4 ">
-    {#each revealedParts as part}
-      <div class:self-end={$lobbyStore.you === part.writer}>
-        <div class="font-bold" class:text-end={$lobbyStore.you === part.writer}>
-          {part.writer}
-        </div>
-        <div
-          class=" mb-2 w-fit rounded-3xl px-5 py-2 shadow-sm"
-          class:bg-slate-100={$lobbyStore.you !== part.writer}
-          class:bg-green-100={$lobbyStore.you === part.writer}
-          class:dark:bg-slate-600={$lobbyStore.you !== part.writer}
-          class:dark:bg-green-700={$lobbyStore.you === part.writer}
-        >
-          {part.text}
-        </div>
-      </div>
-    {/each}
-    <div
-      class="mt-6 flex w-full flex-col-reverse flex-nowrap gap-3 place-self-center sm:flex-row sm:justify-center"
-    >
-      {#each visibleButtons as button, i}
-        {#if button.visible}
-          <Button
-            type={i == lastVisibleButtonIndex ? "primary" : "default"}
-            icon={button.icon}
-            onClick={button.onClick}
-            classes="sm:max-w-50 w-full sm:w-auto md:flex-1"
-            disabled={button.disabled}
+  <svelte:fragment slot="content">
+    <div class="flex flex-col">
+      {#each revealedParts as part, index (index)}
+        <div class:self-end={$lobbyStore.you === part.writer}>
+          <div
+            class="font-bold"
+            class:text-end={$lobbyStore.you === part.writer}
           >
-            {button.text}
-          </Button>
-        {/if}
+            {part.writer}
+          </div>
+          <div
+            class="w-fit rounded-3xl px-5 py-2 shadow-sm"
+            class:mb-2={index !== revealedParts.length - 1}
+            class:bg-slate-100={$lobbyStore.you !== part.writer}
+            class:bg-green-100={$lobbyStore.you === part.writer}
+            class:dark:bg-slate-600={$lobbyStore.you !== part.writer}
+            class:dark:bg-green-700={$lobbyStore.you === part.writer}
+          >
+            {part.text}
+          </div>
+        </div>
       {/each}
     </div>
-  </Card>
-</div>
+  </svelte:fragment>
 
-<style>
-</style>
+  <svelte:fragment slot="actions">
+    {#each visibleButtons as button, i (button.text)}
+      {#if button.visible}
+        <Button
+          type={i == lastVisibleButtonIndex ? "primary" : "default"}
+          icon={button.icon}
+          onClick={button.onClick}
+          classes="w-full sm:w-auto"
+          disabled={button.disabled}
+        >
+          {button.text}
+        </Button>
+      {/if}
+    {/each}
+  </svelte:fragment>
+</PageLayout>

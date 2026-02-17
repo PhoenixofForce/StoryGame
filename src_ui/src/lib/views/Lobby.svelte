@@ -9,7 +9,7 @@
   } from "../services/websocketService";
   import { displayInGame } from "../services/navigationService";
   import { onDestroy } from "svelte";
-  import Card from "../components/Card.svelte";
+  import PageLayout from "../components/PageLayout.svelte";
   import Button from "../components/Button.svelte";
 
   let handler = addEventHandler("start_game", {
@@ -23,6 +23,7 @@
     sendMessage({
       type: "start_game",
       error: false,
+      message: "",
     });
   }
 
@@ -56,60 +57,46 @@
   }
 </script>
 
-<div class="md:fixed md:left-12 md:top-5">
-  <div class="mb-4">
-    <span class="font-semibold"> </span>
-    <Button icon={Clipboard} onClick={shareRoomCodeLink}>
-      {$lobbyStore.roomCode}
-    </Button>
-  </div>
-
-  <div>
+<PageLayout showSidebar={true}>
+  <svelte:fragment slot="sidebar">
+    <div class="mb-4">
+      <Button icon={Clipboard} onClick={shareRoomCodeLink}>
+        {$lobbyStore.roomCode}
+      </Button>
+    </div>
     <PlayerDisplay
-      playerNames={$lobbyStore.players.map((player) => {
-        return {
-          name: getPlayerDisplayName(player),
-          color: getPlayerColor(player),
-        };
-      })}
+      playerNames={$lobbyStore.players.map((player) => ({
+        name: getPlayerDisplayName(player),
+        color: getPlayerColor(player),
+      }))}
     />
-  </div>
-</div>
+  </svelte:fragment>
 
-<div class=" flex items-center justify-center">
-  <div class="flex flex-col">
-    <h2 class="mb-2 text-center font-bold tracking-wide text-slate-700">
+  <svelte:fragment slot="title">
+    <h2 class="font-bold tracking-wide text-slate-700 dark:text-slate-100">
       Settings
     </h2>
-    <Card
-      classes="w-128 md:w-175 h-128 xl:h-200 xl:w-222 xl:p-38 px-8 py-8 rounded-lg  py-5 xl:py-16"
+  </svelte:fragment>
+
+  <svelte:fragment slot="content">
+    <input
+      disabled={true}
+      type="number"
+      class="w-full"
+      placeholder="Number of Rounds"
+    />
+    <p class="mt-2">Settings are currently not supported...</p>
+  </svelte:fragment>
+
+  <svelte:fragment slot="actions">
+    <Button
+      icon={PenTool}
+      onClick={startGame}
+      disabled={$lobbyStore.you !== $lobbyStore.host}
+      type="primary"
+      classes="w-full md:w-48"
     >
-      <div class="align-center flex h-full w-full flex-col justify-between">
-        <div>
-          <input
-            disabled={true}
-            type="number"
-            class="w-full"
-            placeholder="Number of Rounds"
-          />
-
-          <p class="mt-2">Settings are currently not supported...</p>
-        </div>
-        <div class="flex w-full flex-row flex-nowrap justify-end">
-          <Button
-            icon={PenTool}
-            onClick={startGame}
-            disabled={$lobbyStore.you !== $lobbyStore.host}
-            type="primary"
-            classes="w-full md:w-48"
-          >
-            Start Game
-          </Button>
-        </div>
-      </div>
-    </Card>
-  </div>
-</div>
-
-<style>
-</style>
+      Start Game
+    </Button>
+  </svelte:fragment>
+</PageLayout>

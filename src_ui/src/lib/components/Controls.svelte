@@ -41,3 +41,7 @@
     {/if}
   </button>
 </div>
+
+<div class="fixed right-8 bottom-4 text-xs text-slate-400">
+  v{__APP_VERSION__}
+</div>

@@ -28,6 +28,7 @@
 
     //highlight text
     let parts = splitStoryIntoStartAndEnd(fullStory);
+    // eslint-disable-next-line svelte/no-dom-manipulating
     textArea.innerHTML =
       sanitize(parts[0]) + "<b>" + sanitize(parts[1]) + "</b>";
 
@@ -128,7 +129,7 @@
 
   //copied from https://stackoverflow.com/a/48226843
   function sanitize(string: string): string {
-    const map = {
+    const map: Record<string, string> = {
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
@@ -137,7 +138,7 @@
       "/": "&#x2F;",
     };
     const reg = /[&<>"'/]/gi;
-    return string;
+    return string.replace(reg, (match) => map[match]);
   }
 
   //Overwrite onPaste to keep new lines
@@ -157,10 +158,10 @@
   bind:textContent={fullStory}
   bind:this={textArea}
   placeholder="Type your message"
-  class="textarea h-64 w-full shadow"
+  class="textarea h-full w-full shadow"
   on:input={highlight_text}
   on:paste={onPaste}
-/>
+></div>
 
 <style>
 </style>

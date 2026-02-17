@@ -1,5 +1,6 @@
-package dev.phoenixofforce.story_game.data;
+package dev.phoenixofforce.story_game.game;
 
+import dev.phoenixofforce.story_game.data.Player;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
