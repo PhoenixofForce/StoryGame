@@ -1,8 +1,8 @@
 import type {
-  NextStoryMessage,
   PlayerJoinMessage,
   RequestRevealMessage,
   SubmitStoryMessage,
+  NextStoryTrigger,
 } from "./messageTypes";
 import { connect, sendMessage } from "./websocketService";
 
@@ -48,11 +48,10 @@ export function sendRequestRevealMessage() {
 }
 
 export function sendNextStoryRequest() {
-  const data: NextStoryMessage = {
-    type: "next_story",
+  const data: NextStoryTrigger = {
+    type: "next_story_trigger",
     error: false,
     message: "",
-    creator: "",
   };
   sendMessage(data);
 }

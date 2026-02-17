@@ -16,7 +16,7 @@ public class WebsocketConfig implements WebSocketConfigurer {
     private final SocketController socketController;
 
     @Value( "${websocket.allowed-origins}" )
-    private final String allowedOrigins;
+    private String allowedOrigins;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {

@@ -8,8 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "lint": "eslint .",
-    "lint-fix": "eslint . --fix",
+    "lint": "eslint src",
+    "lint-fix": "eslint src --fix",
     "format": "prettier --check src",
     "format-fix": "prettier --write src",
     "ci": "npm run check && npm run lint && npm run build && npm run format",
@@ -17,28 +17,28 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@sveltejs/vite-plugin-svelte": "^3.0.2",
-    "@tailwindcss/postcss": "^4.0.0",
-    "@tsconfig/svelte": "^5.0.2",
+    "@sveltejs/vite-plugin-svelte": "^6.2.4",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@tsconfig/svelte": "^5.0.8",
     "@typescript-eslint/eslint-plugin": "^8.56.0",
     "@typescript-eslint/parser": "^8.56.0",
     "eslint": "^10.0.0",
     "eslint-plugin-svelte": "^3.15.0",
     "globals": "^17.3.0",
     "jiti": "^2.6.1",
-    "postcss": "^8.4.35",
-    "prettier": "^3.5.2",
-    "prettier-plugin-svelte": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "svelte": "^4.2.11",
-    "svelte-check": "^3.6.4",
-    "tailwindcss": "^4.0.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
+    "postcss": "^8.5.6",
+    "prettier": "^3.8.1",
+    "prettier-plugin-svelte": "^3.4.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
+    "svelte": "^5.51.2",
+    "svelte-check": "^4.4.0",
+    "tailwindcss": "^4.1.18",
+    "tslib": "^2.8.1",
+    "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.0",
-    "vite": "^5.1.4"
+    "vite": "^7.3.1"
   },
   "dependencies": {
-    "lucide-svelte": "^0.476.0"
+    "lucide-svelte": "^0.574.0"
   }
 }

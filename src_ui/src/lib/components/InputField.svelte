@@ -161,7 +161,7 @@
   class="textarea h-64 w-full shadow"
   on:input={highlight_text}
   on:paste={onPaste}
-/>
+></div>
 
 <style>
 </style>
