@@ -38,7 +38,7 @@ jobs:
       # --- Frontend ---
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
 
       - name: Set frontend version and build
         working-directory: src_ui
