@@ -110,10 +110,11 @@
 
 <div class="flex flex-col items-center">
   <!-- Move this down as header of the Card -->
-  <h1 class="text-lg font-bold">
+  <h2
+    class="mb-2 text-center font-bold tracking-wide text-slate-700 dark:text-slate-100"
+  >
     Story from {currentCreator}
-  </h1>
-  <hr class="my-4 h-px w-full bg-gray-200 dark:bg-gray-800" />
+  </h2>
 
   <Card classes="px-8 py-16 sm:px-36 flex flex-col min-w-3/4 ">
     {#each revealedParts as part, index (index)}
@@ -132,24 +133,24 @@
         </div>
       </div>
     {/each}
-    <div
-      class="mt-6 flex w-full flex-col-reverse flex-nowrap gap-3 place-self-center sm:flex-row sm:justify-center"
-    >
-      {#each visibleButtons as button, i (button.text)}
-        {#if button.visible}
-          <Button
-            type={i == lastVisibleButtonIndex ? "primary" : "default"}
-            icon={button.icon}
-            onClick={button.onClick}
-            classes="sm:max-w-50 w-full sm:w-auto md:flex-1"
-            disabled={button.disabled}
-          >
-            {button.text}
-          </Button>
-        {/if}
-      {/each}
-    </div>
   </Card>
+  <div
+    class="mt-6 flex w-full min-w-3/4 flex-col-reverse flex-nowrap gap-3 place-self-center sm:w-fit sm:flex-row sm:justify-end"
+  >
+    {#each visibleButtons as button, i (button.text)}
+      {#if button.visible}
+        <Button
+          type={i == lastVisibleButtonIndex ? "primary" : "default"}
+          icon={button.icon}
+          onClick={button.onClick}
+          classes="sm:max-w-50 w-full sm:w-auto md:flex-1"
+          disabled={button.disabled}
+        >
+          {button.text}
+        </Button>
+      {/if}
+    {/each}
+  </div>
 </div>
 
 <style>

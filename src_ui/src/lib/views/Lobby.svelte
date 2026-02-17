@@ -79,11 +79,13 @@
 
 <div class=" flex items-center justify-center">
   <div class="flex flex-col">
-    <h2 class="mb-2 text-center font-bold tracking-wide text-slate-700">
+    <h2
+      class="mb-2 text-center font-bold tracking-wide text-slate-700 dark:text-slate-100"
+    >
       Settings
     </h2>
     <Card
-      classes="w-128 md:w-175 h-128 xl:h-200 xl:w-222 xl:p-38 px-8 py-8 rounded-lg  py-5 xl:py-16"
+      classes="w-128 md:w-175 h-128 xl:h-200 xl:w-222 xl:p-38 px-8 py-8 py-5 xl:py-16"
     >
       <div class="align-center flex h-full w-full flex-col justify-between">
         <div>

@@ -52,8 +52,9 @@ body {
 input,
 textarea,
 div.textarea {
-  @apply rounded-xl border border-solid border-slate-300 bg-white px-3 py-1 dark:border-slate-300 dark:dark:bg-slate-500;
+  @apply rounded-xl border border-solid border-slate-300 bg-white px-3 py-1 dark:border-slate-400 dark:bg-slate-500 dark:text-slate-100;
   @apply disabled:border-slate-400 disabled:text-slate-200 dark:disabled:border-slate-400;
+  @apply outline-none focus:border-slate-500 dark:focus:border-slate-100;
 }
 
 div.textarea {
@@ -64,10 +65,9 @@ div.textarea {
   display: inline-block;
 }
 
-/*placeholder text for textarea, TODO: fix color*/
 [contentEditable="true"]:empty:not(:focus)::before {
   content: attr(placeholder);
-  color: #666;
+  @apply text-slate-400 dark:text-slate-300;
 }
 
 svg {
@@ -75,7 +75,8 @@ svg {
 }
 
 button:not(.plain) {
-  @apply rounded-3xl border-2 border-solid border-slate-300 bg-slate-100 px-4 py-2 font-medium text-slate-700 dark:bg-slate-600 dark:text-slate-100;
+  @apply rounded-xl border-2 border-solid border-slate-300 bg-slate-100 px-4 py-2 font-medium text-slate-700 dark:bg-slate-600 dark:text-slate-100;
   @apply disabled:border-slate-200 disabled:bg-slate-50 disabled:font-normal disabled:text-slate-300 dark:disabled:border-slate-600 dark:disabled:text-slate-400;
   @apply enabled:shadow hover:enabled:scale-105 hover:enabled:bg-slate-200 hover:enabled:shadow-md dark:hover:enabled:bg-slate-500;
+  @apply transition-transform duration-50;
 }

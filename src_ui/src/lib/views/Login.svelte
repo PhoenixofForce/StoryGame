@@ -69,7 +69,7 @@
 
       <Button
         type="primary"
-        classes="mt-6 w-full p-20"
+        classes="mt-6 w-full"
         icon={DoorOpen}
         onClick={() => connectToSocket()}
         disabled={!canCreateGame}
