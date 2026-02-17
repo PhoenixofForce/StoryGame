@@ -6,7 +6,7 @@ on:
     branches: [ "master" ]
     paths:
       - src_ui/**
-      - sercive.Dockerfile-ui
+      - service.Dockerfile-ui
 
 
 env:
@@ -72,7 +72,7 @@ jobs:
       uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
       with:
         context: .
-        file: ./ui.sercive.Dockerfile
+        file: ./ui.service.Dockerfile
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
