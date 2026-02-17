@@ -25,5 +25,5 @@ export function speak(text: string) {
 }
 
 export function cancel() {
-  window.speechSynthesis.cancel();
+  globalThis.speechSynthesis.cancel();
 }

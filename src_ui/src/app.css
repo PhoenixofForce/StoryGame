@@ -60,7 +60,6 @@ div.textarea {
 div.textarea {
   white-space: pre-wrap;
   word-wrap: break-word;
-  /*word-break: break-all;*/
   overflow: auto;
   display: inline-block;
 }

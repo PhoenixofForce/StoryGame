@@ -13,7 +13,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.io.IOException;
 import java.util.*;
 
 
@@ -47,14 +46,14 @@ public class SocketController extends TextWebSocketHandler {
         String receivedData = message.getPayload();
         BaseMessage baseMessage = new ObjectMapper().readValue(receivedData, BaseMessage.class);
 
-        for (String command : commands.keySet()) {
-            if (baseMessage.getType().equals(command)) {
-                commands.get(command).apply(sender, baseMessage);
+        for (Map.Entry<String, CommandHandler> command : commands.entrySet()) {
+            if (baseMessage.getType().equals(command.getKey())) {
+                command.getValue().apply(sender, baseMessage);
             }
         }
     }
 
-    private void register(WebSocketSession sender, BaseMessage message) throws IOException {
+    private void register(WebSocketSession sender, BaseMessage message) {
         if(!(message instanceof PlayerJoinMessage playerJoinMessage)) return;
         lobbyService.register(sender, playerJoinMessage);
     }

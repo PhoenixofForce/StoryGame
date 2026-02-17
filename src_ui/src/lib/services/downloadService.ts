@@ -10,6 +10,5 @@ export function download(filename: string, text: string) {
   document.body.appendChild(element);
 
   element.click();
-
-  document.body.removeChild(element);
+  element.remove();
 }
