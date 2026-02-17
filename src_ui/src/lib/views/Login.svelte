@@ -53,7 +53,9 @@
   <svelte:fragment slot="content">
     <div class="flex h-full flex-col justify-between">
       <div class="mt-14">
-        <div class="mb-4 text-center text-5xl font-bold tracking-wide drop-shadow">
+        <div
+          class="mb-4 text-center text-5xl font-bold tracking-wide drop-shadow"
+        >
           The Story Game
         </div>
         <hr class="my-4" />
@@ -63,13 +65,20 @@
       </div>
 
       <div>
-        <form on:submit|preventDefault={() => {}} class="flex flex-col items-center gap-2">
+        <form
+          on:submit|preventDefault={() => {}}
+          class="flex flex-col items-center gap-2"
+        >
           <input
             bind:value={username}
             placeholder="Username"
             class="w-full xl:w-96"
           />
-          <input bind:value={roomCode} placeholder="Room Code" class="w-full xl:w-96" />
+          <input
+            bind:value={roomCode}
+            placeholder="Room Code"
+            class="w-full xl:w-96"
+          />
 
           <Button
             type="primary"
@@ -81,7 +90,9 @@
             Enter Room
           </Button>
         </form>
-        <div class="text-center text-sm text-red-600 italic">{errorMessage}</div>
+        <div class="text-center text-sm text-red-600 italic">
+          {errorMessage}
+        </div>
       </div>
     </div>
   </svelte:fragment>

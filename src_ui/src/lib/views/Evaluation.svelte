@@ -119,7 +119,10 @@
     <div class="flex flex-col">
       {#each revealedParts as part, index (index)}
         <div class:self-end={$lobbyStore.you === part.writer}>
-          <div class="font-bold" class:text-end={$lobbyStore.you === part.writer}>
+          <div
+            class="font-bold"
+            class:text-end={$lobbyStore.you === part.writer}
+          >
             {part.writer}
           </div>
           <div

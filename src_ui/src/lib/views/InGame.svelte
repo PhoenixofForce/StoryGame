@@ -72,7 +72,9 @@
     {#if !submittedStory}
       <div class="flex h-full flex-col">
         <div class="mb-2">
-          <div class="text-left text-2xl font-bold tracking-wide drop-shadow-sm sm:text-3xl">
+          <div
+            class="text-left text-2xl font-bold tracking-wide drop-shadow-sm sm:text-3xl"
+          >
             Round {currentRound} / {maxRounds}
           </div>
           <p class="min-h-5 text-left text-sm text-slate-400 italic">
