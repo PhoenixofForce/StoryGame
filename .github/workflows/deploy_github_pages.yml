@@ -29,15 +29,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - uses: actions/checkout@v4
+      - name: Extract latest version from tags
+        id: version
+        run: echo "VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      - run: npm install
+      - name: Install dependencies and set version
         working-directory: src_ui
-        
+        run: |
+          npm install
+          npm version ${{ steps.version.outputs.VERSION }} --no-git-tag-version --allow-same-version
+
       - name: Build static page
         run: npm run build
         working-directory: src_ui
