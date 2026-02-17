@@ -15,6 +15,7 @@
   import { onDestroy } from "svelte";
   import Spinner from "../components/Spinner.svelte";
   import Button from "../components/Button.svelte";
+  import PageLayout from "../components/PageLayout.svelte";
 
   let fullStory = "";
   let storyEnd = "";
@@ -66,33 +67,43 @@
   });
 </script>
 
-<div class="absolute top-4 left-8">
-  <div
-    class="mb-2 text-4xl font-bold tracking-wide drop-shadow-sm sm:mb-4 sm:text-5xl"
-  >
-    The Story Game
-  </div>
-  <p class="text-slate-400 italic">
-    Round {currentRound} / {maxRounds}<br />
-    {#if playersReady > 0}
-      <span
-        >{playersReady} / {$lobbyStore.players.length} Players are ready</span
-      >
+<PageLayout noCard={true}>
+  <svelte:fragment slot="content">
+    {#if !submittedStory}
+      <div class="flex h-full flex-col">
+        <div class="mb-2">
+          <div class="text-left text-2xl font-bold tracking-wide drop-shadow-sm sm:text-3xl">
+            Round {currentRound} / {maxRounds}
+          </div>
+          <p class="min-h-5 text-left text-sm text-slate-400 italic">
+            {#if playersReady > 0}
+              {playersReady} / {$lobbyStore.players.length} Players are ready
+            {/if}
+          </p>
+        </div>
+        <p class="mb-2 text-left">{storyEnd}</p>
+        <div class="min-h-0 flex-1">
+          <InputField bind:this={storyInputField} bind:fullStory />
+        </div>
+      </div>
+    {:else}
+      <div class="flex h-full w-full flex-col items-center justify-center">
+        <Spinner />
+        <div class="mt-8 tracking-widest text-slate-500">
+          Waiting for other players...
+        </div>
+      </div>
     {/if}
-  </p>
-</div>
+  </svelte:fragment>
 
-{#if !submittedStory}
-  <div class="mt-52 px-8 md:mt-64 md:px-16">
-    <p style="text-align: left">{storyEnd}</p>
-    <InputField bind:this={storyInputField} bind:fullStory />
-    <div class="h-fit">
-      <span class="inline-block text-sm text-slate-400 italic md:text-base">
+  <svelte:fragment slot="actions">
+    {#if !submittedStory}
+      <span class="mr-auto text-sm text-slate-400 italic md:text-base">
         <b>Hint</b> Use ~ to control what the next player can see.
       </span>
       <Button
         type="primary"
-        classes="float-right mt-4 w-full md:w-48"
+        classes="w-full md:w-48"
         icon={Send}
         onClick={sendStory}
         disabled={!fullStory ||
@@ -100,16 +111,6 @@
       >
         Send
       </Button>
-    </div>
-  </div>
-{:else}
-  <div class="mt-72 flex w-full flex-col items-center justify-center">
-    <Spinner />
-    <div class="mt-8 tracking-widest text-slate-500">
-      Waiting for other players...
-    </div>
-  </div>
-{/if}
-
-<style>
-</style>
+    {/if}
+  </svelte:fragment>
+</PageLayout>
