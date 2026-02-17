@@ -116,7 +116,7 @@
   <hr class="my-4 h-px w-full bg-gray-200 dark:bg-gray-800" />
 
   <Card classes="px-8 py-16 sm:px-36 flex flex-col min-w-3/4 ">
-    {#each revealedParts as part}
+    {#each revealedParts as part, index (index)}
       <div class:self-end={$lobbyStore.you === part.writer}>
         <div class="font-bold" class:text-end={$lobbyStore.you === part.writer}>
           {part.writer}
@@ -135,7 +135,7 @@
     <div
       class="mt-6 flex w-full flex-col-reverse flex-nowrap gap-3 place-self-center sm:flex-row sm:justify-center"
     >
-      {#each visibleButtons as button, i}
+      {#each visibleButtons as button, i (button.text)}
         {#if button.visible}
           <Button
             type={i == lastVisibleButtonIndex ? "primary" : "default"}

@@ -33,9 +33,8 @@
   });
 
   let lobbyHandler = addEventHandler("lobby-change", {
-    onSuccess: (_) => {
+    onSuccess: () => {
       window.history.pushState("page2", "Title", location.pathname);
-
       displayLobby();
     },
   });
@@ -56,7 +55,7 @@
       The Story Game
     </div>
     <hr />
-    <p class="mb-16 text-center italic text-slate-400 xl:mb-52">
+    <p class="mb-16 text-center text-slate-400 italic xl:mb-52">
       ~ This site is currently under construction ~
     </p>
 
@@ -78,7 +77,7 @@
         Enter Room
       </Button>
     </form>
-    <div class="text-center text-sm italic text-red-600">{errorMessage}</div>
+    <div class="text-center text-sm text-red-600 italic">{errorMessage}</div>
   </Card>
 </div>
 

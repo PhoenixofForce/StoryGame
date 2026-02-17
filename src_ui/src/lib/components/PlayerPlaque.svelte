@@ -14,8 +14,8 @@
   class:flex-row-reverse={namePosition === "left"}
 >
   <div
-    class=" mx-1 flex h-9 w-9 select-none items-center justify-center
-     rounded-full border-2 p-2 text-lg font-bold shadow
+    class=" mx-1 flex h-9 w-9 items-center justify-center rounded-full
+     border-2 p-2 text-lg font-bold shadow select-none
      {color === 'slate'
       ? 'border-slate-400 bg-slate-200 text-slate-950 dark:bg-slate-700 dark:text-slate-400'
       : ''}

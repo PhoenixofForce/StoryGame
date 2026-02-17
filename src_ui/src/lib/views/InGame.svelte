@@ -9,7 +9,7 @@
   import { lobbyStore } from "../services/lobbyService";
   import type {
     GameStateUpdateMessage,
-    StartRoundTriggerMessage,
+    StartRoundMessage,
   } from "../services/messageTypes";
   import { displayEvaluation } from "../services/navigationService";
   import { onDestroy } from "svelte";
@@ -29,7 +29,7 @@
   let handlers = [
     addEventHandler("start_round", {
       onSuccess: (e) => {
-        const data = e as StartRoundTriggerMessage;
+        const data = e as StartRoundMessage;
         storyEnd = data.lastStorySnippet;
         currentRound = data.currentRound;
         maxRounds = data.maxRounds;
@@ -66,13 +66,13 @@
   });
 </script>
 
-<div class="absolute left-8 top-4">
+<div class="absolute top-4 left-8">
   <div
     class="mb-2 text-4xl font-bold tracking-wide drop-shadow-sm sm:mb-4 sm:text-5xl"
   >
     The Story Game
   </div>
-  <p class="italic text-slate-400">
+  <p class="text-slate-400 italic">
     Round {currentRound} / {maxRounds}<br />
     {#if playersReady > 0}
       <span
@@ -87,7 +87,7 @@
     <p style="text-align: left">{storyEnd}</p>
     <InputField bind:this={storyInputField} bind:fullStory />
     <div class="h-fit">
-      <span class="inline-block text-sm italic text-slate-400 md:text-base">
+      <span class="inline-block text-sm text-slate-400 italic md:text-base">
         <b>Hint</b> Use ~ to control what the next player can see.
       </span>
       <Button

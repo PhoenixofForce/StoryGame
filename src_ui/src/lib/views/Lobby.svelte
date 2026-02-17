@@ -23,6 +23,7 @@
     sendMessage({
       type: "start_game",
       error: false,
+      message: "",
     });
   }
 
@@ -56,7 +57,7 @@
   }
 </script>
 
-<div class="md:fixed md:left-12 md:top-5">
+<div class="md:fixed md:top-5 md:left-12">
   <div class="mb-4">
     <span class="font-semibold"> </span>
     <Button icon={Clipboard} onClick={shareRoomCodeLink}>

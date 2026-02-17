@@ -1,36 +1,36 @@
 import { writable } from "svelte/store";
-import { addEventHandler } from "./websocketService"
-import { get } from 'svelte/store';
+import { addEventHandler } from "./websocketService";
+import { get } from "svelte/store";
 
-export const viewStore = writable('login');
+export const viewStore = writable("login");
 export function displayLogin() {
-  viewStore.set('login');
+  viewStore.set("login");
 }
 
 export function displayLobby() {
-  viewStore.set('lobby');
+  viewStore.set("lobby");
 }
 
 export function displayInGame() {
-  viewStore.set('ingame');
+  viewStore.set("ingame");
 }
 
 export function displayEvaluation() {
-  viewStore.set('evaluation');
+  viewStore.set("evaluation");
 }
 
 addEventHandler("start_game", {
-  onSuccess: (_) => {
-    if (get(viewStore) !== 'ingame') {
+  onSuccess: () => {
+    if (get(viewStore) !== "ingame") {
       displayInGame();
     }
-  }
+  },
 });
 
 addEventHandler("end_game", {
-  onSuccess: (_) => {
-    if (get(viewStore) !== 'evaluation') {
+  onSuccess: () => {
+    if (get(viewStore) !== "evaluation") {
       displayEvaluation();
     }
-  }
-})
+  },
+});
