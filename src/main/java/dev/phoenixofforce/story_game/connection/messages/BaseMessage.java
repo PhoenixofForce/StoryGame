@@ -2,8 +2,6 @@ package dev.phoenixofforce.story_game.connection.messages;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.phoenixofforce.story_game.connection.messages.trigger.EndGameTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
@@ -14,6 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
@@ -47,19 +46,14 @@ public class BaseMessage {
 
     public String toPayload() {
         ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            log.error("Could not parse this object to json: {}", this);
-            return "";
-        }
+        return mapper.writeValueAsString(this);
     }
 
     public boolean sendTo(WebSocketSession session) {
         try {
             session.sendMessage(new TextMessage(toPayload()));
             return true;
-        } catch (IOException e) {
+        } catch (IOException _) {
             return false;
         }
     }

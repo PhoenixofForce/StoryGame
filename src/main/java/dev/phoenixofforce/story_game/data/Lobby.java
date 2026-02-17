@@ -79,7 +79,7 @@ public class Lobby {
             send(new EndGameTrigger());
             try {
                 Thread.sleep(20);
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException _) {}
             sendNextStory();
             return;
         }

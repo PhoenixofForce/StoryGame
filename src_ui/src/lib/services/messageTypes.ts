@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.2.1263 on 2026-02-17 17:46:58.
+// Generated using typescript-generator version 3.2.1263 on 2026-02-17 18:25:35.
 
 export interface BaseMessage {
     type: "BaseMessage" | "join" | "lobby-change" | "start_round" | "submit_story" | "game_update" | "request_reveal" | "reveal_story" | "start_game" | "end_game" | "next_story_trigger" | "next_story" | "ping";
