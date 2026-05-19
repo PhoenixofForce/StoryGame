@@ -1,21 +1,21 @@
 <script lang="ts">
   import { Send } from "lucide-svelte";
-  import InputField from "../components/InputField.svelte";
+  import InputField from "$lib/components/InputField.svelte";
   import {
     addEventHandler,
     removeEventHandler,
-  } from "../services/websocketService";
-  import { sendSubmitStoryMessage } from "../services/gameService";
-  import { lobbyStore } from "../services/lobbyService";
+  } from "$lib/services/websocketService";
+  import { sendSubmitStoryMessage } from "$lib/services/gameService";
+  import { lobbyStore } from "$lib/services/lobbyService";
   import type {
     GameStateUpdateMessage,
     StartRoundMessage,
-  } from "../services/messageTypes";
-  import { displayEvaluation } from "../services/navigationService";
+  } from "$lib/services/messageTypes";
+  import { displayEvaluation } from "$lib/services/navigationService";
   import { onDestroy } from "svelte";
-  import Spinner from "../components/Spinner.svelte";
-  import Button from "../components/Button.svelte";
-  import PageLayout from "../components/PageLayout.svelte";
+  import Spinner from "$lib/components/Spinner.svelte";
+  import Button from "$lib/components/Button.svelte";
+  import PageLayout from "$lib/components/PageLayout.svelte";
 
   let fullStory = "";
   let storyEnd = "";

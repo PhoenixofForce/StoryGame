@@ -1,11 +1,12 @@
 <script lang="ts">
-  import Login from "./lib/views/Login.svelte";
-  import Lobby from "./lib/views/Lobby.svelte";
-  import InGame from "./lib/views/InGame.svelte";
-  import Evaluation from "./lib/views/Evaluation.svelte";
+  import Login from "$lib/views/Login.svelte";
+  import Lobby from "$lib/views/Lobby.svelte";
+  import InGame from "$lib/views/InGame.svelte";
+  import Evaluation from "$lib/views/Evaluation.svelte";
 
-  import { viewStore } from "./lib/services/navigationService";
-  import Controls from "./lib/components/Controls.svelte";
+  import { viewStore } from "$lib/services/navigationService";
+    import { options } from "$lib/services/options";
+  import Controls from "$lib/components/Controls.svelte";
 
   window.onbeforeunload = function () {
     if ($viewStore === "login") {
@@ -15,7 +16,9 @@
   };
 </script>
 
+{#key $options.language}
 <main class="h-full w-full">
+
   {#if import.meta.env.DEV}
     <span class="fixed top-0 left-0">State: {$viewStore}</span>
   {/if}
@@ -31,6 +34,7 @@
     <Evaluation />
   {/if}
 </main>
+{/key}
 
 <style>
 </style>

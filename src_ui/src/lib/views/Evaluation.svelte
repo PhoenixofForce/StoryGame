@@ -5,25 +5,25 @@
     ChevronLast,
     ChevronRight,
   } from "lucide-svelte";
-  import { lobbyStore } from "../services/lobbyService";
+  import { lobbyStore } from "$lib/services/lobbyService";
   import {
     addEventHandler,
     removeEventHandler,
-  } from "../services/websocketService";
+  } from "$lib/services/websocketService";
   import {
     sendRequestRevealMessage,
     sendNextStoryRequest,
-  } from "../services/gameService";
-  import { canSpeak, speak } from "../services/speakService";
+  } from "$lib/services/gameService";
+  import { canSpeak, speak } from "$lib/services/speakService";
   import type {
     StoryRevealMessage,
     NextStoryMessage,
-  } from "../services/messageTypes";
-  import { displayLobby } from "../services/navigationService";
-  import { download } from "../services/downloadService";
+  } from "$lib/services/messageTypes";
+  import { displayLobby } from "$lib/services/navigationService";
+  import { download } from "$lib/services/downloadService";
   import { onDestroy } from "svelte";
-  import PageLayout from "../components/PageLayout.svelte";
-  import Button from "../components/Button.svelte";
+  import PageLayout from "$lib/components/PageLayout.svelte";
+  import Button from "$lib/components/Button.svelte";
 
   let wasStoryEnd = false;
   let wasLastStory = false;

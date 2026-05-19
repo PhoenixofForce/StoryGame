@@ -1,8 +1,8 @@
 <script lang="ts">
   import { DoorOpen } from "lucide-svelte";
-  import { sendJoinMessage } from "../services/gameService";
-  import type { BaseMessage } from "../services/messageTypes";
-  import { displayLobby } from "../services/navigationService";
+  import { sendJoinMessage } from "$lib/services/gameService";
+  import type { BaseMessage } from "$lib/services/messageTypes";
+  import { displayLobby } from "$lib/services/navigationService";
   import { onDestroy } from "svelte";
   import {
     addEventHandler,
@@ -10,6 +10,7 @@
   } from "../services/websocketService";
   import PageLayout from "../components/PageLayout.svelte";
   import Button from "../components/Button.svelte";
+  import { m } from "../../paraglide/messages.js";
 
   let username = "";
   let roomCode = "";
@@ -56,12 +57,9 @@
         <div
           class="text-neutral-content mb-4 text-center text-5xl font-bold tracking-wide drop-shadow"
         >
-          The Story Game
+          {m.common_title()}
         </div>
         <hr class="my-4" />
-        <p class="text-neutral-content text-center italic opacity-70">
-          ~ This site is currently under construction ~
-        </p>
       </div>
 
       <div>
@@ -71,12 +69,12 @@
         >
           <input
             bind:value={username}
-            placeholder="Username"
+            placeholder={m.common_username()}
             class="input w-full xl:w-96"
           />
           <input
             bind:value={roomCode}
-            placeholder="Room Code"
+            placeholder={m.common_room_code()}
             class="input w-full xl:w-96"
           />
 
@@ -87,7 +85,7 @@
             onClick={() => connectToSocket()}
             disabled={!canCreateGame}
           >
-            Enter Room
+            {m.login_enter_room()}
           </Button>
         </form>
         <div class="text-error-content text-center text-sm italic">

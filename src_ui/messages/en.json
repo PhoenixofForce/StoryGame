@@ -1,0 +1,7 @@
+{
+  "$schema": "https://inlang.com/schema/inlang-message-format",
+  "common_title": "The Story Game",
+  "common_room_code": "Room Code",
+  "common_username": "Username",
+  "login_enter_room": "Enter Room"
+}

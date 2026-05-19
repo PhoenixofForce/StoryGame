@@ -1,16 +1,16 @@
 <script lang="ts">
   import { PenTool, Clipboard } from "lucide-svelte";
-  import PlayerDisplay from "../components/PlayerDisplay.svelte";
-  import { lobbyStore } from "../services/lobbyService";
+  import PlayerDisplay from "$lib/components/PlayerDisplay.svelte";
+  import { lobbyStore } from "$lib/services/lobbyService";
   import {
     sendMessage,
     addEventHandler,
     removeEventHandler,
-  } from "../services/websocketService";
-  import { displayInGame } from "../services/navigationService";
+  } from "$lib/services/websocketService";
+  import { displayInGame } from "$lib/services/navigationService";
   import { onDestroy } from "svelte";
-  import PageLayout from "../components/PageLayout.svelte";
-  import Button from "../components/Button.svelte";
+  import PageLayout from "$lib/components/PageLayout.svelte";
+  import Button from "$lib/components/Button.svelte";
 
   let handler = addEventHandler("start_game", {
     onSuccess: (e) => {

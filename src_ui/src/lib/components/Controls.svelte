@@ -1,7 +1,9 @@
 <script>
   import { Sun, Moon, Volume2, VolumeOff } from "lucide-svelte";
-  import { options } from "../services/options";
-  import { cancel } from "../services/speakService";
+  import { options } from "$lib/services/options";
+  import { cancel } from "$lib/services/speakService";
+  import { getLocale, setLocale } from "$paraglide/runtime.js";
+
 
   function toggleSounds() {
     $options.allowSounds = !$options.allowSounds;
@@ -26,6 +28,17 @@
     requestAnimationFrame(() => {
       document.documentElement.classList.remove("no-transitions");
     });
+  }
+
+  function toggleLanguage() {
+    let language = "en";
+    if($options.language==="en") {
+        language = "de";
+    }
+
+    setLocale(language, {reload: false});
+    $options.language = language;
+    localStorage.setItem("language", $options.language + "");
   }
 
   const version = __APP_VERSION__.startsWith("v")
@@ -55,6 +68,19 @@
     <Volume2 class="swap-off " size="24" />
     <VolumeOff class="swap-on " size="24" />
   </label>
+
+  <label
+      class="swap swap-rotate opacity-50 transition-all duration-300 will-change-transform hover:scale-110 hover:opacity-100 active:scale-90"
+    >
+      <input
+        type="checkbox"
+        checked={$options.language==="en"}
+        onchange={toggleLanguage}
+      />
+
+      <span class="swap-off " >DE</span>
+      <span class="swap-on " >EN</span>
+    </label>
 </div>
 
 <a

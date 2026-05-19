@@ -1,5 +1,5 @@
 import { writable, get } from "svelte/store";
-import { options } from "../services/options";
+import { options } from "./options";
 
 export const canSpeak = writable(true);
 
