@@ -77,7 +77,7 @@
           >
             Round {currentRound} / {maxRounds}
           </div>
-          <p class="min-h-5 text-left text-sm text-slate-400 italic">
+          <p class="text-base-content/70 min-h-5 text-left text-sm italic">
             {#if playersReady > 0}
               {playersReady} / {$lobbyStore.players.length} Players are ready
             {/if}
@@ -91,7 +91,7 @@
     {:else}
       <div class="flex h-full w-full flex-col items-center justify-center">
         <Spinner />
-        <div class="mt-8 tracking-widest text-slate-500">
+        <div class="text-base-content/70 mt-8 tracking-widest">
           Waiting for other players...
         </div>
       </div>
@@ -100,7 +100,7 @@
 
   <svelte:fragment slot="actions">
     {#if !submittedStory}
-      <span class="mr-auto text-sm text-slate-400 italic md:text-base">
+      <span class="text-base-content/70 mr-auto text-sm italic md:text-base">
         <b>Hint</b> Use ~ to control what the next player can see.
       </span>
       <Button

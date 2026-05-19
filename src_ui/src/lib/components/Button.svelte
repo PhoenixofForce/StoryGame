@@ -11,19 +11,18 @@
   export let type: "primary" | "default" = "default";
 
   const typeToClassesMap = {
-    primary:
-      "bg-gradient-to-tr from-lime-100 to-orange-100 dark:from-green-800 dark:to-sky-800",
-    default: "",
+    primary: "btn-primary",
+    default: "btn-neutral",
   };
 </script>
 
 <button
-  class="whitespace-nowrap {classes} {typeToClassesMap[type]}"
+  class="btn whitespace-nowrap {classes} {typeToClassesMap[type]}"
   on:click={onClick}
   {disabled}
 >
   {#if icon}
-    <svelte:component this={icon} class="mr-1" strokeWidth={1} />
+    <svelte:component this={icon} class="mr-1" />
   {/if}
   <slot></slot>
 </button>

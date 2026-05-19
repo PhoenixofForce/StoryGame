@@ -3,7 +3,7 @@
 </script>
 
 <div
-  class="w-full place-self-center rounded-2xl bg-slate-50 shadow-lg sm:w-fit dark:bg-slate-700 {classes}"
+  class="card bg-neutral text-neutral-content w-full place-self-center shadow-lg sm:w-fit {classes}"
 >
   <slot></slot>
 </div>

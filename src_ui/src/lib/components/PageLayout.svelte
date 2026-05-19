@@ -22,7 +22,7 @@
         <slot name="content" />
       </div>
     {:else}
-      <div class="w-full rounded-2xl bg-slate-50 shadow-lg dark:bg-slate-700">
+      <div class="card bg-neutral w-full">
         <div
           class="h-128 overflow-y-auto px-8 py-8 sm:px-12 xl:h-160 xl:px-16 xl:py-12"
         >

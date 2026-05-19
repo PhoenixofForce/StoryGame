@@ -110,7 +110,7 @@
 
 <PageLayout>
   <svelte:fragment slot="title">
-    <h2 class="font-bold tracking-wide text-slate-700 dark:text-slate-100">
+    <h2 class="text-base-content font-bold tracking-wide">
       Story from {currentCreator}
     </h2>
   </svelte:fragment>
@@ -118,22 +118,20 @@
   <svelte:fragment slot="content">
     <div class="flex flex-col">
       {#each revealedParts as part, index (index)}
-        <div class:self-end={$lobbyStore.you === part.writer}>
-          <div
-            class="font-bold"
-            class:text-end={$lobbyStore.you === part.writer}
-          >
+        <div
+          class="chat {$lobbyStore.you === part.writer
+            ? 'chat-end'
+            : 'chat-start'}"
+        >
+          <div class="chat-header">
             {part.writer}
           </div>
           <div
-            class="w-fit rounded-3xl px-5 py-2 shadow-sm"
-            class:mb-2={index !== revealedParts.length - 1}
-            class:bg-slate-100={$lobbyStore.you !== part.writer}
-            class:bg-green-100={$lobbyStore.you === part.writer}
-            class:dark:bg-slate-600={$lobbyStore.you !== part.writer}
-            class:dark:bg-green-700={$lobbyStore.you === part.writer}
+            class="chat-bubble {$lobbyStore.you === part.writer
+              ? 'chat-bubble-primary'
+              : 'chat-bubble-accent'}"
           >
-            {part.text}
+            {part.text}!
           </div>
         </div>
       {/each}

@@ -54,12 +54,12 @@
     <div class="flex h-full flex-col justify-between">
       <div class="mt-14">
         <div
-          class="mb-4 text-center text-5xl font-bold tracking-wide drop-shadow"
+          class="text-neutral-content mb-4 text-center text-5xl font-bold tracking-wide drop-shadow"
         >
           The Story Game
         </div>
         <hr class="my-4" />
-        <p class="text-center text-slate-400 italic">
+        <p class="text-neutral-content text-center italic opacity-70">
           ~ This site is currently under construction ~
         </p>
       </div>
@@ -72,12 +72,12 @@
           <input
             bind:value={username}
             placeholder="Username"
-            class="w-full xl:w-96"
+            class="input w-full xl:w-96"
           />
           <input
             bind:value={roomCode}
             placeholder="Room Code"
-            class="w-full xl:w-96"
+            class="input w-full xl:w-96"
           />
 
           <Button
@@ -90,7 +90,7 @@
             Enter Room
           </Button>
         </form>
-        <div class="text-center text-sm text-red-600 italic">
+        <div class="text-error-content text-center text-sm italic">
           {errorMessage}
         </div>
       </div>

@@ -28,17 +28,15 @@
   }
 
   function getPlayerDisplayName(player: string): string {
-    let out = player;
-    if (player === $lobbyStore.you) out += " (you)";
-    if (player === $lobbyStore.host) out += " (Host)";
-    return out;
+    return player;
   }
 
-  function getPlayerColor(player: string): string {
-    let color = "slate";
-    if (player === $lobbyStore.you) color = "blue";
-    if (player === $lobbyStore.host) color = "yellow";
-    return color;
+  function getPlayerTags(player: string): string {
+    const out = [];
+    if (player === $lobbyStore.you) out.push("You");
+    if (player === $lobbyStore.host) out.push("Host");
+    console.log(out);
+    return out;
   }
 
   onDestroy(() => {
@@ -67,25 +65,25 @@
     <PlayerDisplay
       playerNames={$lobbyStore.players.map((player) => ({
         name: getPlayerDisplayName(player),
-        color: getPlayerColor(player),
+        tags: getPlayerTags(player),
       }))}
     />
   </svelte:fragment>
 
   <svelte:fragment slot="title">
-    <h2 class="font-bold tracking-wide text-slate-700 dark:text-slate-100">
-      Settings
-    </h2>
+    <h2 class="text-base-content font-bold tracking-wide">Settings</h2>
   </svelte:fragment>
 
   <svelte:fragment slot="content">
-    <input
-      disabled={true}
-      type="number"
-      class="w-full"
-      placeholder="Number of Rounds"
-    />
-    <p class="mt-2">Settings are currently not supported...</p>
+    <div class="text-neutral-content">
+      <input
+        disabled={true}
+        type="number"
+        class="input w-full"
+        placeholder="Number of Rounds"
+      />
+      <p class="mt-2">Settings are currently not supported...</p>
+    </div>
   </svelte:fragment>
 
   <svelte:fragment slot="actions">

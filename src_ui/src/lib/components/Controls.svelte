@@ -1,5 +1,5 @@
 <script>
-  import { SunMedium, Moon, Volume2, VolumeOff } from "lucide-svelte";
+  import { Sun, Moon, Volume2, VolumeOff } from "lucide-svelte";
   import { options } from "../services/options";
   import { cancel } from "../services/speakService";
 
@@ -11,37 +11,56 @@
     }
   }
 
-  function toggleDarkMode() {
-    $options.darkMode = !$options.darkMode;
-    localStorage.setItem("darkMode", $options.darkMode + "");
-    document.documentElement.classList.toggle("dark");
+  let isDark = $state(localStorage.getItem("theme") === "forest");
+  const saved = localStorage.getItem("theme");
+  if (saved) {
+    document.documentElement.setAttribute("data-theme", saved);
   }
+
+  function toggleDarkMode() {
+    isDark = !isDark;
+    const theme = isDark ? "forest" : "lemonade";
+    localStorage.setItem("theme", theme);
+    document.documentElement.classList.add("no-transitions");
+    document.documentElement.setAttribute("data-theme", theme);
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove("no-transitions");
+    });
+  }
+
+  const version = __APP_VERSION__.startsWith("v")
+    ? __APP_VERSION__
+    : "v" + __APP_VERSION__;
 </script>
 
-<div class="fixed bottom-4 left-8">
-  <button
-    class="plain mr-2 text-slate-400 hover:scale-105 hover:text-slate-800 dark:hover:text-slate-100"
-    on:click={toggleDarkMode}
+<div class="fixed bottom-4 left-4 z-50 flex flex-row gap-4">
+  <label
+    class="swap swap-rotate opacity-50 transition-all duration-300 will-change-transform hover:scale-110 hover:opacity-100 active:scale-90"
   >
-    {#if $options.darkMode}
-      <Moon />
-    {:else}
-      <SunMedium />
-    {/if}
-  </button>
+    <input type="checkbox" checked={isDark} onchange={toggleDarkMode} />
 
-  <button
-    class="plain text-slate-400 hover:scale-105 hover:text-slate-800 dark:hover:text-slate-100"
-    on:click={toggleSounds}
+    <Sun class="swap-off " size="24" />
+    <Moon class="swap-on " size="24" />
+  </label>
+
+  <label
+    class="swap swap-rotate opacity-50 transition-all duration-300 will-change-transform hover:scale-110 hover:opacity-100 active:scale-90"
   >
-    {#if $options.allowSounds}
-      <Volume2 />
-    {:else}
-      <VolumeOff />
-    {/if}
-  </button>
+    <input
+      type="checkbox"
+      checked={$options.allowSounds}
+      onchange={toggleSounds}
+    />
+
+    <Volume2 class="swap-off " size="24" />
+    <VolumeOff class="swap-on " size="24" />
+  </label>
 </div>
 
-<div class="fixed right-8 bottom-4 text-xs text-slate-400">
-  {__APP_VERSION__}
-</div>
+<a
+  href="https://github.com/PhoenixofForce/StoryGame/releases/tag/{version}"
+  target="_"
+  class="text-base-content/30 fixed right-8 bottom-4 text-xs select-none"
+>
+  {version}
+</a>

@@ -1,5 +1,5 @@
 /* tslint:disable */
-/* eslint-disable */
+ 
 // Generated using typescript-generator version 3.2.1263 on 2026-02-17 18:25:35.
 
 export interface BaseMessage {
