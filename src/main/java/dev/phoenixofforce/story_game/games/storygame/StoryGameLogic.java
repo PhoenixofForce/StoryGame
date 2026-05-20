@@ -21,7 +21,6 @@ public class StoryGameLogic {
 	public StoryGameLogic(int maxRounds, List<Player> players) {
 		this.maxRounds = maxRounds;
 		this.playerOrder = new ArrayList<>(players);
-		Collections.shuffle(playerOrder);
 
 		stories = new HashMap<>();
 		for (Player player : players) {

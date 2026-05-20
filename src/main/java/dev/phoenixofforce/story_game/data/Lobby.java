@@ -61,6 +61,7 @@ public class Lobby {
     }
 
     public void sendGameState() {
+        if(gameMode == null) return;
         this.sendPersonalized(gameMode::getGameStateFor);
     }
 

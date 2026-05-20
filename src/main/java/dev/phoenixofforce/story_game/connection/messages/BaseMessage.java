@@ -45,6 +45,7 @@ public class BaseMessage {
     }
 
     public boolean sendTo(WebSocketSession session) {
+        if(session == null) return false;
         try {
             session.sendMessage(new TextMessage(toPayload()));
             return true;
