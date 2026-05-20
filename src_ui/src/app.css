@@ -34,11 +34,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   min-width: 320px;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 div.textarea {
