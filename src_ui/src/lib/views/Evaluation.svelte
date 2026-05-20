@@ -84,7 +84,7 @@
             ? 'chat-end'
             : 'chat-start'}"
         >
-          <div class="chat-header">
+          <div class="chat-header text-neutral-content">
             {part.writer}
           </div>
           <div

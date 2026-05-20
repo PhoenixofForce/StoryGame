@@ -63,13 +63,13 @@
 
   <svelte:fragment slot="actions">
     {#if !$inGameStore.submittedStory}
-      <span class="text-base-content/70 mr-auto text-sm italic md:text-base">
+      <div class="text-base-content/70 mr-auto text-sm italic md:text-base">
         <b>{m.common_hint()}</b>
         {m.storygame_hint()}
-      </span>
+      </div>
       <Button
         type="primary"
-        classes="w-full md:w-48"
+        classes="w-full sm:w-48"
         icon={Send}
         onClick={sendStory}
         disabled={!fullStory ||

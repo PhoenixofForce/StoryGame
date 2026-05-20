@@ -1,40 +1,27 @@
 <script>
   export let noCard = false;
-  export let showSidebar = false;
 </script>
 
 <div
-  class="mx-auto mt-12 flex w-full max-w-4xl flex-col items-center px-4 sm:mt-16 sm:px-8 xl:mt-20"
+  class="w-full h-full flex flex-col sm:flex-row gap-4"
 >
-  {#if showSidebar}
-    <div class="mb-4 w-full md:fixed md:top-5 md:left-12 md:mb-0 md:w-auto">
-      <slot name="sidebar" />
-    </div>
-  {/if}
-
-  <div class="mb-4 flex min-h-12 w-full items-end justify-center">
-    <slot name="title" />
+  <div class="flex-1 px-8 py-6">
+    <slot name="sidebar" />
   </div>
 
-  <div class="w-full">
-    {#if noCard}
-      <div class="h-128 w-full overflow-hidden xl:h-160">
-        <slot name="content" />
+  <div class="flex-5 flex flex-col gap-4 px-8 sm:px-0 max-w-4xl">
+      <div class="flex-1 flex flex-col justify-end items-center">
+        <slot name="title" />
       </div>
-    {:else}
-      <div class="card bg-neutral w-full">
-        <div
-          class="h-128 overflow-y-auto px-8 py-8 sm:px-12 xl:h-160 xl:px-16 xl:py-12"
-        >
-          <slot name="content" />
-        </div>
-      </div>
-    {/if}
-
-    <div
-      class="mt-3 flex w-full flex-col-reverse items-center justify-end gap-3 sm:flex-row"
-    >
+    <div  class="{noCard ? "" : "card bg-neutral px-8 py-6"} flex-3">
+      <slot name="content" />
+    </div>
+    <div class="flex-1 flex flex-col sm:flex-row justify-end gap-4">
       <slot name="actions" />
     </div>
+  </div>
+
+  <div class="flex-1 px-8 py-6">
+      <slot name="rightbar" />
   </div>
 </div>

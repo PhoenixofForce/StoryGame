@@ -40,7 +40,7 @@
   }
 </script>
 
-<PageLayout showSidebar={true}>
+<PageLayout>
   <svelte:fragment slot="sidebar">
     <div class="mb-4">
       <Button icon={Clipboard} onClick={shareRoomCodeLink}>
