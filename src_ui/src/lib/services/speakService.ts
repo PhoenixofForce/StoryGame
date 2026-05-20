@@ -16,6 +16,7 @@ export function speak(text: string) {
     speechSynthesis.speak(currentUtterance);
   }
 
+  // Dont force users to wait for tts to finish - but still prevent spam clicking
   setTimeout(() => {
     canSpeak.set(true);
   }, 1000);

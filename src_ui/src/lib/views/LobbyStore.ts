@@ -1,5 +1,5 @@
-import type { BaseMessage, LobbyStateMessage } from "./messageTypes";
-import { addEventHandler } from "./websocketService";
+import { displayInGame } from "$lib/services/navigationService";
+import { addEventHandler } from "../services/websocketService";
 import { writable } from "svelte/store";
 
 export const lobbyStore = writable({
@@ -10,9 +10,8 @@ export const lobbyStore = writable({
 });
 
 addEventHandler("lobby-change", {
-  onSuccess: (dataIn: BaseMessage) => {
-    if (!("players" in dataIn)) return;
-    const data: LobbyStateMessage = dataIn as LobbyStateMessage;
+  onSuccess: (data) => {
+    if (!data.players) return;
 
     const players = data.players;
     const index = players.indexOf(data.you);
@@ -27,5 +26,12 @@ addEventHandler("lobby-change", {
       you: data.you,
       host: data.host,
     });
+  },
+});
+
+addEventHandler("start_game", {
+  onSuccess: (e) => {
+    console.log("start: ", e);
+    displayInGame();
   },
 });

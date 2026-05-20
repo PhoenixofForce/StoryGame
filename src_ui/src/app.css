@@ -51,3 +51,15 @@ div.textarea {
 [contentEditable="true"]:empty:not(:focus)::before {
   content: attr(placeholder);
 }
+
+.no-transitions,
+.no-transitions *,
+.no-transitions *::before,
+.no-transitions *::after {
+  transition-property: none !important;
+}
+
+.no-transitions .swap-rotate .swap-on,
+.no-transitions .swap-rotate .swap-off {
+  transition-property: all !important;
+}

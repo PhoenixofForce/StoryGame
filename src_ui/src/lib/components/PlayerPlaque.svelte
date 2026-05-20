@@ -1,6 +1,6 @@
 <script lang="ts">
   export let name!: string;
-  export let tags: string[];
+  export let tags: string[] | undefined;
 </script>
 
 <div

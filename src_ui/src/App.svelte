@@ -5,7 +5,7 @@
   import Evaluation from "$lib/views/Evaluation.svelte";
 
   import { viewStore } from "$lib/services/navigationService";
-    import { options } from "$lib/services/options";
+  import { options } from "$lib/services/options";
   import Controls from "$lib/components/Controls.svelte";
 
   window.onbeforeunload = function () {
@@ -17,23 +17,22 @@
 </script>
 
 {#key $options.language}
-<main class="h-full w-full">
+  <main class="h-full w-full">
+    {#if import.meta.env.DEV}
+      <span class="fixed top-0 left-0">State: {$viewStore}</span>
+    {/if}
+    <Controls />
 
-  {#if import.meta.env.DEV}
-    <span class="fixed top-0 left-0">State: {$viewStore}</span>
-  {/if}
-  <Controls />
-
-  {#if $viewStore === "login"}
-    <Login />
-  {:else if $viewStore === "lobby"}
-    <Lobby />
-  {:else if $viewStore === "ingame"}
-    <InGame />
-  {:else if $viewStore === "evaluation"}
-    <Evaluation />
-  {/if}
-</main>
+    {#if $viewStore === "login"}
+      <Login />
+    {:else if $viewStore === "lobby"}
+      <Lobby />
+    {:else if $viewStore === "ingame"}
+      <InGame />
+    {:else if $viewStore === "evaluation"}
+      <Evaluation />
+    {/if}
+  </main>
 {/key}
 
 <style>

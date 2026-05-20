@@ -1,9 +1,8 @@
-<script>
+<script lang="ts">
   import { Sun, Moon, Volume2, VolumeOff } from "lucide-svelte";
   import { options } from "$lib/services/options";
   import { cancel } from "$lib/services/speakService";
-  import { getLocale, setLocale } from "$paraglide/runtime.js";
-
+  import { setLocale } from "$paraglide/runtime.js";
 
   function toggleSounds() {
     $options.allowSounds = !$options.allowSounds;
@@ -31,12 +30,12 @@
   }
 
   function toggleLanguage() {
-    let language = "en";
-    if($options.language==="en") {
-        language = "de";
+    let language: "en" | "de" = "en";
+    if ($options.language === "en") {
+      language = "de";
     }
 
-    setLocale(language, {reload: false});
+    setLocale(language, { reload: false });
     $options.language = language;
     localStorage.setItem("language", $options.language + "");
   }
@@ -70,17 +69,17 @@
   </label>
 
   <label
-      class="swap swap-rotate opacity-50 transition-all duration-300 will-change-transform hover:scale-110 hover:opacity-100 active:scale-90"
-    >
-      <input
-        type="checkbox"
-        checked={$options.language==="en"}
-        onchange={toggleLanguage}
-      />
+    class="swap swap-rotate opacity-50 transition-all duration-300 will-change-transform hover:scale-110 hover:opacity-100 active:scale-90"
+  >
+    <input
+      type="checkbox"
+      checked={$options.language === "en"}
+      onchange={toggleLanguage}
+    />
 
-      <span class="swap-off " >DE</span>
-      <span class="swap-on " >EN</span>
-    </label>
+    <span class="swap-off">DE</span>
+    <span class="swap-on">EN</span>
+  </label>
 </div>
 
 <a

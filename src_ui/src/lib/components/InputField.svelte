@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { m } from "$paraglide/messages.js";
+
   export let fullStory = "";
   export const MIN_SENTENCE_LENGTH = 10;
 
@@ -157,7 +159,7 @@
   contenteditable="true"
   bind:textContent={fullStory}
   bind:this={textArea}
-  placeholder="Type your message"
+  placeholder={m.storygame_type_next_message()}
   class="textarea h-full w-full shadow"
   on:input={highlight_text}
   on:paste={onPaste}

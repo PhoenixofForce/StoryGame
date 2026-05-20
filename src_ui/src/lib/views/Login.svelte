@@ -7,10 +7,10 @@
   import {
     addEventHandler,
     removeEventHandler,
-  } from "../services/websocketService";
-  import PageLayout from "../components/PageLayout.svelte";
-  import Button from "../components/Button.svelte";
-  import { m } from "../../paraglide/messages.js";
+  } from "$lib/services/websocketService";
+  import PageLayout from "$lib/components/PageLayout.svelte";
+  import Button from "$lib/components/Button.svelte";
+  import { m } from "$paraglide/messages.js";
 
   let username = "";
   let roomCode = "";

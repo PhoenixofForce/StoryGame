@@ -1,8 +1,12 @@
-import type { BaseMessage } from "./messageTypes";
+import type { BaseMessage, BaseMessageUnion } from "./messageTypes";
 export { connect, sendMessage, addEventHandler, removeEventHandler };
 
-let socket: WebSocket;
+type MessageOfType = {
+  [M in BaseMessageUnion as M["type"]]: M;
+};
+type EventType = keyof MessageOfType;
 
+let socket: WebSocket;
 function connect(url: string): Promise<void> {
   return new Promise((resolve, reject) => {
     socket = new WebSocket(url);
@@ -27,36 +31,37 @@ function connect(url: string): Promise<void> {
   });
 }
 
-function sendMessage(data: BaseMessage) {
+function sendMessage<Type extends EventType>(data: MessageOfType[Type]) {
   socket.send(JSON.stringify(data));
 }
 
 let eventHandler: {
-  eventType: string;
-  handler: SocketEventHandler;
+  eventType: EventType;
+  handler: SocketEventHandler<BaseMessage>;
   id: number;
 }[] = [];
 
-interface SocketEventHandler {
-  onSuccess?: (data: BaseMessage) => void;
-  onError?: (data: BaseMessage) => void;
+interface SocketEventHandler<TypedMessage extends BaseMessage> {
+  onSuccess?: (data: TypedMessage) => void;
+  onError?: (data: TypedMessage) => void;
 }
 
-function addEventHandler(
-  eventType: string,
-  handler: SocketEventHandler,
+let nextId = 0;
+function addEventHandler<Type extends EventType>(
+  eventType: Type,
+  handler: SocketEventHandler<MessageOfType[Type]>,
 ): number {
-  const id = Math.random();
+  const id = nextId++;
   eventHandler.push({
     eventType: eventType,
-    handler: handler,
+    handler: handler as SocketEventHandler<BaseMessage>,
     id: id,
   });
   return id;
 }
 
 function removeEventHandler(id: number) {
-  eventHandler = eventHandler.filter((handler) => handler.id != id);
+  eventHandler = eventHandler.filter((handler) => handler.id !== id);
 }
 
 function fireEvent(type: string, isError: boolean, data: BaseMessage) {

@@ -12,7 +12,10 @@ function getFromLocalStorage(itemKey: string, defaultValue: boolean): boolean {
   return "true" === item;
 }
 
-function getStringFromLocalStorage(itemKey: string, defaultValue: string): string {
+function getStringFromLocalStorage(
+  itemKey: string,
+  defaultValue: string,
+): string {
   const item = localStorage.getItem(itemKey);
   if (item === null) return defaultValue;
   return item;

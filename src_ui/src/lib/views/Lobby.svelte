@@ -1,23 +1,13 @@
 <script lang="ts">
   import { PenTool, Clipboard } from "lucide-svelte";
   import PlayerDisplay from "$lib/components/PlayerDisplay.svelte";
-  import { lobbyStore } from "$lib/services/lobbyService";
+  import { lobbyStore } from "./LobbyStore";
   import {
     sendMessage,
-    addEventHandler,
-    removeEventHandler,
   } from "$lib/services/websocketService";
-  import { displayInGame } from "$lib/services/navigationService";
-  import { onDestroy } from "svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
   import Button from "$lib/components/Button.svelte";
-
-  let handler = addEventHandler("start_game", {
-    onSuccess: (e) => {
-      console.log("start: ", e);
-      displayInGame();
-    },
-  });
+  import { m } from "$paraglide/messages.js";
 
   function startGame() {
     sendMessage({
@@ -31,17 +21,12 @@
     return player;
   }
 
-  function getPlayerTags(player: string): string {
+  function getPlayerTags(player: string): string[] {
     const out = [];
     if (player === $lobbyStore.you) out.push("You");
     if (player === $lobbyStore.host) out.push("Host");
-    console.log(out);
     return out;
   }
-
-  onDestroy(() => {
-    removeEventHandler(handler);
-  });
 
   function shareRoomCodeLink() {
     const roomCodeLink =
@@ -71,7 +56,9 @@
   </svelte:fragment>
 
   <svelte:fragment slot="title">
-    <h2 class="text-base-content font-bold tracking-wide">Settings</h2>
+    <h2 class="text-base-content font-bold tracking-wide">
+      {m.lobby_settings()}
+    </h2>
   </svelte:fragment>
 
   <svelte:fragment slot="content">
@@ -82,7 +69,9 @@
         class="input w-full"
         placeholder="Number of Rounds"
       />
-      <p class="mt-2">Settings are currently not supported...</p>
+      <p class="mt-2">
+        {m.lobby_settings_unsupported()}
+      </p>
     </div>
   </svelte:fragment>
 
@@ -94,7 +83,7 @@
       type="primary"
       classes="w-full md:w-48"
     >
-      Start Game
+      {m.lobby_start_game()}
     </Button>
   </svelte:fragment>
 </PageLayout>

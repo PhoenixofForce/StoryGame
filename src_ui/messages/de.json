@@ -3,5 +3,29 @@
   "common_title": "The Story Game",
   "common_room_code": "Raum Code",
   "common_username": "Nutzername",
-  "login_enter_room": "Raum betreten"
+  "common_hint": "Tipp",
+  "common_send": "Senden",
+  "common_to_lobby": "Zur Lobby",
+  "common_download": "Herunterladen",
+  "login_enter_room": "Raum betreten",
+  "lobby_start_game": "Spiel starten",
+  "lobby_settings": "Einstellungen",
+  "lobby_settings_unsupported": "Einstellungen werden noch nicht unterstützt...",
+  "storygame_round": "Runde {currentRound} / {maxRounds}",
+  "storygame_players_ready": [
+    {
+      "declarations": ["input playersReady", "input maxPlayers", "local playersReadyPlural = playersReady: plural"],
+      "selectors": ["playersReadyPlural"],
+      "match": {
+        "playersReadyPlural=one": "{playersReady} / {maxPlayers} Spieler ist bereit",
+        "playersReadyPlural=other": "{playersReady} / {maxPlayers} Spieler sind bereit"
+      }
+    }
+  ],
+  "storygame_waiting_other_players": "Warte auf andere Spieler...",
+  "storygame_hint": "Kontrolliere mit ~ was der nächste Spieler sehen kann.",
+  "storygame_type_next_message": "Schreibe deine Nachricht",
+  "storygame_eval_story_from": "Geschichte von {creator}",
+  "storygame_eval_next_story": "Nächste Geschichte",
+  "storygame_eval_next_message": "Nächster Teil"
 }

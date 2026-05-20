@@ -5,60 +5,21 @@
     ChevronLast,
     ChevronRight,
   } from "lucide-svelte";
-  import { lobbyStore } from "$lib/services/lobbyService";
-  import {
-    addEventHandler,
-    removeEventHandler,
-  } from "$lib/services/websocketService";
+  import { lobbyStore } from "./LobbyStore";
+  import { evaluationStore } from "./EvaluationStore";
   import {
     sendRequestRevealMessage,
     sendNextStoryRequest,
   } from "$lib/services/gameService";
-  import { canSpeak, speak } from "$lib/services/speakService";
-  import type {
-    StoryRevealMessage,
-    NextStoryMessage,
-  } from "$lib/services/messageTypes";
+  import { canSpeak } from "$lib/services/speakService";
   import { displayLobby } from "$lib/services/navigationService";
   import { download } from "$lib/services/downloadService";
-  import { onDestroy } from "svelte";
   import PageLayout from "$lib/components/PageLayout.svelte";
   import Button from "$lib/components/Button.svelte";
-
-  let wasStoryEnd = false;
-  let wasLastStory = false;
-  let revealedParts: Array<{ text: string; writer: string }> = [];
-  let currentCreator = "";
-
-  let handler = addEventHandler("next_story", {
-    onSuccess: (e) => {
-      const data = e as NextStoryMessage;
-      currentCreator = data.creator;
-      revealedParts = [];
-      wasStoryEnd = false;
-    },
-  });
-
-  let revealHandler = addEventHandler("reveal_story", {
-    onSuccess: (e) => {
-      const data = e as StoryRevealMessage;
-
-      // reassign to trigger reactivity
-      revealedParts = [
-        ...revealedParts,
-        {
-          text: data.text,
-          writer: data.writer,
-        },
-      ];
-      speak(data.writer + " wrote: " + data.text);
-      wasStoryEnd = data.storyEnd;
-      wasLastStory = data.lastStory;
-    },
-  });
+  import { m } from "$paraglide/messages.js";
 
   function next() {
-    if (wasStoryEnd) {
+    if ($evaluationStore.wasStoryEnd) {
       sendNextStoryRequest();
       return;
     }
@@ -67,57 +28,57 @@
   }
 
   function downloadStory() {
-    const filename = "story_from_" + currentCreator;
+    const filename = "story_from_" + $evaluationStore.currentCreator;
     let text = "";
-    for (let revealedPart of revealedParts) {
+    for (let revealedPart of $evaluationStore.revealedParts) {
       text += revealedPart.writer + ":\r\n" + revealedPart.text + "\r\n\r\n";
     }
 
     download(filename, text);
   }
 
-  onDestroy(() => {
-    removeEventHandler(handler);
-    removeEventHandler(revealHandler);
-  });
-
-  $: buttons = [
+  const buttons = $derived([
     {
-      text: "To Lobby",
+      text: m.common_to_lobby(),
       icon: Undo,
       onClick: displayLobby,
-      visible: wasStoryEnd && wasLastStory,
+      visible: $evaluationStore.wasStoryEnd && $evaluationStore.wasLastStory,
       disabled: false,
     },
     {
-      text: "Download",
+      text: m.common_download(),
       icon: ArrowBigDownDash,
       onClick: downloadStory,
-      visible: wasStoryEnd,
+      visible: $evaluationStore.wasStoryEnd,
       disabled: false,
     },
     {
-      text: "Next " + (wasStoryEnd ? "Story" : "Message"),
-      icon: wasStoryEnd ? ChevronLast : ChevronRight,
+      text: $evaluationStore.wasStoryEnd
+        ? m.storygame_eval_next_story()
+        : m.storygame_eval_next_message(),
+      icon: $evaluationStore.wasStoryEnd ? ChevronLast : ChevronRight,
       onClick: next,
-      visible: $lobbyStore.you === $lobbyStore.host && !wasLastStory,
+      visible:
+        $lobbyStore.you === $lobbyStore.host && !$evaluationStore.wasLastStory,
       disabled: !$canSpeak,
     },
-  ];
-  $: visibleButtons = buttons.filter((b) => b.visible);
-  $: lastVisibleButtonIndex = visibleButtons.length - 1;
+  ]);
+  const visibleButtons = $derived(buttons.filter((b) => b.visible));
+  const lastVisibleButtonIndex = $derived(visibleButtons.length - 1);
 </script>
 
 <PageLayout>
   <svelte:fragment slot="title">
     <h2 class="text-base-content font-bold tracking-wide">
-      Story from {currentCreator}
+      {m.storygame_eval_story_from({
+        creator: $evaluationStore.currentCreator,
+      })}
     </h2>
   </svelte:fragment>
 
   <svelte:fragment slot="content">
     <div class="flex flex-col">
-      {#each revealedParts as part, index (index)}
+      {#each $evaluationStore.revealedParts as part, index (index)}
         <div
           class="chat {$lobbyStore.you === part.writer
             ? 'chat-end'
@@ -142,7 +103,7 @@
     {#each visibleButtons as button, i (button.text)}
       {#if button.visible}
         <Button
-          type={i == lastVisibleButtonIndex ? "primary" : "default"}
+          type={i === lastVisibleButtonIndex ? "primary" : "default"}
           icon={button.icon}
           onClick={button.onClick}
           classes="w-full sm:w-auto"
