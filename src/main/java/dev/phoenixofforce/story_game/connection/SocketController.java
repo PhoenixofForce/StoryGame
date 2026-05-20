@@ -1,17 +1,19 @@
 package dev.phoenixofforce.story_game.connection;
 
+import dev.phoenixofforce.story_game.connection.configurations.ObjectMapperConfig;
 import dev.phoenixofforce.story_game.connection.messages.*;
 import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
 import dev.phoenixofforce.story_game.data.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
 
 import java.util.*;
 
@@ -37,20 +39,22 @@ public class SocketController extends TextWebSocketHandler {
     private final LobbyService lobbyService;
 
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) throws Exception {
         lobbyService.handleDisconnect(session);
     }
 
     @Override
-    public void handleTextMessage(WebSocketSession sender, TextMessage message) throws Exception {
+    public void handleTextMessage(@NonNull WebSocketSession sender, TextMessage message) throws Exception {
         String receivedData = message.getPayload();
-        BaseMessage baseMessage = new ObjectMapper().readValue(receivedData, BaseMessage.class);
+        try {
+            BaseMessage baseMessage = ObjectMapperConfig.MAPPER.readValue(receivedData, BaseMessage.class);
 
-        for (Map.Entry<String, CommandHandler> command : commands.entrySet()) {
-            if (baseMessage.getType().equals(command.getKey())) {
-                command.getValue().apply(sender, baseMessage);
+            for (Map.Entry<String, CommandHandler> command : commands.entrySet()) {
+                if (baseMessage.getType().equals(command.getKey())) {
+                    command.getValue().apply(sender, baseMessage);
+                }
             }
-        }
+        } catch (JacksonException _) {}
     }
 
     private void register(WebSocketSession sender, BaseMessage message) {

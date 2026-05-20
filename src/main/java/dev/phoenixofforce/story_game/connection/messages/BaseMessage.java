@@ -2,6 +2,7 @@ package dev.phoenixofforce.story_game.connection.messages;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import dev.phoenixofforce.story_game.connection.configurations.ObjectMapperConfig;
 import dev.phoenixofforce.story_game.connection.messages.trigger.EndGameTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
@@ -45,8 +46,7 @@ public class BaseMessage {
     private String message;
 
     public String toPayload() {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(this);
+        return ObjectMapperConfig.MAPPER.writeValueAsString(this);
     }
 
     public boolean sendTo(WebSocketSession session) {
