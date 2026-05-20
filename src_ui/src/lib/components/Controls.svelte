@@ -51,8 +51,8 @@
   >
     <input type="checkbox" checked={isDark} onchange={toggleDarkMode} />
 
-    <Sun class="swap-off " size="24" />
-    <Moon class="swap-on " size="24" />
+    <Sun class="swap-off" size="24" />
+    <Moon class="swap-on" size="24" />
   </label>
 
   <label
@@ -64,8 +64,8 @@
       onchange={toggleSounds}
     />
 
-    <Volume2 class="swap-off " size="24" />
-    <VolumeOff class="swap-on " size="24" />
+    <VolumeOff class="swap-off" size="24" />
+    <Volume2 class="swap-on" size="24" />
   </label>
 
   <label
