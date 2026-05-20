@@ -12,7 +12,7 @@
   let fullStory = "";
   let storyInputField: InputField;
 
-  $: if (!$inGameStore.submittedStory && storyInputField) {
+  $: if (!$inGameStore.hasPlayerSubmitted && storyInputField) {
     storyInputField.resetStory();
   }
 
@@ -26,7 +26,7 @@
 
 <PageLayout noCard={true}>
   <svelte:fragment slot="content">
-    {#if !$inGameStore.submittedStory}
+    {#if !$inGameStore.hasPlayerSubmitted}
       <div class="flex h-full flex-col">
         <div class="mb-2">
           <div
@@ -38,15 +38,15 @@
             })}
           </div>
           <p class="text-base-content/70 min-h-5 text-left text-sm italic">
-            {#if $inGameStore.playersReady > 0}
+            {#if $inGameStore.finishedPlayers > 0}
               {m.storygame_players_ready({
-                playersReady: $inGameStore.playersReady,
+                playersReady: $inGameStore.finishedPlayers,
                 maxPlayers: $lobbyStore.players.length,
               })}
             {/if}
           </p>
         </div>
-        <p class="mb-2 text-left">{$inGameStore.storyEnd}</p>
+        <p class="mb-2 text-left">{$inGameStore.lastStorySnippet}</p>
         <div class="min-h-0 flex-1">
           <InputField bind:this={storyInputField} bind:fullStory />
         </div>
@@ -62,7 +62,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="actions">
-    {#if !$inGameStore.submittedStory}
+    {#if !$inGameStore.hasPlayerSubmitted}
       <div class="text-base-content/70 mr-auto text-sm italic md:text-base">
         <b>{m.common_hint()}</b>
         {m.storygame_hint()}

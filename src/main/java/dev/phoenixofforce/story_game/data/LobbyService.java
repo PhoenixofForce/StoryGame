@@ -1,12 +1,7 @@
 package dev.phoenixofforce.story_game.data;
 
-import dev.phoenixofforce.story_game.game.Game;
 import dev.phoenixofforce.story_game.connection.messages.BaseMessage;
 import dev.phoenixofforce.story_game.connection.messages.PlayerJoinMessage;
-import dev.phoenixofforce.story_game.connection.messages.StoryRevealMessage;
-import dev.phoenixofforce.story_game.connection.messages.SubmitStoryMessage;
-import dev.phoenixofforce.story_game.connection.messages.trigger.EndGameTrigger;
-import dev.phoenixofforce.story_game.connection.messages.trigger.StartGameTrigger;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.WebSocketSession;
@@ -42,40 +37,6 @@ public class LobbyService {
         Lobby lobby = lobbyPlayer.get().lobby();
 
         lobby.startGame(player);
-    }
-
-    public void acceptLobby(WebSocketSession sender, SubmitStoryMessage storyMessage) {
-        Optional<LobbyPlayer> lobbyPlayer = getLobbyAndPlayer(sender);
-        if(lobbyPlayer.isEmpty()) return;
-        Player player = lobbyPlayer.get().player();
-        Lobby lobby = lobbyPlayer.get().lobby();
-        
-        lobby.acceptStory(player, storyMessage.getFullStory().trim(), storyMessage.getTeaser().trim());
-    }
-
-    public void revealMessage(WebSocketSession sender) {
-        Optional<LobbyPlayer> lobbyPlayer = getLobbyAndPlayer(sender);
-        if(lobbyPlayer.isEmpty()) return;
-        Player player = lobbyPlayer.get().player();
-        Lobby lobby = lobbyPlayer.get().lobby();
-        Game game = lobby.getGame();
-
-        if (player != lobby.getHost()) return;
-        if (game == null || game.isGameRunning()) return;
-        if (game.allStoriesRevealed()) return;
-
-        StoryRevealMessage messageToSend = game.advanceReveal();
-        if(game.allStoriesRevealed()) {
-            lobby.setState(LobbyState.LOBBY);
-        }
-        lobby.send(messageToSend);
-    }
-
-    public void nextStory(WebSocketSession sender) {
-        Optional<LobbyPlayer> lobbyPlayer = getLobbyAndPlayer(sender);
-        if(lobbyPlayer.isEmpty()) return;
-        Lobby lobby = lobbyPlayer.get().lobby();
-        lobby.sendNextStory();
     }
 
     private void createRoom(String roomCode, WebSocketSession sender, PlayerJoinMessage joinMessage) {
@@ -120,7 +81,8 @@ public class LobbyService {
             return;
         }
 
-        if(playerInLobby.isEmpty() && lobby.getGame() != null && lobby.isGameStarted()) {
+        if(playerInLobby.isEmpty() && lobby.isGameStarted()) {
+            //Todo: set spectator
             BaseMessage.getError("join", "Game is currently running. Please wait to the end").sendTo(sender);
             return;
         }
@@ -130,24 +92,21 @@ public class LobbyService {
         player.setConnected(true);
         socketToPlayer.put(sender, player);
 
-        //tell player current game state
-        if(playerInLobby.isPresent() && lobby.getGame() != null && lobby.isGameStarted()) {
-            new StartGameTrigger().sendTo(sender);
-            lobby.getNextStoryMessage(player).sendTo(sender);
-            lobby.sendGameStateUpdate();
-            lobby.sendLobbyChangeUpdate();
-            if(!lobby.getGame().hasPlayerSubmitted(player)) {
-                lobby.getNextStoryMessage(player).sendTo(sender);
-            }
-            return;
+        if(playerInLobby.isEmpty()) {
+            lobby.addPlayer(player);
         }
 
-        lobby.addPlayer(player);
-        if(lobby.getState() == LobbyState.EVALUATION) {
-            new EndGameTrigger().sendTo(sender);
-            lobby.sendNextStory(player);
-            //TODO: send already revealed messages
-        }
+        lobby.sendLobbyChangeUpdate();
+        lobby.sendGameState();
+    }
+
+    public void handleGameMessage(WebSocketSession sender, BaseMessage message) {
+        Optional<LobbyPlayer> lobbyPlayer = getLobbyAndPlayer(sender);
+        if(lobbyPlayer.isEmpty()) return;
+        Player player = lobbyPlayer.get().player();
+        Lobby lobby = lobbyPlayer.get().lobby();
+
+        lobby.handleGameMessage(player, message);
     }
 
     public void handleDisconnect(WebSocketSession session) throws IOException, InterruptedException {
@@ -199,7 +158,6 @@ public class LobbyService {
     public void closeLobby(String lobbyCode) {
         codeToLobby.remove(lobbyCode);
     }
-
 
     private String getRoomCode(PlayerJoinMessage joinMessage) {
         String roomCode = joinMessage.getRoom();

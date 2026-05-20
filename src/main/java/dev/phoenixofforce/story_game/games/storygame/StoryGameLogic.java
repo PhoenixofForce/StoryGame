@@ -1,16 +1,12 @@
-package dev.phoenixofforce.story_game.game;
+package dev.phoenixofforce.story_game.games.storygame;
 
-import dev.phoenixofforce.story_game.connection.messages.StoryRevealMessage;
 import dev.phoenixofforce.story_game.data.Player;
 import lombok.Data;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
-public class Game {
+public class StoryGameLogic {
 
 	private int currentRound;
 	private final int maxRounds;
@@ -19,13 +15,13 @@ public class Game {
 	private final List<Player> playerOrder;
 
 	private int finishedPlayers = 0;
+	private int revealedChapterIndex = 0;
 	private int revealedStoryIndex = 0;
-	private int revealedStoryPartIndex = 0;
-	
-	public Game(int maxRounds, List<Player> players) {
+
+	public StoryGameLogic(int maxRounds, List<Player> players) {
 		this.maxRounds = maxRounds;
-		this.playerOrder = players;
-		Collections.shuffle(players);
+		this.playerOrder = new ArrayList<>(players);
+		Collections.shuffle(playerOrder);
 
 		stories = new HashMap<>();
 		for (Player player : players) {
@@ -33,7 +29,7 @@ public class Game {
 		}
 	}
 	
-	public boolean isRoundOver() {
+	public boolean isCurrentWritingPhaseOver() {
 		return stories.keySet().stream()
 			.filter(Player::isConnected)
 			.map(stories::get)
@@ -47,10 +43,6 @@ public class Game {
 	public boolean isGameRunning() {
 		return !stories.values().stream().allMatch(s -> s.getLength() >= maxRounds);
 	}
-
-	public boolean allStoriesRevealed() {
-		return revealedStoryIndex >= stories.size();
-	}
 	
 	public void advanceRound() {
 		++currentRound;
@@ -58,8 +50,8 @@ public class Game {
 		rotateStories();
 	}
 
-	public void addStoryPart(Player player, String storyPart, String teaser) {
-		stories.get(player).addStoryPart(player, storyPart, teaser);
+	public void addChapter(Player player, String chapter, String teaser) {
+		stories.get(player).addChapter(player, chapter, teaser);
 		finishedPlayers++;
 	}
 
@@ -86,34 +78,36 @@ public class Game {
             stories.put(player, newStories.get(player));
         }
 	}
-	
+
+	public void advanceReveal() {
+		if (allStoriesRevealed()) return;
+
+		revealedChapterIndex += 1;
+		if (revealedChapterIndex > maxRounds) {
+			revealedChapterIndex = 0;
+			revealedStoryIndex += 1;
+		}
+	}
+
+	public List<Chapter> getRevealedChapters() {
+		return getStory(revealedStoryIndex).getChapters(revealedChapterIndex);
+	}
+
+	public boolean allChaptersRevealed() {
+		return revealedChapterIndex >= getStory(revealedStoryIndex).getLength();
+	}
+
+	public boolean allStoriesRevealed() {
+		return revealedStoryIndex >= stories.size() - 1 && allChaptersRevealed();
+	}
+
+	public String getCurrentStoriesAuthor() {
+		return getStory(revealedStoryIndex).getAuthor();
+	}
+
 	private Story getStory(int index) {
 		return stories.get(playerOrder.get(index));
 	}
 
-	public StoryRevealMessage advanceReveal() {
-		if (allStoriesRevealed()) return null;
-
-		Story story = getStory(revealedStoryIndex);
-		Chapter storyPart = story.getStoryPart(revealedStoryPartIndex);
-		StoryRevealMessage message = new StoryRevealMessage();
-		message.setWriter(storyPart.getAuthor().getName());
-		message.setText(storyPart.getText());
-
-		message.setStoryEnd(revealedStoryPartIndex == story.getLength() - 1);
-		++revealedStoryPartIndex;
-
-		if (revealedStoryPartIndex >= maxRounds) {
-			revealedStoryPartIndex = 0;
-			++revealedStoryIndex;
-		}
-
-		message.setLastStory(allStoriesRevealed());
-		return message;
-	}
-
-	public String getCurrentStoriesAuthor() {
-		return getStory(revealedStoryIndex).getStoryPart(0).getAuthor().getName();
-	}
 
 }

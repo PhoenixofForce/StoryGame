@@ -1,37 +1,19 @@
 import { addEventHandler } from "../services/websocketService";
 import { writable } from "svelte/store";
 import { displayEvaluation } from "../services/navigationService";
+import {
+  StoryGamePhase,
+  type StoryGameState,
+} from "$lib/services/messageTypes";
 
-export const inGameStore = writable({
-  storyEnd: "",
-  currentRound: 0,
-  maxRounds: 0,
-  submittedStory: false,
-  playersReady: 0,
-});
+export const inGameStore = writable({} as StoryGameState);
 
-addEventHandler("start_round", {
+addEventHandler("story_game_update", {
   onSuccess: (data) => {
-    inGameStore.update((s) => ({
-      ...s,
-      storyEnd: data.lastStorySnippet,
-      currentRound: data.currentRound,
-      maxRounds: data.maxRounds,
-      submittedStory: false,
-      playersReady: 0,
-    }));
+    inGameStore.update(() => data);
+    if (data.phase === StoryGamePhase.REVEALING) {
+      displayEvaluation();
+    }
+    // TODO: speak(data.writer + " wrote: " + data.text);
   },
-});
-
-addEventHandler("game_update", {
-  onSuccess: (data) => {
-    inGameStore.update((s) => ({
-      ...s,
-      playersReady: data.finishedPlayers,
-    }));
-  },
-});
-
-addEventHandler("end_game", {
-  onSuccess: displayEvaluation,
 });

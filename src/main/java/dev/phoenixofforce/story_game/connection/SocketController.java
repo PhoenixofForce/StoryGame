@@ -2,7 +2,6 @@ package dev.phoenixofforce.story_game.connection;
 
 import dev.phoenixofforce.story_game.connection.configurations.ObjectMapperConfig;
 import dev.phoenixofforce.story_game.connection.messages.*;
-import dev.phoenixofforce.story_game.connection.messages.trigger.NextStoryTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
 import dev.phoenixofforce.story_game.data.*;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +22,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class SocketController extends TextWebSocketHandler {
 
-    private interface CommandHandler {
-        void apply(WebSocketSession sender, BaseMessage data) throws Exception;
-    }
-
-    private final Map<String, CommandHandler> commands = Map.of(
-        "join", this::register,
-        "start_game", this::handleStart,
-        "submit_story", this::acceptStory,
-        "request_reveal", this::revealStory,
-        "next_story_trigger", this::nextStory,
-        "ping", this::ping
-        );
-
     private final LobbyService lobbyService;
 
     @Override
@@ -49,11 +35,13 @@ public class SocketController extends TextWebSocketHandler {
         try {
             BaseMessage baseMessage = ObjectMapperConfig.MAPPER.readValue(receivedData, BaseMessage.class);
 
-            for (Map.Entry<String, CommandHandler> command : commands.entrySet()) {
-                if (baseMessage.getType().equals(command.getKey())) {
-                    command.getValue().apply(sender, baseMessage);
-                }
+            switch (baseMessage.getType()) {
+                case "join" -> this.register(sender, baseMessage);
+                case "start_game" -> this.handleStart(sender, baseMessage);
+                case "ping" -> this.ping(sender, baseMessage);
+                case null, default -> this.handleGameMessage(sender, baseMessage);
             }
+
         } catch (JacksonException _) {}
     }
 
@@ -66,19 +54,8 @@ public class SocketController extends TextWebSocketHandler {
            lobbyService.startLobby(sender);
     }
 
-    private void acceptStory(WebSocketSession sender, BaseMessage message) {
-        if(!(message instanceof SubmitStoryMessage storyMessage)) return;
-        lobbyService.acceptLobby(sender, storyMessage);
-    }
-
-    private void revealStory(WebSocketSession sender, BaseMessage message) {
-        if(!(message instanceof RequestRevealMessage)) return;
-        lobbyService.revealMessage(sender);
-    }
-
-    private void nextStory(WebSocketSession sender, BaseMessage message) {
-        if(!(message instanceof NextStoryTrigger)) return;
-        lobbyService.nextStory(sender);
+    public void handleGameMessage(WebSocketSession sender, BaseMessage message) {
+        this.lobbyService.handleGameMessage(sender, message);
     }
 
     private void ping(WebSocketSession sender, BaseMessage message) {
