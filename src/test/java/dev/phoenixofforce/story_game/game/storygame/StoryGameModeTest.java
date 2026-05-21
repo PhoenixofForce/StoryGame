@@ -15,6 +15,7 @@ import java.util.List;
 class StoryGameModeTest {
 
     // Todo: test how disconnects are handled
+    // Todo: handle spectator
 
     private Player player1;
     private Player player2;
@@ -44,6 +45,7 @@ class StoryGameModeTest {
             .submitted(false, false)
             .verify();
 
+        // Player 1 completes his message
         mode.handleMessage(player1, getSubmitMessage("full 1", "teaser 1"));
         assertGameState()
             .phase(StoryGamePhase.WRITING)
@@ -54,6 +56,7 @@ class StoryGameModeTest {
 
         // Todo: check double submit
 
+        // Player 2 completes his message - Round 1 is over
         mode.handleMessage(player2, getSubmitMessage("full 2", "teaser 2"));
         assertGameState()
             .phase(StoryGamePhase.WRITING)
@@ -63,6 +66,7 @@ class StoryGameModeTest {
             .submitted(false, false)
             .verify();
 
+        // Player 2 completes his message
         mode.handleMessage(player2, getSubmitMessage("full 3", "teaser 3"));
         assertGameState()
             .phase(StoryGamePhase.WRITING)
@@ -72,6 +76,7 @@ class StoryGameModeTest {
             .submitted(false, true)
             .verify();
 
+        // Player 1 completes his message - Round 2 is over, revealing now
         mode.handleMessage(player1, getSubmitMessage("full 4", "teaser 4"));
         assertGameState()
             .phase(StoryGamePhase.REVEALING)
@@ -84,6 +89,7 @@ class StoryGameModeTest {
         // Todo: check submit
         // Todo: check playen2 request reveal
 
+        // Reveal Story 1 message 1
         mode.handleMessage(player1, new RequestRevealMessage());
         assertGameState()
                 .allChaptersRevealed(false)
@@ -92,6 +98,7 @@ class StoryGameModeTest {
                 .revealedChapters(List.of(new Chapter(player2, "full 2")))
                 .verify();
 
+        // Reveal Story 1 message 2 - Story fully revealed
         mode.handleMessage(player1, new RequestRevealMessage());
         assertGameState()
                 .allChaptersRevealed(true)
@@ -100,6 +107,7 @@ class StoryGameModeTest {
                 .revealedChapters(List.of(new Chapter(player2, "full 2"), new Chapter(player1, "full 4")))
                 .verify();
 
+        // Switch to Story 2
         mode.handleMessage(player1, new RequestRevealMessage());
         assertGameState()
                 .allChaptersRevealed(false)
@@ -108,6 +116,7 @@ class StoryGameModeTest {
                 .revealedChapters(List.of())
                 .verify();
 
+        // Reveal Story 2 message 1
         mode.handleMessage(player1, new RequestRevealMessage());
         assertGameState()
                 .allChaptersRevealed(false)
@@ -116,6 +125,7 @@ class StoryGameModeTest {
                 .revealedChapters(List.of(new Chapter(player1, "full 1")))
                 .verify();
 
+        // Reveal Story 2 message 2 - all stories revealed now
         mode.handleMessage(player1, new RequestRevealMessage());
         assertGameState()
                 .allChaptersRevealed(true)

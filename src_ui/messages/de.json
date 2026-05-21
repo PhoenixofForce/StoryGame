@@ -11,6 +11,7 @@
   "lobby_start_game": "Spiel starten",
   "lobby_settings": "Einstellungen",
   "lobby_settings_unsupported": "Einstellungen werden noch nicht unterstützt...",
+  "lobby_copy_roomcode": "Raumcode kopieren",
   "storygame_round": "Runde {currentRound} / {maxRounds}",
   "storygame_players_ready": [
     {

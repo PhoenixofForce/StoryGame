@@ -12,10 +12,6 @@
   let fullStory = "";
   let storyInputField: InputField;
 
-  $: if (!$inGameStore.hasPlayerSubmitted && storyInputField) {
-    storyInputField.resetStory();
-  }
-
   function sendStory() {
     const teaser = storyInputField.splitStoryIntoStartAndEnd(fullStory)[1];
     sendSubmitStoryMessage(fullStory.replace("~", ""), teaser.replace("~", ""));

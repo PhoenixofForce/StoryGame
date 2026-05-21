@@ -88,7 +88,7 @@
             {m.login_enter_room()}
           </Button>
         </form>
-        <div class="text-error-content text-center text-sm italic">
+        <div class="text-error text-center text-sm italic">
           {errorMessage}
         </div>
       </div>

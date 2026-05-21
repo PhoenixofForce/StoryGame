@@ -43,7 +43,7 @@
 <PageLayout>
   <svelte:fragment slot="sidebar">
     <div class="mb-4">
-      <Button icon={Clipboard} onClick={shareRoomCodeLink}>
+      <Button icon={Clipboard} onClick={shareRoomCodeLink} tooltip={m.lobby_copy_roomcode()}>
         {$lobbyStore.roomCode}
       </Button>
     </div>
