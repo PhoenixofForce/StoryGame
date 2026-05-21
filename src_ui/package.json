@@ -12,20 +12,27 @@
     "lint-fix": "eslint src --fix",
     "format": "prettier --check src",
     "format-fix": "prettier --write src",
-    "ci": "npm run check && npm run lint && npm run build && npm run format",
-    "fix": "npm run lint-fix && npm run format-fix"
+    "ci": "npm run check && npm run lint && npm run build && npm run format && npm run test",
+    "fix": "npm run lint-fix && npm run format-fix",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@inlang/paraglide-js": "^2.18.0",
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
     "@tailwindcss/postcss": "^4.3.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/svelte": "^5.3.1",
     "@tsconfig/svelte": "^5.0.8",
     "@types/node": "^25.9.1",
+    "@vitest/ui": "^4.1.7",
     "eslint": "^10.4.0",
     "eslint-plugin-svelte": "^3.17.1",
     "globals": "^17.6.0",
     "jiti": "^2.7.0",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.15",
     "prettier": "^3.8.3",
     "prettier-plugin-svelte": "^3.5.2",
@@ -36,7 +43,8 @@
     "tslib": "^2.8.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.4",
-    "vite": "^8.0.13"
+    "vite": "^8.0.13",
+    "vitest": "^4.1.7"
   },
   "dependencies": {
     "daisyui": "^5.5.20",

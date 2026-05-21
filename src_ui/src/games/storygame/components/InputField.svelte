@@ -156,6 +156,7 @@
 </script>
 
 <div
+  data-testid="StoryGame.Input"
   contenteditable="true"
   bind:textContent={fullStory}
   bind:this={textArea}

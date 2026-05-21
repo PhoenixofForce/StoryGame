@@ -1,13 +1,8 @@
-import { displayInGame } from "$lib/services/navigationService";
-import { addEventHandler } from "../services/websocketService";
+import type { LobbyStateMessage } from "$common/services/messageTypes";
+import { addEventHandler } from "$common/services/websocketService";
 import { writable } from "svelte/store";
 
-export const lobbyStore = writable({
-  roomCode: "",
-  players: <string[]>[],
-  you: "",
-  host: "",
-});
+export const lobbyStore = writable({} as LobbyStateMessage);
 
 addEventHandler("lobby-change", {
   onSuccess: (data) => {
@@ -20,18 +15,12 @@ addEventHandler("lobby-change", {
       players.unshift(data.you);
     }
 
-    lobbyStore.set({
-      roomCode: data.roomCode,
-      players: players,
-      you: data.you,
-      host: data.host,
-    });
+    lobbyStore.update((s) => ({ ...s, ...data, players }));
   },
 });
 
 addEventHandler("start_game", {
   onSuccess: (e) => {
     console.log("start: ", e);
-    displayInGame();
   },
 });

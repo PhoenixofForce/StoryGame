@@ -28,9 +28,10 @@ public class StoryGameMode implements GameMode<StoryGameState> {
         this.currentPhase = StoryGamePhase.WRITING;
     }
 
+    // Todo: currently has tu match ui package, split into id and label
     @Override
     public String getName() {
-        return "Story Game";
+        return "storygame";
     }
 
     @Override

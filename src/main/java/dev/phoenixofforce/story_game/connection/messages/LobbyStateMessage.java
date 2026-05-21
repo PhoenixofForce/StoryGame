@@ -9,6 +9,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class LobbyStateMessage extends BaseMessage {
 
+    private String gameName;
     private String roomCode;
     private List<String> players;
     private String you;

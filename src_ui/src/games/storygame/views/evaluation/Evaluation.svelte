@@ -5,15 +5,13 @@
     ChevronLast,
     ChevronRight,
   } from "lucide-svelte";
-  import { lobbyStore } from "./LobbyStore";
-  import { inGameStore } from "./InGameStore";
-  import {
-    sendRequestRevealMessage  } from "$lib/services/gameService";
-  import { canSpeak } from "$lib/services/speakService";
-  import { displayLobby } from "$lib/services/navigationService";
-  import { download } from "$lib/services/downloadService";
-  import PageLayout from "$lib/components/PageLayout.svelte";
-  import Button from "$lib/components/Button.svelte";
+  import { lobbyStore } from "$common/views/lobby/LobbyStore";
+  import { inGameStore } from "../ingame/InGameStore";
+  import { sendRequestRevealMessage } from "../../services/storyGameService";
+  import { canSpeak } from "$common/services/speakService";
+  import { download } from "$common/services/downloadService";
+  import PageLayout from "$common/views/PageLayout.svelte";
+  import Button from "$common/components/Button.svelte";
   import { m } from "$paraglide/messages.js";
 
   function next() {
@@ -38,8 +36,9 @@
     {
       text: m.common_to_lobby(),
       icon: Undo,
-      onClick: displayLobby,
-      visible: $inGameStore.allChaptersRevealed && $inGameStore.allStoriesRevealed,
+      onClick: () => ($lobbyStore.gameName = ""),
+      visible:
+        $inGameStore.allChaptersRevealed && $inGameStore.allStoriesRevealed,
       disabled: false,
     },
     {
@@ -56,7 +55,8 @@
       icon: $inGameStore.allChaptersRevealed ? ChevronLast : ChevronRight,
       onClick: next,
       visible:
-        $lobbyStore.you === $lobbyStore.host && !$inGameStore.allStoriesRevealed,
+        $lobbyStore.you === $lobbyStore.host &&
+        !$inGameStore.allStoriesRevealed,
       disabled: !$canSpeak,
     },
   ]);
@@ -102,8 +102,8 @@
         <Button
           type={i === lastVisibleButtonIndex ? "primary" : "default"}
           icon={button.icon}
-          onClick={button.onClick}
-          classes="w-full sm:w-auto"
+          onclick={button.onClick}
+          class="w-full sm:w-auto"
           disabled={button.disabled}
         >
           {button.text}

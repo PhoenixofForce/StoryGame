@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import dev.phoenixofforce.story_game.connection.configurations.ObjectMapperConfig;
 import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
+import dev.phoenixofforce.story_game.connection.messages.trigger.RequestStateTrigger;
 import dev.phoenixofforce.story_game.connection.messages.trigger.StartGameTrigger;
 import dev.phoenixofforce.story_game.games.storygame.messages.RequestRevealMessage;
 import dev.phoenixofforce.story_game.games.storygame.messages.StoryGameState;
@@ -31,6 +32,7 @@ import java.io.IOException;
     @JsonSubTypes.Type(value = SubmitStoryMessage.class, name="submit_story"),
     @JsonSubTypes.Type(value = RequestRevealMessage.class, name="request_reveal"),
     @JsonSubTypes.Type(value = StartGameTrigger.class, name="start_game"),
+    @JsonSubTypes.Type(value = RequestStateTrigger.class, name="request_state"),
     @JsonSubTypes.Type(value = StoryGameState.class, name="story_game_update"),
     @JsonSubTypes.Type(value = Ping.class, name="ping"),
 })

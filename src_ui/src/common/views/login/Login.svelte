@@ -1,16 +1,22 @@
 <script lang="ts">
   import { DoorOpen } from "lucide-svelte";
-  import { sendJoinMessage } from "$lib/services/gameService";
-  import type { BaseMessage } from "$lib/services/messageTypes";
-  import { displayLobby } from "$lib/services/navigationService";
+  import type {
+    BaseMessage,
+    PlayerJoinMessage,
+  } from "$common/services/messageTypes";
   import { onDestroy } from "svelte";
   import {
     addEventHandler,
+    connect,
     removeEventHandler,
-  } from "$lib/services/websocketService";
-  import PageLayout from "$lib/components/PageLayout.svelte";
-  import Button from "$lib/components/Button.svelte";
+    sendMessage,
+  } from "$common/services/websocketService";
+  import PageLayout from "$common/views/PageLayout.svelte";
+  import Button from "$common/components/Button.svelte";
   import { m } from "$paraglide/messages.js";
+
+  const url = import.meta.env.VITE_API_URL;
+  const fullUrl = url + "/game";
 
   let username = "";
   let roomCode = "";
@@ -26,7 +32,21 @@
 
   function connectToSocket() {
     errorMessage = "";
-    sendJoinMessage(username, roomCode);
+    const data: PlayerJoinMessage = {
+      type: "join",
+      error: false,
+      message: "",
+      name: username,
+      room: roomCode,
+    };
+
+    connect(fullUrl)
+      .then(() => {
+        sendMessage(data);
+      })
+      .catch(() => {
+        console.log("something went wrong");
+      });
   }
 
   let joinHandler = addEventHandler("join", {
@@ -36,7 +56,6 @@
   let lobbyHandler = addEventHandler("lobby-change", {
     onSuccess: () => {
       window.history.pushState("page2", "Title", location.pathname);
-      displayLobby();
     },
   });
 
@@ -80,9 +99,9 @@
 
           <Button
             type="primary"
-            classes="mt-6 w-full xl:w-96"
+            class="mt-6 w-full xl:w-96"
             icon={DoorOpen}
-            onClick={() => connectToSocket()}
+            onclick={() => connectToSocket()}
             disabled={!canCreateGame}
           >
             {m.login_enter_room()}

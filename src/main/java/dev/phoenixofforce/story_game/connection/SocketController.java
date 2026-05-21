@@ -3,6 +3,7 @@ package dev.phoenixofforce.story_game.connection;
 import dev.phoenixofforce.story_game.connection.configurations.ObjectMapperConfig;
 import dev.phoenixofforce.story_game.connection.messages.*;
 import dev.phoenixofforce.story_game.connection.messages.trigger.Ping;
+import dev.phoenixofforce.story_game.connection.messages.trigger.RequestStateTrigger;
 import dev.phoenixofforce.story_game.data.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,7 @@ public class SocketController extends TextWebSocketHandler {
             switch (baseMessage.getType()) {
                 case "join" -> this.register(sender, baseMessage);
                 case "start_game" -> this.handleStart(sender, baseMessage);
+                case "request_state" -> this.requestState(sender, baseMessage);
                 case "ping" -> this.ping(sender, baseMessage);
                 case null, default -> this.handleGameMessage(sender, baseMessage);
             }
@@ -50,8 +52,13 @@ public class SocketController extends TextWebSocketHandler {
         lobbyService.register(sender, playerJoinMessage);
     }
 
+    private void requestState(WebSocketSession sender, BaseMessage message) {
+        if (!(message instanceof RequestStateTrigger _)) return;
+        lobbyService.requestState(sender);
+    }
+
     private void handleStart(WebSocketSession sender, BaseMessage message) {
-           lobbyService.startLobby(sender);
+       lobbyService.startLobby(sender);
     }
 
     public void handleGameMessage(WebSocketSession sender, BaseMessage message) {

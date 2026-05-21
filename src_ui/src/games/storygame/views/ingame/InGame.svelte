@@ -1,12 +1,12 @@
 <script lang="ts">
   import { Send } from "lucide-svelte";
-  import InputField from "$lib/components/InputField.svelte";
-  import { sendSubmitStoryMessage } from "$lib/services/gameService";
-  import { lobbyStore } from "./LobbyStore";
+  import InputField from "../../components/InputField.svelte";
+  import { sendSubmitStoryMessage } from "../../services/storyGameService";
+  import { lobbyStore } from "$common/views/lobby/LobbyStore";
   import { inGameStore } from "./InGameStore";
-  import Spinner from "$lib/components/Spinner.svelte";
-  import Button from "$lib/components/Button.svelte";
-  import PageLayout from "$lib/components/PageLayout.svelte";
+  import Spinner from "$common/components/Spinner.svelte";
+  import Button from "$common/components/Button.svelte";
+  import PageLayout from "$common/views/PageLayout.svelte";
   import { m } from "$paraglide/messages.js";
 
   let fullStory = "";
@@ -64,10 +64,11 @@
         {m.storygame_hint()}
       </div>
       <Button
+        data-testid="StoryGame.sendStory"
         type="primary"
-        classes="w-full sm:w-48"
+        class="w-full sm:w-48"
         icon={Send}
-        onClick={sendStory}
+        onclick={sendStory}
         disabled={!fullStory ||
           fullStory.length < storyInputField.MIN_SENTENCE_LENGTH}
       >

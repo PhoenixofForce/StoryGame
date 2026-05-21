@@ -63,3 +63,7 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: src_ui
+
+      - name: Test
+        run: npm run test
+        working-directory: src_ui

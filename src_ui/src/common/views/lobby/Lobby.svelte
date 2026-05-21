@@ -1,12 +1,10 @@
 <script lang="ts">
   import { PenTool, Clipboard } from "lucide-svelte";
-  import PlayerDisplay from "$lib/components/PlayerDisplay.svelte";
+  import PlayerDisplay from "$common/components/PlayerDisplay.svelte";
   import { lobbyStore } from "./LobbyStore";
-  import {
-    sendMessage,
-  } from "$lib/services/websocketService";
-  import PageLayout from "$lib/components/PageLayout.svelte";
-  import Button from "$lib/components/Button.svelte";
+  import { sendMessage } from "$common/services/websocketService";
+  import PageLayout from "$common/views/PageLayout.svelte";
+  import Button from "$common/components/Button.svelte";
   import { m } from "$paraglide/messages.js";
 
   function startGame() {
@@ -43,7 +41,11 @@
 <PageLayout>
   <svelte:fragment slot="sidebar">
     <div class="mb-4">
-      <Button icon={Clipboard} onClick={shareRoomCodeLink} tooltip={m.lobby_copy_roomcode()}>
+      <Button
+        icon={Clipboard}
+        onclick={shareRoomCodeLink}
+        tooltip={m.lobby_copy_roomcode()}
+      >
         {$lobbyStore.roomCode}
       </Button>
     </div>
@@ -78,10 +80,10 @@
   <svelte:fragment slot="actions">
     <Button
       icon={PenTool}
-      onClick={startGame}
+      onclick={startGame}
       disabled={$lobbyStore.you !== $lobbyStore.host}
       type="primary"
-      classes="w-full md:w-48"
+      class="w-full md:w-48"
     >
       {m.lobby_start_game()}
     </Button>

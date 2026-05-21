@@ -52,12 +52,17 @@ public class Lobby {
     public void sendLobbyChangeUpdate() {
         sendPersonalized(player -> {
             LobbyStateMessage stateMessage = new LobbyStateMessage();
+            if(gameMode != null) stateMessage.setGameName(gameMode.getName());
             stateMessage.setRoomCode(roomCode);
             stateMessage.setPlayers(connectedPlayer.stream().map(Player::getName).toList());
             stateMessage.setYou(player.getName());
             stateMessage.setHost(connectedPlayer.getFirst().getName());
             return stateMessage;
         });
+    }
+
+    public void sendGameState(Player player) {
+        gameMode.getGameStateFor(player).sendTo(player.getSession());
     }
 
     public void sendGameState() {
@@ -72,7 +77,8 @@ public class Lobby {
         send(new StartGameTrigger());
         gameMode = new StoryGameMode(this);
 
-        sendPersonalized(gameMode::getGameStateFor);
+        sendLobbyChangeUpdate();
+        sendGameState();
     }
 
     public boolean isGameStarted() {

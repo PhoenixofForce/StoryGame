@@ -100,6 +100,15 @@ public class LobbyService {
         lobby.sendGameState();
     }
 
+    public void requestState(WebSocketSession sender) {
+        Optional<LobbyPlayer> lobbyPlayer = getLobbyAndPlayer(sender);
+        if(lobbyPlayer.isEmpty()) return;
+        Player player = lobbyPlayer.get().player();
+        Lobby lobby = lobbyPlayer.get().lobby();
+
+        lobby.sendGameState(player);
+    }
+
     public void handleGameMessage(WebSocketSession sender, BaseMessage message) {
         Optional<LobbyPlayer> lobbyPlayer = getLobbyAndPlayer(sender);
         if(lobbyPlayer.isEmpty()) return;
@@ -179,5 +188,4 @@ public class LobbyService {
         roomCode = roomCode.trim();
         return roomCode;
     }
-
 }

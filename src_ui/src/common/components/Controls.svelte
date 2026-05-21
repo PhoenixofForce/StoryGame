@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Sun, Moon, Volume2, VolumeOff } from "lucide-svelte";
-  import { options } from "$lib/services/options";
-  import { cancel } from "$lib/services/speakService";
+  import { options } from "$common/services/options";
+  import { cancel } from "$common/services/speakService";
   import { setLocale } from "$paraglide/runtime.js";
 
   function toggleSounds() {
