@@ -1,8 +1,10 @@
+import { registerStore } from "$common/services/debugStoreRegistry";
 import type { LobbyStateMessage } from "$common/services/messageTypes";
 import { addEventHandler } from "$common/services/websocketService";
 import { writable } from "svelte/store";
 
 export const lobbyStore = writable({} as LobbyStateMessage);
+registerStore("Lobby", lobbyStore);
 
 addEventHandler("lobby-change", {
   onSuccess: (data) => {
