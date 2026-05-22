@@ -14,7 +14,6 @@
     "allowJs": true,
     "checkJs": true,
     "isolatedModules": true,
-    "baseUrl": ".",
     "paths": {
       "$common/*": ["./src/common/*"],
       "$games/*": ["./src/games/*"],
