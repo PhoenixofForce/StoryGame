@@ -53,6 +53,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>cz.habarta.typescript-generator</groupId>
+			<artifactId>typescript-generator-maven-plugin</artifactId>
+			<version>3.2.1263</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -82,32 +88,13 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</exclude>
+						<exclude>
+							<groupId>cz.habarta.typescript-generator</groupId>
+							<artifactId>typescript-generator-maven-plugin</artifactId>
+						</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
-
-            <plugin>
-                <groupId>cz.habarta.typescript-generator</groupId>
-                <artifactId>typescript-generator-maven-plugin</artifactId>
-                <version>3.2.1263</version>
-                <executions>
-                    <execution>
-                        <id>generate</id>
-                        <goals><goal>generate</goal></goals>
-                        <phase>process-classes</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jsonLibrary>jackson2</jsonLibrary>
-                    <classes>
-                        <class>dev.phoenixofforce.story_game.connection.messages.BaseMessage</class>
-                    </classes>
-                    <outputKind>module</outputKind>
-                    <outputFileType>implementationFile</outputFileType>
-                    <outputFile>src_ui/src/common/services/messageTypes.ts</outputFile>
-                    <mapEnum>asEnum</mapEnum>
-                </configuration>
-            </plugin>
 		</plugins>
 	</build>
 
